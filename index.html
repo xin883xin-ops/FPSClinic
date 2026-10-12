@@ -78,7 +78,10 @@ header.top {
   backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
 }
 header.top .wrap { display: flex; align-items: center; gap: 24px; min-height: 64px; }
-.brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; color: var(--ink); margin-right: auto; }
+.logo-mark { width: 28px; height: 28px; flex: none; display: block; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); margin-right: auto; }
+.brand b { display: inline-flex; align-items: center; gap: 8px; }
+footer b { display: inline-flex; align-items: center; gap: 8px; }
 .brand b { font-size: 1.3rem; font-weight: 900; letter-spacing: -.01em; }
 .brand span { font-size: .85rem; color: var(--muted); }
 header.top nav { display: flex; gap: 22px; }
@@ -236,7 +239,7 @@ footer p { margin: 6px 0 0; max-width: none; }
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#top"><b>FPSClinic</b><span>遊戲效能遠端優化</span></a>
+    <a class="brand" href="#top"><b><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#0A7F6E"/><path d="M3 18h6l3-9 5 15 3-9h9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>FPSClinic</b><span>遊戲效能遠端優化</span></a>
     <nav aria-label="主選單">
       <a href="#symptoms">症狀自檢</a>
       <a href="#process">流程</a>
@@ -524,7 +527,8 @@ s0.parentNode.insertBefore(s1,s0);
         <li>玩的遊戲，與卡頓的感覺</li>
       </ul>
       <a class="btn line-link" href="#contact">加 LINE 預約</a>
-      <p class="lineid" id="lineid">LINE ID：<span class="tbd">tbd：待補</span></p>
+      <a class="btn ghost tawk-link" href="#contact" style="margin-left:8px">線上詢問（備用）</a>
+      <p class="lineid">LINE ID：<span class="line-id tbd">tbd：待補</span></p>
     </div>
   </div>
 </section>
@@ -578,23 +582,45 @@ s0.parentNode.insertBefore(s1,s0);
 
 <footer>
   <div class="wrap">
-    <b>FPSClinic</b>
+    <b><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#0A7F6E"/><path d="M3 18h6l3-9 5 15 3-9h9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>FPSClinic</b>
     <p>遊戲效能遠端優化，試營運版本。</p>
     <p>試營運限 10 個名額，免費調校一次，換你的前後對比與回饋。</p>
   </div>
 </footer>
 
 <script>
-  // 站長設定：填入你的 LINE ID（不含 @ 以外的符號，例如 "fpsclinic"），所有「預約」按鈕會自動連到加好友頁。
-  var LINE_ID = "";
+  // 站長設定：全站只改這一個地方。
+  // 個人 LINE ID 直接填，例如 "fpsclinic"；官方帳號要連 @ 一起填，例如 "@fpsclinic"。
+  var LINE_ID = "xin883xin";
 
   (function () {
-    if (!LINE_ID) return;
-    var url = "https://line.me/ti/p/~" + encodeURIComponent(LINE_ID);
-    document.querySelectorAll("a.line-link").forEach(function (a) { a.href = url; a.target = "_blank"; a.rel = "noopener"; });
-    var el = document.getElementById("lineid");
-    if (el) el.textContent = "LINE ID：" + xin883xin;
+    var id = (LINE_ID || "").trim();
+    if (!id) return; // 還沒填：按鈕維持跳到 #contact，文字維持「待補」提示
+
+    var url = id.charAt(0) === "@"
+      ? "https://line.me/R/ti/p/" + encodeURIComponent(id)
+      : "https://line.me/ti/p/~" + encodeURIComponent(id);
+
+    // 所有預約按鈕（class="line-link"）
+    document.querySelectorAll("a.line-link").forEach(function (a) {
+      a.href = url; a.target = "_blank"; a.rel = "noopener";
+    });
+    // 所有顯示 LINE ID 文字的位置（class="line-id"），數量不限
+    document.querySelectorAll(".line-id").forEach(function (el) {
+      el.textContent = id;
+      el.classList.remove("tbd");
+    });
   })();
+
+  // 備用：tawk.to 線上聊天。所有 class="tawk-link" 的按鈕點下去會展開聊天視窗。
+  document.querySelectorAll("a.tawk-link").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      if (window.Tawk_API && typeof Tawk_API.maximize === "function") {
+        e.preventDefault();
+        Tawk_API.maximize();
+      }
+    });
+  });
 </script>
 </body>
 </html>
