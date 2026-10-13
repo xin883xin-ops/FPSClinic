@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FPSClinic 遊戲效能遠端優化</title>
+<meta name="description" content="遊戲卡頓，先查出卡在哪，再動手。真人遠端診斷，調整前先備份、全程看得到、每一項都能還原。試營運限 10 個名額。">
+<meta property="og:title" content="FPSClinic 遊戲效能遠端優化">
+<meta property="og:description" content="遊戲卡頓，先查出卡在哪，再動手。真人遠端診斷，先備份、全程可見、可還原。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230A7F6E'/%3E%3Cpath d='M3 18h6l3-9 5 15 3-9h9' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<!--
+  站長待辦（搜尋「tbd」可找到所有空位）：
+  1. 在最下方 <script> 的 LINE_ID 填入你的 LINE ID，所有預約按鈕會自動接上。
+  2. .tbd 標記的欄位：實測機型、畫質、解析度、1% low、前後截圖。沒有真實數據前請保留空位，不要放示意數字。
+  3. 「成功標準」與退款文字，請依你的實際決定修改（見 #warranty）。
+  4. 遠端工具名稱（見 FAQ），選定並確認授權條款後再填。
+-->
+
+<style>
+:root {
+  --paper: #EDF1F3;
+  --card: #FFFFFF;
+  --ink: #0F1E28;
+  --muted: #52636E;
+  --line: #C9D4DA;
+  --teal: #0A7F6E;
+  --teal-deep: #075E51;
+  --teal-wash: #DDF1EC;
+  --coral: #D6403C;
+  --amber-wash: #FFF3C4;
+  --amber-line: #B98B00;
+  --radius: 10px;
+  --font: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Heiti TC", system-ui, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--font); font-size: 17px; line-height: 1.8;
+}
+img, svg { max-width: 100%; display: block; }
+a { color: var(--teal-deep); }
+p { margin: 0 0 1em; max-width: 38em; }
+h1, h2, h3 { margin: 0; line-height: 1.3; font-weight: 900; }
+:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; border-radius: 4px; }
+
+.wrap { width: min(1120px, 100% - 32px); margin-inline: auto; }
+section { padding: 72px 0; }
+.sec-head { margin-bottom: 36px; }
+.sec-head h2 { font-size: clamp(1.7rem, 4vw, 2.5rem); }
+.sec-head p { margin: 12px 0 0; color: var(--muted); }
+
+/* 待填欄位 */
+.tbd {
+  background: var(--amber-wash); outline: 1.5px dashed var(--amber-line); outline-offset: 2px;
+  padding: 0 .35em; border-radius: 4px; color: #6B5200; font-weight: 500;
+}
+
+/* 按鈕 */
+.btn {
+  display: inline-block; text-decoration: none; font-weight: 700; font-size: 1rem; line-height: 1.2;
+  padding: 14px 24px; border-radius: 999px; border: 2px solid var(--teal);
+  background: var(--teal); color: #fff; cursor: pointer; transition: background .15s, color .15s;
+}
+.btn:hover { background: var(--teal-deep); border-color: var(--teal-deep); }
+.btn.ghost { background: transparent; color: var(--teal-deep); }
+.btn.ghost:hover { background: var(--teal-wash); }
+.btn.small { padding: 10px 18px; font-size: .95rem; }
+
+/* 頁首 */
+header.top {
+  position: sticky; top: 0; z-index: 10; background: rgba(237,241,243,.94);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+}
+header.top .wrap { display: flex; align-items: center; gap: 24px; min-height: 64px; }
+.logo-mark { width: 28px; height: 28px; flex: none; display: block; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); margin-right: auto; }
+.brand b { display: inline-flex; align-items: center; gap: 8px; }
+footer b { display: inline-flex; align-items: center; gap: 8px; }
+.brand b { font-size: 1.3rem; font-weight: 900; letter-spacing: -.01em; }
+.brand span { font-size: .85rem; color: var(--muted); }
+header.top nav { display: flex; gap: 22px; }
+header.top nav a { color: var(--ink); text-decoration: none; font-weight: 500; font-size: .95rem; }
+header.top nav a:hover { color: var(--teal-deep); text-decoration: underline; text-underline-offset: 6px; }
+
+/* 首屏 */
+.hero { padding: 56px 0 72px; }
+.hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
+.hero h1 { font-size: clamp(2.3rem, 6vw, 4rem); line-height: 1.2; }
+.hero .lead { font-size: 1.15rem; margin: 22px 0 28px; }
+.hero .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+.trial {
+  display: inline-block; background: var(--teal-wash); border-left: 4px solid var(--teal);
+  padding: 10px 16px; font-size: .95rem; margin: 0 0 22px; max-width: none;
+}
+.fine { font-size: .85rem; color: var(--muted); margin: 0; }
+
+/* 幀時間圖：這個頁面的主視覺 */
+.monitor { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 18px 14px; }
+.monitor .bar { display: flex; justify-content: space-between; font-size: .85rem; font-weight: 700; margin-bottom: 8px; }
+.monitor .bar .bad { color: var(--coral); }
+.monitor .bar .good { color: var(--teal-deep); }
+.plot { position: relative; }
+.plot svg { width: 100%; height: auto; }
+.plot .ref { position: absolute; right: 6px; font-size: .72rem; color: var(--muted); background: var(--card); padding: 0 4px; line-height: 1.4; }
+.plot .ref.r33 { top: 48.2%; transform: translateY(-120%); }
+.plot .ref.r16 { top: 70.5%; transform: translateY(-120%); }
+.monitor figcaption { font-size: .8rem; color: var(--muted); margin-top: 8px; line-height: 1.6; }
+.trace { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.6s ease-out forwards; }
+.trace.bad { stroke: var(--coral); animation-delay: .3s; }
+.trace.good { stroke: var(--teal); animation-delay: 1.8s; animation-duration: 1.4s; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .trace { animation: none; stroke-dashoffset: 0; }
+  html { scroll-behavior: auto; }
+}
+
+/* 症狀 */
+#symptoms { background: var(--card); border-block: 1px solid var(--line); }
+.chart-rows { border-bottom: 1px solid var(--line); }
+.srow { display: grid; grid-template-columns: 1fr 1.5fr; gap: 12px 40px; padding: 26px 0; border-top: 1px solid var(--line); }
+.srow h3 { font-size: 1.3rem; }
+.srow .quote { color: var(--muted); margin: 6px 0 0; font-size: .98rem; }
+.srow dl { margin: 0; display: grid; grid-template-columns: 6.5em 1fr; gap: 6px 14px; font-size: .98rem; }
+.srow dt { font-weight: 700; color: var(--teal-deep); }
+.srow dd { margin: 0; }
+.srow.other { background: var(--teal-wash); padding-inline: 20px; border-radius: 0 0 var(--radius) var(--radius); }
+
+/* 案例 */
+.case { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; align-items: start; }
+.bignum { font-size: clamp(3rem, 8vw, 5rem); font-weight: 900; line-height: 1; letter-spacing: -.02em; }
+.bignum small { font-size: 1.1rem; font-weight: 700; letter-spacing: 0; color: var(--muted); }
+.case .note { color: var(--muted); font-size: .92rem; margin-top: 14px; }
+.spec { width: 100%; border-collapse: collapse; font-size: .98rem; background: var(--card); border: 1px solid var(--line); }
+.spec th, .spec td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.spec th { width: 9em; color: var(--muted); font-weight: 500; background: #F6F9FA; }
+.media { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; grid-column: 1 / -1; }
+.shot { aspect-ratio: 16 / 9; border: 2px dashed var(--amber-line); background: var(--amber-wash); border-radius: var(--radius); display: grid; place-items: center; text-align: center; padding: 12px; font-weight: 500; color: #6B5200; }
+.shot b { display: block; font-size: 1.05rem; }
+
+.games { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); margin-top: 8px; }
+.games th, .games td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.games th { width: 40%; font-weight: 700; }
+.chip { display: inline-block; font-size: .85rem; font-weight: 700; padding: 2px 12px; border-radius: 999px; }
+.chip.done { background: var(--teal-wash); color: var(--teal-deep); }
+.chip.wip { background: #E6ECEF; color: var(--muted); }
+
+/* 流程 */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: s; }
+.steps li { counter-increment: s; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 20px; }
+.steps li::before {
+  content: counter(s); display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%;
+  background: var(--teal); color: #fff; font-weight: 900; margin-bottom: 14px;
+}
+.steps h3 { font-size: 1.15rem; margin-bottom: 6px; }
+.steps p { font-size: .95rem; margin: 0; color: var(--muted); }
+
+/* 安全底線 */
+#safety { background: var(--ink); color: #EAF1F4; }
+#safety .sec-head p { color: #A9BAC4; }
+.rules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 48px; }
+.rules li { padding: 14px 0 14px 34px; border-top: 1px solid #2D4150; position: relative; }
+.rules li::before { content: ""; position: absolute; left: 4px; top: 22px; width: 14px; height: 8px; border-left: 3px solid #5FD3BC; border-bottom: 3px solid #5FD3BC; transform: rotate(-45deg); }
+
+/* 等級 */
+.tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
+.tier { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 24px; display: flex; flex-direction: column; }
+.tier.pick { border: 2px solid var(--teal); }
+.tier h3 { font-size: 1.3rem; }
+.tier .tag { font-size: .85rem; font-weight: 700; color: var(--teal-deep); margin: 2px 0 0; }
+.tier ul { margin: 16px 0; padding-left: 1.1em; flex: 1; }
+.tier li { margin-bottom: 6px; font-size: .98rem; }
+.tier .price { font-weight: 900; font-size: 1.1rem; border-top: 1px solid var(--line); padding-top: 14px; margin: 0; }
+.addon { margin-top: 20px; color: var(--muted); }
+
+/* 保固 */
+.warranty { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.warranty > div { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+.warranty h3 { font-size: 1.15rem; margin-bottom: 8px; }
+.warranty p { margin: 0; font-size: .98rem; }
+
+/* 預約 */
+#contact { background: var(--teal-wash); border-block: 1px solid #BADFD6; }
+.contact { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: start; }
+.contact h2 { font-size: clamp(1.8rem, 4.2vw, 2.7rem); }
+.contact ol { padding-left: 1.2em; margin: 14px 0 0; }
+.contact li { margin-bottom: 6px; }
+.panel { background: var(--card); border-radius: var(--radius); border: 1px solid #BADFD6; padding: 24px; }
+.panel h3 { font-size: 1.1rem; margin-bottom: 10px; }
+.panel ul { margin: 0 0 18px; padding-left: 1.1em; font-size: .98rem; }
+.lineid { font-size: 1.05rem; margin: 14px 0 0; }
+
+/* 關於 */
+.about { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; }
+.about ul { margin: 0; padding-left: 1.1em; }
+.about li { margin-bottom: 8px; }
+
+/* FAQ */
+details { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; }
+summary { cursor: pointer; padding: 16px 20px; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-size: 1.4rem; line-height: 1; color: var(--teal-deep); transition: transform .2s; }
+details[open] summary::after { transform: rotate(45deg); }
+details p { padding: 0 20px 16px; margin: 0; }
+
+footer { background: var(--ink); color: #A9BAC4; padding: 36px 0; font-size: .92rem; }
+footer b { color: #fff; font-size: 1.1rem; }
+footer p { margin: 6px 0 0; max-width: none; }
+
+@media (max-width: 900px) {
+  section { padding: 56px 0; }
+  .hero .wrap, .case, .about, .contact { grid-template-columns: 1fr; gap: 28px; }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .tiers, .warranty { grid-template-columns: 1fr; }
+  .rules { grid-template-columns: 1fr; }
+  .srow { grid-template-columns: 1fr; }
+  header.top nav { display: none; }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .steps { grid-template-columns: 1fr; }
+  .media { grid-template-columns: 1fr; }
+  .brand span { display: none; }
+  .srow dl { grid-template-columns: 1fr; gap: 2px; }
+  .srow dd { margin-bottom: 8px; }
+  .games th, .games td { display: block; width: auto; border-bottom: 0; padding: 10px 16px 0; }
+  .games td { padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .spec th, .spec td { display: block; width: auto; border-bottom: 0; }
+  .spec td { border-bottom: 1px solid var(--line); }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><b><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#0A7F6E"/><path d="M3 18h6l3-9 5 15 3-9h9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>FPSClinic</b><span>遊戲效能遠端優化</span></a>
+    <nav aria-label="主選單">
+      <a href="#symptoms">症狀自檢</a>
+      <a href="#process">流程</a>
+      <a href="#safety">安全底線</a>
+      <a href="#tiers">服務內容</a>
+      <a href="#faq">常見問題</a>
+    </nav>
+    <a class="btn small line-link" href="#contact">預約試營運</a>
+  </div>
+</header>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6acbe49bf5cc5c34c2fbba6f/1k4m7a0ct';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+<main id="top">
+
+<!-- 首屏 -->
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <p class="trial">試營運限 10 個名額，免費調校一次，換你的前後對比與回饋。</p>
+      <h1>遊戲卡頓，先查出卡在哪，再動手。</h1>
+      <p class="lead">真人遠端診斷你的電腦。不用先換硬體；調整前先備份，全程看得到畫面，每一項都能還原。</p>
+      <div class="actions">
+        <a class="btn line-link" href="#contact">預約試營運</a>
+        <a class="btn ghost" href="#symptoms">看看是哪一種卡頓</a>
+      </div>
+      <p class="fine">不承諾固定 FPS。每台電腦先測再說明可改善的幅度，不值得調的也會直接告訴你。</p>
+    </div>
+
+    <figure class="monitor" style="margin:0">
+      <div class="bar"><span class="bad">卡頓：平均 FPS 正常，仍會突然頓一下</span><span class="good">穩定</span></div>
+      <div class="plot">
+        <svg viewBox="0 0 560 220" role="img" aria-label="幀時間示意圖：左側曲線多次尖峰代表卡頓，右側曲線平穩代表畫面穩定">
+          <line x1="0" y1="106" x2="560" y2="106" stroke="#C9D4DA" stroke-dasharray="4 5"/>
+          <line x1="0" y1="155" x2="560" y2="155" stroke="#C9D4DA" stroke-dasharray="4 5"/>
+          <line x1="280" y1="10" x2="280" y2="210" stroke="#9DB0BA" stroke-dasharray="2 5"/>
+          <path class="trace bad" pathLength="1" d="M0,152 L14,148 L28,156 L40,146 L52,152 L60,62 L66,154 L80,148 L92,154 L104,30 L110,158 L124,150 L138,154 L150,86 L158,152 L172,148 L186,156 L198,48 L206,154 L220,150 L234,156 L246,100 L254,152 L268,148 L280,154"/>
+          <path class="trace good" pathLength="1" d="M280,154 L296,174 L312,170 L328,176 L344,171 L360,175 L376,170 L392,174 L408,171 L424,175 L440,170 L456,174 L472,171 L488,175 L504,170 L520,174 L536,171 L552,175 L560,172"/>
+        </svg>
+        <span class="ref r33">33 ms 以上：明顯頓</span>
+        <span class="ref r16">16.7 ms：60 FPS 的畫面間隔</span>
+      </div>
+      <figcaption>示意圖，用來說明「平均 FPS 看起來正常，卻會頓」是什麼樣子，不是實測數據。我們量的是每一格畫面花的時間（幀時間），不只看平均 FPS。</figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- 症狀 -->
+<section id="symptoms">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>哪一種像你的電腦？</h2>
+      <p>先對症狀。每一種都會先量、再說明，不會直接套一包設定。</p>
+    </div>
+    <div class="chart-rows">
+
+      <div class="srow">
+        <div><h3>團戰掉幀</h3><p class="quote">平常很順，一打團戰就掉。</p></div>
+        <dl>
+          <dt>診斷會看</dt><dd>團戰時的處理器與顯示負載、背景程式、電源與溫度紀錄</dd>
+          <dt>你會拿到</dt><dd>同樣情境下，調校前後的平均 FPS 與 1% low 對比</dd>
+        </dl>
+      </div>
+
+      <div class="srow">
+        <div><h3>畫質全調低，還是不順</h3><p class="quote">特效都關到最低了，還是卡。</p></div>
+        <dl>
+          <dt>診斷會看</dt><dd>顯示輸出設定、顯卡設定、記憶體配置、系統資源占用</dd>
+          <dt>你會拿到</dt><dd>一張診斷單，寫清楚量到什麼、改了什麼、前後差多少</dd>
+        </dl>
+      </div>
+
+      <div class="srow">
+        <div><h3>配備不差，偶爾頓一下</h3><p class="quote">規格明明夠，就是會突然卡一下。</p></div>
+        <dl>
+          <dt>診斷會看</dt><dd>幀時間穩定度、儲存裝置狀態、驅動與背景活動</dd>
+          <dt>你會拿到</dt><dd>卡頓發生位置的紀錄，與處理過程的施工紀錄</dd>
+        </dl>
+      </div>
+
+      <div class="srow">
+        <div><h3>舊筆電、只有內顯</h3><p class="quote">沒有獨顯，連最低畫質都吃力。</p></div>
+        <dl>
+          <dt>診斷會看</dt><dd>內顯與記憶體設定、電源計畫、散熱與降頻狀況</dd>
+          <dt>你會拿到</dt><dd>這台電腦能到哪個程度的評估，包含升級值不值得，有就說，沒有就說沒有</dd>
+        </dl>
+      </div>
+
+      <div class="srow">
+        <div><h3>更新之後變卡</h3><p class="quote">Windows 或驅動更新完，突然不一樣了。</p></div>
+        <dl>
+          <dt>診斷會看</dt><dd>更新前後的設定差異、驅動版本、被改回預設的項目</dd>
+          <dt>你會拿到</dt><dd>變更清單、修復紀錄與還原方式</dd>
+        </dl>
+      </div>
+
+      <div class="srow">
+        <div><h3>多工、開會時卡</h3><p class="quote">同時開著通訊軟體、瀏覽器、直播，遊戲就掉。</p></div>
+        <dl>
+          <dt>診斷會看</dt><dd>同時執行程式的資源分配、背景服務、記憶體使用</dd>
+          <dt>你會拿到</dt><dd>多工情境下的前後對比，與日常使用建議</dd>
+        </dl>
+      </div>
+
+      <div class="srow">
+        <div><h3>畫面跳，其實是網路</h3><p class="quote">看起來像掉幀，可能是延遲在作怪。</p></div>
+        <dl>
+          <dt>診斷會看</dt><dd>網路抖動與封包遺失、網卡與連線設定</dd>
+          <dt>你會拿到</dt><dd>把「畫面卡」和「網路卡」分開的診斷結果。根源在路由器或線路，就直接告訴你，不亂調</dd>
+        </dl>
+      </div>
+
+      <div class="srow other">
+        <div><h3>都不像，或說不上來</h3><p class="quote">只知道玩起來不舒服。</p></div>
+        <dl>
+          <dt>怎麼做</dt><dd>預約時描述遊戲與感覺就好。診斷會先把症狀量出來，再決定怎麼處理。</dd>
+        </dl>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 案例 -->
+<section id="case">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>英雄聯盟實測案例</h2>
+      <p>目前以英雄聯盟為主要案例，其他遊戲測完才會公布。</p>
+    </div>
+    <div class="case">
+      <div>
+        <div class="bignum">30 → 100+<br><small>FPS，站長自己的內顯筆電，一般對戰</small></div>
+        <p class="note">這是單一台電腦的個案，不代表每台都會這樣。每台的瓶頸不同，所以才要先診斷。</p>
+      </div>
+      <table class="spec">
+        <tr><th>機型與處理器</th><td><span class="tbd">tbd：機型、CPU</span></td></tr>
+        <tr><th>顯示晶片與記憶體</th><td><span class="tbd">tbd：內顯型號、記憶體容量與通道數</span></td></tr>
+        <tr><th>解析度與畫質</th><td><span class="tbd">tbd：解析度、畫質設定</span></td></tr>
+        <tr><th>一般對戰</th><td>約 30 → 100+ FPS，1% low：<span class="tbd">tbd</span></td></tr>
+        <tr><th>混戰團戰</th><td>80+ FPS，1% low：<span class="tbd">tbd</span></td></tr>
+        <tr><th>測試方式</th><td><span class="tbd">tbd：量測工具、測試場景、是否同一場景前後各測一次</span></td></tr>
+      </table>
+      <div class="media">
+        <div class="shot"><div><b>調校前</b>tbd：截圖或錄影</div></div>
+        <div class="shot"><div><b>調校後</b>tbd：截圖或錄影</div></div>
+      </div>
+    </div>
+
+    <div class="sec-head" style="margin-top:56px">
+      <h2>其他遊戲測試進度</h2>
+    </div>
+    <table class="games">
+      <tr><th>英雄聯盟</th><td><span class="chip done">已有實測案例</span></td></tr>
+      <tr><th>其他熱門遊戲</th><td><span class="chip wip">測試中</span>　測完一款，公布一款，有前後數據才上架。</td></tr>
+      <tr><th>想優先支援的遊戲</th><td>預約時告訴我，會排進測試清單。</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 流程 -->
+<section id="process" style="background:var(--card);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>服務流程</h2>
+      <p>約定好的時間，你在電腦前，全程看得到。</p>
+    </div>
+    <ol class="steps">
+      <li><h3>診斷</h3><p>記錄硬體與系統狀態，量調校前的平均 FPS、1% low 與網路抖動。</p></li>
+      <li><h3>備份</h3><p>先建立還原點與備份，確認能還原，才開始動手。</p></li>
+      <li><h3>調校</h3><p>依服務等級逐項處理。進階項目先說明風險，你同意才執行。</p></li>
+      <li><h3>驗證交付</h3><p>同樣情境重測，交付前後對比與施工紀錄，確認常用功能正常，附上還原方式。</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 安全底線 -->
+<section id="safety">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>讓陌生人動你的電腦，這些事我不做</h2>
+      <p>這行最大的門檻是信任，所以規則寫在前面。</p>
+    </div>
+    <ul class="rules">
+      <li>調整前先備份，每一項都能還原</li>
+      <li>不修改、不注入遊戲檔案，不碰 Riot Vanguard</li>
+      <li>Windows Defender 保持開啟</li>
+      <li>不更動 TPM 與 Secure Boot</li>
+      <li>遠端時你全程看得到畫面，只處理系統與驅動設定</li>
+      <li>進階項目先說明風險，勾選同意才執行</li>
+      <li>結束後移除遠端工具與連線權限</li>
+      <li>只收施工需要的硬體資訊與聯絡方式，結束後刪除</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 服務等級 -->
+<section id="tiers">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>服務內容</h2>
+      <p>試營運期間免費，正式價格會在試營運結束後公布。</p>
+    </div>
+    <div class="tiers">
+      <div class="tier">
+        <h3>基礎</h3>
+        <ul>
+          <li>系統與遊戲的基本調校</li>
+          <li>顯卡驅動與設定檢查</li>
+          <li>電源與啟動項整理</li>
+          <li>網路穩定設定</li>
+        </ul>
+        <p class="price">試營運免費</p>
+      </div>
+      <div class="tier pick">
+        <h3>進階</h3>
+        <p class="tag">多數人選這個</p>
+        <ul>
+          <li>包含基礎全部項目</li>
+          <li>進階效能調校</li>
+          <li>網路抖動優化</li>
+          <li>更新後的設定守護</li>
+        </ul>
+        <p class="price">試營運免費</p>
+      </div>
+      <div class="tier">
+        <h3>完整</h3>
+        <ul>
+          <li>包含進階全部項目</li>
+          <li>系統元件精簡（限使用者自有的正版 Windows）</li>
+          <li>硬體升級建議</li>
+        </ul>
+        <p class="price">試營運免費</p>
+      </div>
+    </div>
+    <p class="addon">加購：大版本更新後的健檢，檢查設定有沒有被改回去，並重新量測。</p>
+  </div>
+</section>
+
+<!-- 保固 -->
+<section id="warranty" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><h2>保固與退費</h2></div>
+    <div class="warranty">
+      <div>
+        <h3>7 天保固</h3>
+        <p>調校後 7 天內，因設定失效或系統更新造成的問題，免費修復一次。</p>
+      </div>
+      <div>
+        <h3>先約定成功標準，沒達到就退費</h3>
+        <p>施工前，診斷單會寫明這次的成功標準（<span class="tbd">tbd：以平均 FPS 還是 1% low 計算、門檻怎麼定</span>）。調校後沒達到，依約退費。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 預約 -->
+<section id="contact">
+  <div class="wrap contact">
+    <div>
+      <h2>試營運限 10 個名額</h2>
+      <p style="margin-top:14px">免費調校一次，換你的前後對比與使用回饋。</p>
+      <ol>
+        <li>加 LINE，傳下面準備好的資料。</li>
+        <li>確認你的電腦適合，約好時段。</li>
+        <li>簽同意書、先備份，再遠端調校。</li>
+      </ol>
+      <p class="fine" style="margin-top:14px">希望的對象：內顯筆電、獨顯桌機、NVIDIA 或 AMD 顯卡都可以。你同意的話，匿名的前後數據會當作範例使用。</p>
+    </div>
+    <div class="panel">
+      <h3>傳給我這些就夠了</h3>
+      <ul>
+        <li>電腦型號，或處理器與顯卡型號</li>
+        <li>記憶體容量、Windows 版本</li>
+        <li>玩的遊戲，與卡頓的感覺</li>
+      </ul>
+      <a class="btn line-link" href="#contact">加 LINE 預約</a>
+      <a class="btn ghost tawk-link" href="#contact" style="margin-left:8px">線上詢問（備用）</a>
+      <p class="lineid">LINE ID：<span class="line-id tbd">tbd：待補</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 關於 -->
+<section id="about">
+  <div class="wrap about">
+    <div class="sec-head" style="margin:0"><h2>誰在幫你調</h2></div>
+    <ul>
+      <li>有電腦硬體維修與壞硬碟檔案掃描的經驗。</li>
+      <li>方法來自我自己的經驗：把自己的內顯筆電從 30 FPS 測到 100 以上，才開始幫別人看。</li>
+      <li>一次只接少數客戶，每一步都診斷、都留紀錄。</li>
+      <li>資料處理：只收施工需要的硬體資訊與聯絡方式，不開你的個人檔案，服務結束後刪除。前後數據只在你同意時當範例。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><h2>常見問題</h2></div>
+
+    <details>
+      <summary>會保證提升多少 FPS 嗎？</summary>
+      <p>不保證固定數字。每台電腦先測，再告訴你可以改善到哪裡。調了也沒有意義的，我會直接說。</p>
+    </details>
+    <details>
+      <summary>會不會影響遊戲或被封號？</summary>
+      <p>我只調整 Windows 與驅動的設定，不修改、不注入遊戲檔案，也不碰 Riot Vanguard。調整前先備份，每一項都能還原。</p>
+    </details>
+    <details>
+      <summary>遠端是怎麼進行的？</summary>
+      <p>約好時段，你坐在電腦前，全程看得到畫面。我只處理系統與驅動設定，結束後移除遠端工具與權限。使用的遠端工具：<span class="tbd">tbd：選定並確認商用授權後再填</span>。</p>
+    </details>
+    <details>
+      <summary>一定要換硬體嗎？</summary>
+      <p>先調到這台電腦應有的水準，再評估升級值不值得。要換的話，會告訴你換哪一項最划算；不用換，就說不用換。</p>
+    </details>
+    <details>
+      <summary>支援哪些電腦？</summary>
+      <p>Windows 10 與 Windows 11，Intel、AMD、NVIDIA 顯示晶片，筆電與桌機都可以。預約時先傳型號，不適合的我會事先說明。</p>
+    </details>
+    <details>
+      <summary>有其他遊戲也能調嗎？</summary>
+      <p>目前以英雄聯盟為主要案例。其他遊戲正在測試，有前後數據才會公布，想優先的遊戲預約時告訴我。</p>
+    </details>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <b><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#0A7F6E"/><path d="M3 18h6l3-9 5 15 3-9h9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>FPSClinic</b>
+    <p>遊戲效能遠端優化，試營運版本。</p>
+    <p>試營運限 10 個名額，免費調校一次，換你的前後對比與回饋。</p>
+  </div>
+</footer>
+
+<script>
+  // 站長設定：全站只改這一個地方。
+  // 個人 LINE ID 直接填，例如 "fpsclinic"；官方帳號要連 @ 一起填，例如 "@fpsclinic"。
+  var LINE_ID = "xin883xin";
+
+  (function () {
+    var id = (LINE_ID || "").trim();
+    if (!id) return; // 還沒填：按鈕維持跳到 #contact，文字維持「待補」提示
+
+    var url = id.charAt(0) === "@"
+      ? "https://line.me/R/ti/p/" + encodeURIComponent(id)
+      : "https://line.me/ti/p/~" + encodeURIComponent(id);
+
+    // 所有預約按鈕（class="line-link"）
+    document.querySelectorAll("a.line-link").forEach(function (a) {
+      a.href = url; a.target = "_blank"; a.rel = "noopener";
+    });
+    // 所有顯示 LINE ID 文字的位置（class="line-id"），數量不限
+    document.querySelectorAll(".line-id").forEach(function (el) {
+      el.textContent = id;
+      el.classList.remove("tbd");
+    });
+  })();
+
+  // 備用：tawk.to 線上聊天。所有 class="tawk-link" 的按鈕點下去會展開聊天視窗。
+  document.querySelectorAll("a.tawk-link").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      if (window.Tawk_API && typeof Tawk_API.maximize === "function") {
+        e.preventDefault();
+        Tawk_API.maximize();
+      }
+    });
+  });
+</script>
+</body>
+</html>

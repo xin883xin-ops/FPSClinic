@@ -1,3 +1,5 @@
+var SCRIPT_URL = (document.currentScript && document.currentScript.src) || location.href;
+
 /* 站長設定：全站只改這裡 ------------------------------------------- */
 var LINE_ID = "xin883xin";              // 個人 ID 直接填；官方帳號請連 @ 一起填，例如 "@xxxx"
 var FPS_URL = "https://xin883xin-ops.github.io/FPSClinic/"; // FPSClinic 頁面網址
@@ -69,22 +71,63 @@ var SKILLS = [
     });
   }
 
-  /* 找對技能 */
-  var answer = $("#answer");
-  var picks = {
-    game: ['玩遊戲會卡、會掉幀。', "遊戲效能遠端優化", FPS_URL, "看 FPS 優化"],
-    web:  ['想要一個自己的網站或店家頁面。', "30 分鐘一頁式網頁（NT$199）", SITE199_URL, "看一頁式網頁"],
-    app:  ['想做一個 App。', "Android App 開發，目前還在準備中，先告訴我們你的想法。", "#wish", "留下需求"],
-    other: ['都不像，或說不上來。', "沒關係，直接描述你遇到的狀況，我們看能不能處理。", "#wish", "描述我的問題"]
-  };
-  $$(".chips button").forEach(function (b) {
-    b.addEventListener("click", function () {
-      $$(".chips button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
-      var p = picks[b.getAttribute("data-pick")];
-      if (!p || !answer) return;
-      answer.innerHTML = '<p><b>' + esc(p[0]) + '</b> 適合：' + esc(p[1]) + '</p><a class="btn small" href="' + esc(p[2]) + '">' + esc(p[3]) + ' →</a>';
-      answer.classList.add("show");
+  /* 左右滑動的卡片列：箭頭（桌機）與頁碼點 */
+  $$(".rail-wrap").forEach(function (wrap) {
+    var rail = $(".rail", wrap), prev = $("[data-prev]", wrap), next = $("[data-next]", wrap);
+    if (!rail) return;
+    function step() { var c = rail.firstElementChild; return c ? c.getBoundingClientRect().width + 18 : rail.clientWidth * 0.8; }
+    function sync() {
+      var max = rail.scrollWidth - rail.clientWidth - 2;
+      if (prev) prev.hidden = rail.scrollLeft <= 2;
+      if (next) next.hidden = rail.scrollLeft >= max || max <= 0;
+    }
+    if (prev) prev.addEventListener("click", function () { rail.scrollBy({ left: -step(), behavior: "smooth" }); });
+    if (next) next.addEventListener("click", function () { rail.scrollBy({ left: step(), behavior: "smooth" }); });
+    rail.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", sync);
+    sync();
+  });
+
+  /* 方塊頁碼：每個 [data-dots="#id"] 對應一個 rail */
+  $$("[data-dots]").forEach(function (box) {
+    var rail = $(box.getAttribute("data-dots"));
+    if (!rail) return;
+    var kids = Array.prototype.slice.call(rail.children);
+    kids.forEach(function (k, i) {
+      var d = document.createElement("button");
+      d.type = "button"; d.setAttribute("aria-label", "第 " + (i + 1) + " 個");
+      d.addEventListener("click", function () { rail.scrollTo({ left: k.offsetLeft - rail.offsetLeft, behavior: "smooth" }); });
+      box.appendChild(d);
     });
+    function mark() {
+      var x = rail.scrollLeft, best = 0, bestD = 1e9;
+      kids.forEach(function (k, i) { var dd = Math.abs((k.offsetLeft - rail.offsetLeft) - x); if (dd < bestD) { bestD = dd; best = i; } });
+      if (rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 2) best = kids.length - 1;
+      $$("button", box).forEach(function (d, i) { d.setAttribute("aria-current", i === best ? "true" : "false"); });
+    }
+    rail.addEventListener("scroll", mark, { passive: true });
+    mark();
+  });
+
+  /* 滑鼠拖曳左右捲動（手機本來就能滑） */
+  $$(".rail").forEach(function (rail) {
+    var down = false, moved = false, sx = 0, sl = 0;
+    rail.addEventListener("pointerdown", function (e) {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      down = true; moved = false; sx = e.clientX; sl = rail.scrollLeft;
+    });
+    window.addEventListener("pointermove", function (e) {
+      if (!down) return;
+      var dx = e.clientX - sx;
+      if (!moved && Math.abs(dx) > 5) { moved = true; rail.classList.add("dragging"); }
+      if (moved) rail.scrollLeft = sl - dx;
+    });
+    window.addEventListener("pointerup", function () {
+      if (!down) return;
+      down = false; rail.classList.remove("dragging");
+    });
+    rail.addEventListener("click", function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+    rail.addEventListener("dragstart", function (e) { e.preventDefault(); });
   });
 
   /* 捲動顯示 */
@@ -95,4 +138,26 @@ var SKILLS = [
     }, { threshold: 0.12 });
     items.forEach(function (el) { io.observe(el); });
   } else { items.forEach(function (el) { el.classList.add("in"); }); }
+
+  /* PWA：安裝到桌面／主畫面，並註冊離線快取 */
+  var installBtns = $$("[data-install]"), tip = $("#install-tip"), deferred = null;
+  var standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+  function showInstall(on) { installBtns.forEach(function (b) { b.hidden = !on; }); }
+  window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferred = e; if (!standalone) showInstall(true); });
+  window.addEventListener("appinstalled", function () { deferred = null; showInstall(false); if (tip) tip.hidden = true; });
+  var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  if (ios && !standalone) showInstall(true);
+  installBtns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (deferred) {
+        deferred.prompt();
+        deferred.userChoice.then(function () { deferred = null; showInstall(false); });
+      } else if (tip) { tip.hidden = !tip.hidden; }
+    });
+  });
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register(new URL("sw.js", SCRIPT_URL).href).catch(function () {});
+    });
+  }
 })();

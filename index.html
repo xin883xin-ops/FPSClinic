@@ -4,47 +4,55 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>技能商店｜把你的難題，交給會的人</title>
-<meta name="description" content="先說你遇到什麼問題，再找會解決的人。官方技能包由站長親自提供，每個都經過審核、可回報問題、持續更新。">
+<meta name="description" content="先說你遇到什麼問題，再找會解決的人。技能商店：審核上架、可回報問題、持續更新。">
 <meta property="og:title" content="技能商店｜把你的難題，交給會的人">
-<meta property="og:description" content="遊戲卡頓、想要一個網站、想做 App，先說問題，再找對的技能。">
+<meta property="og:description" content="先說問題，再找對的技能。審核上架、可回報問題、持續更新。">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B1620'/%3E%3Crect x='6' y='6' width='9' height='9' rx='2.5' fill='%235FD3BC'/%3E%3Crect x='17' y='6' width='9' height='9' rx='2.5' fill='white'/%3E%3Crect x='6' y='17' width='9' height='9' rx='2.5' fill='white'/%3E%3Crect x='17' y='17' width='9' height='9' rx='2.5' fill='white' fill-opacity='.4'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="store.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#0B141A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="技能商店">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <!--
   站長待辦（搜尋「tbd」可找到所有空位）：
   1. 商店正式名稱（目前暫名「技能商店」）。
-  2. 「官方」提供者的品牌名稱（199 一頁式網頁那張卡）。
+  2. 「官方」提供者的品牌名稱（199 一頁式網頁）。
   3. 禱告種子的 Google Play 載點。
   4. 服務條款、隱私權頁面。
-  LINE ID、各頁網址都在 main.js 最上面設定。
+  LINE ID、各頁網址、技能清單都在 main.js 最上面設定。
+  廣告區（最上方）與商品磚（熱門技能）的內容，直接改下面的 HTML。
 -->
-<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="技能商店 首頁">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0B1620"/><rect x="6" y="6" width="9" height="9" rx="2.5" fill="#5FD3BC"/><rect x="17" y="6" width="9" height="9" rx="2.5" fill="#fff"/><rect x="6" y="17" width="9" height="9" rx="2.5" fill="#fff"/><rect x="17" y="17" width="9" height="9" rx="2.5" fill="#fff" fill-opacity=".4"/></svg>
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#16242D"/><rect x="6" y="6" width="9" height="9" rx="2.5" fill="#5FD3BC"/><rect x="17" y="6" width="9" height="9" rx="2.5" fill="#fff"/><rect x="6" y="17" width="9" height="9" rx="2.5" fill="#fff"/><rect x="17" y="17" width="9" height="9" rx="2.5" fill="#fff" fill-opacity=".4"/></svg>
       <b>技能商店</b><small class="tbd">暫名</small>
     </a>
     <ul class="menu" id="menu">
       <li>
-        <button type="button" aria-haspopup="true">找技能 ▾</button>
+        <button type="button" aria-haspopup="true">全部分類 ▾</button>
         <div class="mega">
           <div><h4>遊戲／電腦</h4><a href="https://xin883xin-ops.github.io/FPSClinic/">遊戲效能遠端優化</a></div>
           <div><h4>網站／上線</h4><a href="site199/">30 分鐘一頁式網頁</a></div>
-          <div><h4>App 開發</h4><a class="soon" href="#skills">Android App 開發</a></div>
-          <div><h4>其他平台</h4><a class="soon" href="#skills">Microsoft Store</a><a class="soon" href="#skills">iOS App Store</a><a class="soon" href="#skills">Chrome 擴充功能</a></div>
+          <div><h4>App 開發</h4><a class="soon" href="#tiles">Android App 開發</a></div>
+          <div><h4>其他平台</h4><a class="soon" href="#tiles">Microsoft Store</a><a class="soon" href="#tiles">iOS App Store</a><a class="soon" href="#tiles">Chrome 擴充功能</a></div>
         </div>
       </li>
-      <li><a href="#works">我們的作品</a></li>
-      <li><a href="#join">技術人加入</a></li>
-      <li><a href="#trust">為什麼放心</a></li>
+      <li><a href="#tiles">熱門技能</a></li>
+      <li><a href="#more">作品與加入</a></li>
     </ul>
+    <button class="btn small install" type="button" data-install hidden>安裝到桌面</button>
     <button class="icon-btn" type="button" data-open-search aria-label="搜尋技能">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
     </button>
@@ -53,6 +61,7 @@
     </button>
   </div>
 </header>
+<div class="tip" id="install-tip" hidden>在 Safari 點下方的「分享」，再選「加入主畫面」，就能像 App 一樣開啟。</div>
 
 <div class="search" id="search" role="dialog" aria-modal="true" aria-label="搜尋技能">
   <div class="sheet">
@@ -60,11 +69,11 @@
       <form role="search">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
         <label class="sr" for="q">你遇到什麼問題？</label>
-        <input id="q" type="search" placeholder="你遇到什麼問題？例如：遊戲卡頓" autocomplete="off">
+        <input id="q" type="search" placeholder="你遇到什麼問題？" autocomplete="off">
       </form>
       <div class="cols">
         <div class="pop"><h4>大家常搜尋</h4>
-          <button type="button">遊戲卡頓</button><button type="button">一頁式網站</button><button type="button">做 App</button>
+          <button type="button">一頁式網站</button><button type="button">做 App</button><button type="button">上架</button>
         </div>
         <div><h4>技能</h4><div class="results" id="results"></div></div>
       </div>
@@ -74,198 +83,158 @@
 
 <main id="top">
 
-<!-- 大主視覺 -->
-<section class="hero" style="padding-bottom:0">
-  <div class="wrap">
-    <h1>你的難題，<br>交給<em>會的人</em>。</h1>
-    <p class="sub">先說你遇到什麼問題，再找對的技能。官方技能包由站長親自提供，每一個都經過審核<sup><a href="#n1">1</a></sup>，可以回報問題，也會持續更新。</p>
-    <ul class="pills">
-      <li><a class="on" href="#skills">全部技能</a></li>
-      <li><a href="#skills">遊戲優化</a></li>
-      <li><a href="#skills">一頁式網站</a></li>
-      <li><a href="#skills">App 開發</a></li>
-      <li><a href="#works">我們的作品</a></li>
-      <li><a href="#join">技術人加入</a></li>
-    </ul>
-    <div class="pulse" aria-hidden="true">
-      <svg viewBox="0 0 1200 150" preserveAspectRatio="none">
-        <path class="ghost" d="M0 100H210l16-58 26 96 22-70 14 32H520l16-70 26 112 24-84 14 42H820l16-50 26 92 22-62 14 20H1200"/>
-        <path class="live" pathLength="1" d="M0 100H210l16-58 26 96 22-70 14 32H520l16-70 26 112 24-84 14 42H820l16-50 26 92 22-62 14 20H1200"/>
-      </svg>
-    </div>
-  </div>
-</section>
+<!-- 廣告版位：滿版、標示「廣告」與提供者 -->
+<section class="ads" aria-label="廣告">
+  <div class="rail" id="ads">
 
-<!-- 找對技能（仿相容性工具） -->
-<section class="finder" aria-labelledby="finder-h">
-  <div class="wrap">
-    <div>
-      <h2 id="finder-h">不確定要找哪個？<br>先告訴我們你遇到什麼。</h2>
-      <p class="lead">點一個最像的，我們指給你對的技能。</p>
-    </div>
-    <div>
-      <div class="chips" role="group" aria-label="你遇到的情況">
-        <button type="button" data-pick="game" aria-pressed="false">遊戲會卡</button>
-        <button type="button" data-pick="web" aria-pressed="false">想要一個網站</button>
-        <button type="button" data-pick="app" aria-pressed="false">想做一個 App</button>
-        <button type="button" data-pick="other" aria-pressed="false">都不像</button>
+    <a class="ad a1" href="site199/">
+      <span class="sponsor"><b>廣告</b><span class="tbd">官方（品牌名待定）</span></span>
+      <div class="art" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="30" width="168" height="140" rx="16"/><path d="M16 66h168"/><circle cx="38" cy="48" r="4" fill="#fff"/><circle cx="54" cy="48" r="4" fill="#fff"/><path d="M40 98h60M40 122h104M40 146h72"/></svg></div>
+      <div class="in">
+        <h2>你的網站，<br>30 分鐘上線。</h2>
+        <p>NT$199，含部署</p>
+        <span class="btn dark">了解更多</span>
       </div>
-      <div class="answer" id="answer" role="status" aria-live="polite"></div>
+    </a>
+
+    <a class="ad a2" href="https://xin883xin-ops.github.io/FPSClinic/">
+      <span class="sponsor"><b>廣告</b>FPSClinic</span>
+      <div class="art" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#5FD3BC" stroke-opacity=".8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 110h42l18-62 28 108 24-80 16 34h56"/></svg></div>
+      <div class="in">
+        <h2>遊戲卡頓，<br>先查出卡在哪。</h2>
+        <p>真人遠端診斷 · 試營運免費</p>
+        <span class="btn dark">了解更多</span>
+      </div>
+    </a>
+
+  </div>
+  <div class="dots" data-dots="#ads"></div>
+</section>
+
+<!-- 分類格 -->
+<section class="sec" id="cats">
+  <div class="wrap">
+    <div class="sec-head"><h2>全部分類</h2></div>
+    <div class="grid">
+      <a href="https://xin883xin-ops.github.io/FPSClinic/">遊戲／電腦 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="site199/">網站／上線 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="soon" href="#tiles">App 開發 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><small>即將推出</small></a>
+      <a class="soon" href="#tiles">Microsoft Store <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><small>即將推出</small></a>
+      <a class="soon" href="#tiles">iOS App Store <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><small>即將推出</small></a>
+      <a class="soon" href="#tiles">Chrome 擴充功能 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><small>即將推出</small></a>
     </div>
   </div>
 </section>
 
-<!-- 技能卡片列 -->
-<section id="skills">
+<!-- 熱門技能：可拖曳左右滑的商品磚 -->
+<section class="sec" id="tiles">
   <div class="wrap">
-    <div class="head rv">
-      <div><h2>官方技能包</h2><p>名字旁邊的勾勾，代表這個技能包已通過審核<sup><a href="#n2">2</a></sup>。</p></div>
-    </div>
-    <div class="cards">
+    <div class="sec-head"><h2>熱門技能</h2><a class="more" href="#cats">更多分類 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+    <div class="rail-wrap">
+      <button class="arrow prev" type="button" aria-label="上一個" data-prev hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="rail" id="ptiles" tabindex="0" aria-label="熱門技能，左右滑動">
 
-      <article class="skill rv">
-        <div class="art">
-          <span class="badge">遊戲／電腦</span>
-          <svg viewBox="0 0 96 96" fill="none" stroke="#5FD3BC" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 54h20l9-30 14 52 12-38 7 16h22"/></svg>
-        </div>
-        <div class="body">
-          <h3>遊戲效能遠端優化</h3>
-          <p class="by">提供者 FPSClinic <span class="tick" title="已通過審核"><svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5l2.5 2.5L10 3.5"/></svg></span></p>
-          <p class="what">遊戲卡頓、掉幀，先查出卡在哪再動手。真人遠端診斷，調整前先備份，每一項都能還原。</p>
-          <div class="foot"><span class="price">試營運免費</span><a class="btn small" href="https://xin883xin-ops.github.io/FPSClinic/">看服務</a></div>
-        </div>
-      </article>
-
-      <article class="skill rv">
-        <div class="art t2">
-          <span class="badge">網站／上線</span>
-          <svg viewBox="0 0 96 96" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="10" y="16" width="76" height="64" rx="8"/><path d="M10 34h76M24 25h.1M34 25h.1"/><path d="M24 48h30M24 60h48"/></svg>
-        </div>
-        <div class="body">
+        <a class="ptile p1" href="site199/" draggable="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="16" width="76" height="64" rx="8"/><path d="M10 34h76M24 25h.1M34 25h.1M24 48h30M24 60h48"/></svg></div>
+          <div class="tag">網站／上線</div>
           <h3>30 分鐘一頁式網頁</h3>
-          <p class="by">提供者 <span class="tbd">官方（品牌名待定）</span> <span class="tick" title="已通過審核"><svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5l2.5 2.5L10 3.5"/></svg></span></p>
-          <p class="what">商店、介紹頁都行。簡單描述你要什麼，我們做好並幫你部署上線，放一年。</p>
-          <div class="foot"><span class="price">NT$199 <small>一頁</small></span><a class="btn small" href="site199/">看服務</a></div>
-        </div>
-      </article>
+          <div class="by">提供者 <span class="tbd">官方</span> <span class="tick"><svg viewBox="0 0 12 12" fill="none" stroke="#0B141A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5l2.5 2.5L10 3.5"/></svg></span></div>
+          <div class="foot"><span class="price">NT$199 <small>一頁</small></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+        </a>
 
-      <article class="skill rv">
-        <div class="art t3">
-          <span class="badge soon">即將推出</span>
-          <svg viewBox="0 0 96 96" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="28" y="8" width="40" height="80" rx="9"/><path d="M42 18h12M44 76h8"/></svg>
-        </div>
-        <div class="body">
+        <a class="ptile p2" href="https://xin883xin-ops.github.io/FPSClinic/" draggable="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96" fill="none" stroke="#5FD3BC" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 54h20l9-30 14 52 12-38 7 16h26"/></svg></div>
+          <div class="tag">遊戲／電腦</div>
+          <h3>遊戲效能遠端優化</h3>
+          <div class="by">提供者 FPSClinic <span class="tick"><svg viewBox="0 0 12 12" fill="none" stroke="#0B141A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5l2.5 2.5L10 3.5"/></svg></span></div>
+          <div class="foot"><span class="price">試營運免費</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+        </a>
+
+        <a class="ptile p3 soon" href="#wish" draggable="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="28" y="8" width="40" height="80" rx="9"/><path d="M42 18h12M44 76h8"/></svg></div>
+          <div class="tag">App 開發 · 即將推出</div>
           <h3>Android App 開發</h3>
-          <p class="by">提供者 官方</p>
-          <p class="what">原生、Flutter、Web 版都做得出來，案例都是我們自己上線的專案。可另外協助上架 Google Play。</p>
-          <div class="foot"><span class="price">價格待公布</span><a class="btn small" href="#wish" aria-disabled="true">留下需求</a></div>
-        </div>
-      </article>
+          <div class="by">提供者 官方</div>
+          <div class="foot"><span class="price">價格待公布</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+        </a>
 
-      <article class="skill rv">
-        <div class="art t4">
-          <span class="badge soon">即將推出</span>
-          <svg viewBox="0 0 96 96" fill="none" stroke="#8A9BA5" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M48 24v48M24 48h48"/></svg>
-        </div>
-        <div class="body">
-          <h3>更多平台與技能</h3>
-          <p class="by">陸續開放</p>
-          <p class="what">Microsoft Store、iOS App Store、Chrome 擴充功能的上架服務，還有更多遠端技能包，準備好一個開一個。</p>
-          <div class="foot"><span class="price">敬請期待</span><a class="btn small" href="#wish" aria-disabled="true">我想要這個</a></div>
-        </div>
-      </article>
+        <a class="ptile p4 soon" href="#wish" draggable="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="12" y="12" width="32" height="32"/><rect x="52" y="12" width="32" height="32"/><rect x="12" y="52" width="32" height="32"/><rect x="52" y="52" width="32" height="32"/></svg></div>
+          <div class="tag">Microsoft Store · 即將推出</div>
+          <h3>Microsoft Store 上架</h3>
+          <div class="by">提供者 官方</div>
+          <div class="foot"><span class="price">敬請期待</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+        </a>
 
-    </div>
-  </div>
-</section>
+        <a class="ptile p5 soon" href="#wish" draggable="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M48 24c-8-12-24-8-24 8 0 20 16 44 24 44s24-24 24-44c0-16-16-20-24-8z"/></svg></div>
+          <div class="tag">iOS App Store · 即將推出</div>
+          <h3>iOS App Store 上架</h3>
+          <div class="by">提供者 官方</div>
+          <div class="foot"><span class="price">敬請期待</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+        </a>
 
-<!-- 主打 -->
-<section class="feature" aria-labelledby="feat-h">
-  <div class="glow" aria-hidden="true"></div>
-  <div class="wrap">
-    <div class="rv">
-      <p class="eyebrow">本週主打 · FPSClinic</p>
-      <h2 id="feat-h">配備不差，<br>為什麼還是卡？</h2>
-      <p class="lead">先量每一格畫面花的時間，找出卡在哪，再逐項調整。不先換硬體，也不一次套一包設定。試營運限 10 個名額，免費調校一次。</p>
-      <div class="actions">
-        <a class="btn light" href="https://xin883xin-ops.github.io/FPSClinic/">了解服務</a>
-        <a class="btn outline-light line-link" href="#wish">加 LINE 預約</a>
+        <a class="ptile p6 soon" href="#wish" draggable="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="48" cy="48" r="34"/><circle cx="48" cy="48" r="13"/><path d="M48 35h34M26 61L10 33M48 82l17-28"/></svg></div>
+          <div class="tag">Chrome 擴充功能 · 即將推出</div>
+          <h3>Chrome 擴充功能</h3>
+          <div class="by">提供者 官方</div>
+          <div class="foot"><span class="price">敬請期待</span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+        </a>
+
       </div>
+      <button class="arrow next" type="button" aria-label="下一個" data-next><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
-    <div class="big rv" aria-label="站長自己的內顯筆電，從約 30 FPS 到 100 FPS 以上">
-      30<span>→</span>100+
-      <small>FPS，站長自己的內顯筆電，一般對戰<sup><a href="#n3">3</a></sup>。<br>這是單一台電腦的個案，不代表每台都會這樣。</small>
-    </div>
+    <div class="dots" data-dots="#ptiles"></div>
   </div>
 </section>
 
-<!-- 作品與加入 -->
-<section id="works">
-  <div class="wrap">
-    <div class="head rv"><div><h2>我們做的東西</h2><p>不只賣技能，也自己做產品。</p></div></div>
-    <div class="tiles">
-      <article class="tile a rv">
-        <p class="tag">作品 · Android App</p>
-        <h3>禱告種子</h3>
-        <p>給華語基督徒社群的禱告 App，2026 年 4 月 1 日正式上線。我們自己的專案，從設計、開發到維護都是自己做。</p>
-        <div class="stack"><span>Flutter</span><span>Firebase</span><span>Google Play</span></div>
-        <div class="links"><a class="btn light small" href="#"><span class="tbd" style="outline-color:#fff">Google Play 載點待補</span></a></div>
-      </article>
-      <article class="tile b rv" id="join">
-        <p class="tag">技術人加入</p>
-        <h3>有技能？放上來。</h3>
-        <p>加入、交流、上架都免費。你的技能包經過審核就能上架，成交時才抽成<sup><a href="#n5">5</a></sup>。作品頁讓你累積自己的名聲。</p>
-        <div class="links"><a class="btn small line-link" href="#wish">洽詢上架</a></div>
-      </article>
-      <article class="tile c rv">
-        <p class="tag">持續維護</p>
-        <h3>發現問題，直接回報</h3>
-        <p>每個技能包下面都能回報問題。作者修好就上傳新版本，頁面會寫出這一版修了什麼。</p>
-      </article>
-      <article class="tile d rv">
-        <p class="tag">可以復原</p>
-        <h3>先備份，才動手</h3>
-        <p>會動到你電腦或帳號的服務，都先備份、說明風險、經過你同意，並附上還原方式。</p>
-      </article>
-    </div>
+<!-- 大橫幅 -->
+<section class="sec" id="more">
+  <div class="wrap banners">
+    <a class="banner b1" href="#wish">
+      <div class="art" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="64" r="28"/><path d="M40 176c4-40 28-56 60-56s56 16 60 56"/><path d="M150 40l10 10 20-24"/></svg></div>
+      <div><h3>有技能？放上來。</h3><p>加入與上架免費，通過審核就有勾勾，成交時才抽成<sup>4</sup>。</p></div>
+      <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+    <a class="banner b2" href="#">
+      <div class="art" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#E7C65A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M100 24c10 30 42 40 42 74 0 26-18 44-42 44S58 124 58 98c0-34 32-44 42-74z"/><path d="M100 142v40M80 170h40"/></svg></div>
+      <div><h3>我們的作品：禱告種子</h3><p>給華語基督徒社群的禱告 App。<span class="tbd">Google Play 載點待補</span></p></div>
+      <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
   </div>
 </section>
 
-<!-- 為什麼放心 -->
-<section class="trust" id="trust">
+<section class="trust">
   <div class="wrap">
-    <div class="head rv"><div><h2>為什麼可以放心</h2></div></div>
     <ul>
-      <li class="rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#075E51" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h3>上架必先審核</h3><p>通過審核才有勾勾。更新版本後會重新審核。</p></li>
-      <li class="rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#075E51" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4-6 8-6s7 1.5 8 6"/></svg></div><h3>提供者寫清楚</h3><p>每張卡片都標明誰提供。我們自己的技能包標「官方」。</p></li>
-      <li class="rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#075E51" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 3-6.2"/><path d="M4 4v5h5"/></svg></div><h3>持續修、持續更新</h3><p>問題可以回報，版本更新都有紀錄。</p></li>
-      <li class="rv"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#075E51" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></div><h3>有保固</h3><p>各技能包都把保固與條件寫在服務頁上，不藏在小字裡。</p></li>
+      <li><b>上架必先審核</b>通過審核才有勾勾，更新後重新審核。</li>
+      <li><b>提供者寫清楚</b>每個技能都標明誰提供。</li>
+      <li><b>可以回報問題</b>作者持續修，版本更新有紀錄。</li>
+      <li><b>條件寫在明處</b>價格與保固都在各技能的頁面上。</li>
     </ul>
   </div>
 </section>
 
-<!-- 許願 -->
 <section class="wish" id="wish">
   <div class="wrap">
     <div>
       <h2>想要的技能還沒有？</h2>
-      <p>告訴我們你想解決什麼，我們排進清單，做好第一個通知你。</p>
+      <p>告訴我們你想解決什麼，我們排進清單。</p>
       <p class="lineid">LINE ID：<span class="line-id tbd">tbd：待補</span></p>
     </div>
     <a class="btn line-link" href="#wish">加 LINE 告訴我們</a>
   </div>
 </section>
 
-<!-- 小字 -->
 <section class="notes" aria-label="說明">
   <div class="wrap">
     <b>說明</b>
     <ol>
-      <li id="n1">官方技能包由站長自己提供，並自行實測後才上架。</li>
+      <li id="n1">標示「廣告」的區塊是提供者的推廣，內容由提供者負責。目前的提供者都是站長自己。</li>
       <li id="n2">勾勾代表已通過審核，不代表保證每個人的結果都一樣。</li>
-      <li id="n3">FPS 數字為站長自己的一台電腦的個案。每台電腦的瓶頸不同，不承諾固定 FPS，會先測再說明可改善的幅度。</li>
-      <li id="n4">各技能包的價格、保固與退費條件，以該技能包的服務頁為準。</li>
-      <li id="n5">第三方技能包上架的抽成比例與收款方式，將在開放前公布。</li>
+      <li id="n3">各技能的價格、保固與退費條件，以該技能的頁面為準。</li>
+      <li id="n4">第三方技能上架的抽成比例與收款方式，將在開放前公布。</li>
     </ol>
   </div>
 </section>
@@ -277,16 +246,16 @@
     <div class="cols">
       <div>
         <a class="brand" href="#top">
-          <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#14262F"/><rect x="6" y="6" width="9" height="9" rx="2.5" fill="#5FD3BC"/><rect x="17" y="6" width="9" height="9" rx="2.5" fill="#fff"/><rect x="6" y="17" width="9" height="9" rx="2.5" fill="#fff"/><rect x="17" y="17" width="9" height="9" rx="2.5" fill="#fff" fill-opacity=".4"/></svg>
+          <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#16242D"/><rect x="6" y="6" width="9" height="9" rx="2.5" fill="#5FD3BC"/><rect x="17" y="6" width="9" height="9" rx="2.5" fill="#fff"/><rect x="6" y="17" width="9" height="9" rx="2.5" fill="#fff"/><rect x="17" y="17" width="9" height="9" rx="2.5" fill="#fff" fill-opacity=".4"/></svg>
           <b>技能商店</b>
         </a>
         <p>把你的難題，交給會的人。</p>
       </div>
-      <div><h4>找技能</h4><ul><li><a href="https://xin883xin-ops.github.io/FPSClinic/">遊戲效能遠端優化</a></li><li><a href="site199/">30 分鐘一頁式網頁</a></li><li><a href="#skills">Android App 開發（即將推出）</a></li></ul></div>
-      <div><h4>關於我們</h4><ul><li><a href="#works">我們的作品</a></li><li><a href="#join">技術人加入</a></li><li><a href="#trust">為什麼放心</a></li></ul></div>
-      <div><h4>聯絡</h4><ul><li><a class="line-link" href="#wish">LINE 洽詢</a></li><li><span class="tbd">服務條款待補</span></li><li><span class="tbd">隱私權待補</span></li></ul></div>
+      <div><h4>找技能</h4><ul><li><a href="#cats">全部分類</a></li><li><a href="#tiles">熱門技能</a></li></ul></div>
+      <div><h4>關於</h4><ul><li><a href="#more">作品與加入</a></li><li><a href="#n1">廣告說明</a></li></ul></div>
+      <div><h4>聯絡</h4><ul><li><a class="line-link" href="#wish">LINE 洽詢</a></li><li><button class="linklike" type="button" data-install hidden>安裝到桌面</button></li><li><span class="tbd">服務條款待補</span></li><li><span class="tbd">隱私權待補</span></li></ul></div>
     </div>
-    <div class="copy"><span>© 2026 技能商店<span class="tbd" style="margin-left:6px">暫名</span></span></div>
+    <div class="copy">© 2026 技能商店 <span class="tbd">暫名</span></div>
   </div>
 </footer>
 
