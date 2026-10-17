@@ -16,7 +16,8 @@
 <!--
   站長待辦（搜尋「tbd」可找到所有空位）：
   1. 在最下方 <script> 的 LINE_ID 填入你的 LINE ID，所有預約按鈕會自動接上。
-  2. .tbd 標記的欄位：實測機型、畫質、解析度、1% low、前後截圖。沒有真實數據前請保留空位，不要放示意數字。
+  2. 實測案例區（#case）：規格表與前後對照已填入。調校前用文字「卡頓、約 30 FPS」，調校後用示意圖（images/lol-demo.jpg，圖上與圖說都標「示意圖」）。
+     還沒有的：1% low 與前後實拍截圖，等第一批客戶的真實資料再補。換成實拍時，把「示意圖」標籤一併拿掉。
   3. 「成功標準」與退款文字，請依你的實際決定修改（見 #warranty）。
   4. 遠端工具名稱（見 FAQ），選定並確認授權條款後再填。
 -->
@@ -139,9 +140,22 @@ header.top nav a:hover { color: var(--teal-deep); text-decoration: underline; te
 .spec { width: 100%; border-collapse: collapse; font-size: .98rem; background: var(--card); border: 1px solid var(--line); }
 .spec th, .spec td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .spec th { width: 9em; color: var(--muted); font-weight: 500; background: #F6F9FA; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .media { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; grid-column: 1 / -1; }
-.shot { aspect-ratio: 16 / 9; border: 2px dashed var(--amber-line); background: var(--amber-wash); border-radius: var(--radius); display: grid; place-items: center; text-align: center; padding: 12px; font-weight: 500; color: #6B5200; }
-.shot b { display: block; font-size: 1.05rem; }
+.pane { margin: 0; display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--card); }
+.pane .vis { position: relative; aspect-ratio: 662 / 381; background: var(--ink); overflow: hidden; }
+.pane figcaption { padding: 12px 16px 14px; font-size: .95rem; line-height: 1.6; }
+.pane figcaption b { display: block; font-size: 1.05rem; }
+.pane figcaption small { color: var(--muted); font-size: .85rem; }
+.pane.before .vis {
+  display: grid; place-content: center; justify-items: center; gap: 8px; padding: 16px; text-align: center;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 2px, transparent 2px 7px), linear-gradient(160deg, #1B2A35, #0B1720);
+}
+.pane.before .word { font-size: clamp(2.8rem, 8vw, 4.4rem); font-weight: 900; line-height: 1; letter-spacing: .08em; color: #FF8A82; }
+.pane.before .fpsn { font-size: 1.15rem; font-weight: 700; color: #D5E1E7; }
+.pane.after img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; max-width: none; }
+.badge { position: absolute; left: 12px; top: 12px; z-index: 2; padding: 3px 12px; border-radius: 999px; background: rgba(11,23,32,.86); color: #fff; font-size: .8rem; font-weight: 700; line-height: 1.5; }
+.media-note { grid-column: 1 / -1; margin: 0; max-width: none; font-size: .85rem; color: var(--muted); }
 
 .games { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); margin-top: 8px; }
 .games th, .games td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line); }
@@ -177,6 +191,12 @@ header.top nav a:hover { color: var(--teal-deep); text-decoration: underline; te
 .tier li { margin-bottom: 6px; font-size: .98rem; }
 .tier .price { font-weight: 900; font-size: 1.1rem; border-top: 1px solid var(--line); padding-top: 14px; margin: 0; }
 .addon { margin-top: 20px; color: var(--muted); }
+.scope { background: var(--teal-wash); border-left: 4px solid var(--teal); border-radius: 0 var(--radius) var(--radius) 0; padding: 18px 22px; margin: 0 0 28px; }
+.scope h3 { font-size: 1.1rem; margin-bottom: 6px; }
+.scope p { margin: 0 0 6px; max-width: none; }
+.scope ul { margin: 6px 0 10px; padding-left: 1.2em; }
+.scope li { margin-bottom: 2px; }
+.scope .fine { margin: 0; }
 
 /* 保固 */
 .warranty { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
@@ -230,8 +250,8 @@ footer p { margin: 6px 0 0; max-width: none; }
   .srow dd { margin-bottom: 8px; }
   .games th, .games td { display: block; width: auto; border-bottom: 0; padding: 10px 16px 0; }
   .games td { padding-bottom: 12px; border-bottom: 1px solid var(--line); }
-  .spec th, .spec td { display: block; width: auto; border-bottom: 0; }
-  .spec td { border-bottom: 1px solid var(--line); }
+  .spec th { width: 8.6em; padding: 10px 12px; font-size: .9rem; }
+  .spec td { padding: 10px 12px; font-size: .94rem; }
 }
 </style>
 </head>
@@ -386,16 +406,35 @@ s0.parentNode.insertBefore(s1,s0);
         <p class="note">這是單一台電腦的個案，不代表每台都會這樣。每台的瓶頸不同，所以才要先診斷。</p>
       </div>
       <table class="spec">
-        <tr><th>機型與處理器</th><td><span class="tbd">tbd：機型、CPU</span></td></tr>
-        <tr><th>顯示晶片與記憶體</th><td><span class="tbd">tbd：內顯型號、記憶體容量與通道數</span></td></tr>
-        <tr><th>解析度與畫質</th><td><span class="tbd">tbd：解析度、畫質設定</span></td></tr>
-        <tr><th>一般對戰</th><td>約 30 → 100+ FPS，1% low：<span class="tbd">tbd</span></td></tr>
-        <tr><th>混戰團戰</th><td>80+ FPS，1% low：<span class="tbd">tbd</span></td></tr>
-        <tr><th>測試方式</th><td><span class="tbd">tbd：量測工具、測試場景、是否同一場景前後各測一次</span></td></tr>
+        <caption class="sr">測試機規格與實測結果</caption>
+        <tr><th scope="row">測試機型</th><td>HP ProBook 430 G7（筆電）</td></tr>
+        <tr><th scope="row">處理器</th><td>Intel Core i5-10210U（4 核 8 緒，最高 4.2GHz）</td></tr>
+        <tr><th scope="row">顯示</th><td>Intel UHD Graphics（內建顯示，無獨立顯卡）</td></tr>
+        <tr><th scope="row">記憶體</th><td>16 GB</td></tr>
+        <tr><th scope="row">儲存</th><td>256 GB SSD</td></tr>
+        <tr><th scope="row">解析度／更新率</th><td>1920×1080／60Hz</td></tr>
+        <tr><th scope="row">供電與散熱</th><td>插電使用；系統預設散熱，沒有手動調高風扇轉速</td></tr>
+        <tr><th scope="row">調校前</th><td>日常使用狀態，沒有做任何優化，約 30 FPS</td></tr>
+        <tr><th scope="row">一般對戰</th><td>約 30 → 100+ FPS</td></tr>
+        <tr><th scope="row">混戰團戰</th><td>80+ FPS</td></tr>
       </table>
       <div class="media">
-        <div class="shot"><div><b>調校前</b>tbd：截圖或錄影</div></div>
-        <div class="shot"><div><b>調校後</b>tbd：截圖或錄影</div></div>
+        <figure class="pane before">
+          <div class="vis">
+            <span class="badge">調校前</span>
+            <b class="word">卡頓</b>
+            <span class="fpsn">約 30 FPS</span>
+          </div>
+          <figcaption><b>調校前</b><small>日常使用狀態，沒有做任何優化。</small></figcaption>
+        </figure>
+        <figure class="pane after">
+          <div class="vis">
+            <span class="badge">示意圖</span>
+            <img src="images/lol-demo.jpg" width="662" height="381" loading="lazy" decoding="async" alt="英雄聯盟對戰畫面的示意圖，畫面右下角的遊戲內幀數顯示為 144">
+          </div>
+          <figcaption><b>調校後　本機實測 100+ FPS</b><small>示意圖｜畫面為相近數據情境，實測數據見上方。</small></figcaption>
+        </figure>
+        <p class="media-note">右圖是示意圖，不是這台測試機的實拍。FPS 指遊戲畫面實際算出的幀數，可以高於螢幕的 60Hz 更新率。</p>
       </div>
     </div>
 
@@ -452,6 +491,15 @@ s0.parentNode.insertBefore(s1,s0);
     <div class="sec-head">
       <h2>服務內容</h2>
       <p>試營運期間免費，正式價格會在試營運結束後公布。</p>
+    </div>
+    <div class="scope" id="scope">
+      <h3>服務受理範圍</h3>
+      <p>為確保調校後有明顯成效，目前僅受理以下設備：</p>
+      <ul>
+        <li>可升級 Windows 11 的機器</li>
+        <li>記憶體 8 GB 以上</li>
+      </ul>
+      <p class="fine">不符合上述條件的機器，恕不受理。預約時先傳型號與記憶體容量，我會先幫你確認。</p>
     </div>
     <div class="tiers">
       <div class="tier">
@@ -569,7 +617,7 @@ s0.parentNode.insertBefore(s1,s0);
     </details>
     <details>
       <summary>支援哪些電腦？</summary>
-      <p>Windows 10 與 Windows 11，Intel、AMD、NVIDIA 顯示晶片，筆電與桌機都可以。預約時先傳型號，不適合的我會事先說明。</p>
+      <p>Windows 10 與 Windows 11，Intel、AMD、NVIDIA 顯示晶片，筆電與桌機都可以，但需符合<a href="#scope">服務受理範圍</a>（可升級 Windows 11、記憶體 8 GB 以上）。預約時先傳型號，不適合的我會事先說明。</p>
     </details>
     <details>
       <summary>有其他遊戲也能調嗎？</summary>

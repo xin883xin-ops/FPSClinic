@@ -220,6 +220,31 @@ footer .copy { border-top: 1px solid #1C2A33; margin-top: 32px; padding-top: 18p
 .linklike:hover { color: #fff; text-decoration: underline; }
 @media (max-width: 560px) { .top .install { padding: 8px 12px; font-size: .85rem; } }
 
+/* ---------- 工具箱側邊欄 ---------- */
+.btn.ghost { background: transparent; border-color: var(--line); color: var(--ink); }
+.btn.ghost:hover { background: #1B2B35; border-color: var(--teal-bright); color: var(--ink); }
+.top .tools { white-space: nowrap; }
+.top .tools svg { width: 18px; height: 18px; }
+.toolbox-scrim { position: fixed; inset: 0; z-index: 90; background: rgba(4,8,12,.62); opacity: 0; transition: opacity .3s; }
+.toolbox-scrim.on { opacity: 1; }
+.toolbox {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 100; width: min(460px, 100vw);
+  background: #0a0c11; border-left: 1px solid rgba(255,255,255,.17); box-shadow: 0 22px 48px rgba(0,0,0,.5);
+  transform: translateX(104%); visibility: hidden;
+  transition: transform .34s cubic-bezier(.2,.8,.2,1), visibility 0s .34s;
+}
+.toolbox.open { transform: none; visibility: visible; transition: transform .34s cubic-bezier(.2,.8,.2,1), visibility 0s; }
+.toolbox iframe { display: block; width: 100%; height: 100%; border: 0; background: #0a0c11; }
+html.toolbox-open { overflow: hidden; }
+@media (max-width: 560px) {
+  .top .tools { width: 44px; height: 44px; padding: 0; justify-content: center; border-radius: 50%; }
+  .top .tools .lbl { display: none; }
+  .top .tools svg { width: 22px; height: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toolbox, .toolbox.open, .toolbox-scrim { transition: none; }
+}
+
 @media (max-width: 560px) {
   .ptile { width: 72%; aspect-ratio: 4 / 5; padding: 18px; }
   .ptile h3 { font-size: 1.3rem; }

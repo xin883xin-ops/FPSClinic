@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>極速撥號</title>
 <meta name="theme-color" content="#0a0c11">
+<script>if (/[?&]embed=1(&|$)/.test(location.search)) document.documentElement.classList.add("embed");</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -344,6 +345,20 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
   .brand small { display: none; }
   .handle { padding-top: 12px; padding-bottom: 12px; }
 }
+
+/* 帶鎖筆記（nologin.in 內嵌畫面與最近用過的名稱） */
+.lkframe { display: block; width: 100%; height: min(54vh, 460px); margin-top: 12px; border: 1px solid var(--line-2); border-radius: 14px; background: #fff; }
+.lkbar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.lkbar .btn { height: auto; min-height: 40px; padding: 8px 14px; font-size: 14px; white-space: normal; }
+.lkopen { flex: 1; min-width: 0; text-align: left; background: transparent; border: 0; padding: 4px 0; font-family: var(--f-mono); font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lkopen:hover { color: var(--accent); }
+.lkacts { display: flex; gap: 6px; flex: none; }
+.ib.cp:hover { color: var(--accent); }
+
+/* 嵌入模式（網址帶 ?embed=1）：被首頁的「工具箱」面板載入時，只顯示側邊欄內容 */
+html.embed body { min-height: 0; height: 100vh; height: 100dvh; overflow: hidden; }
+html.embed .home, html.embed .handle { display: none !important; }
+html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: none; visibility: visible; transition: none; }
 </style>
 </head>
 <body>
@@ -560,6 +575,7 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
   "use strict";
   var $ = function (id) { return document.getElementById(id); };
   var LS_KEY = "sd_state_v3", LS_LOOK = "sd_look_v1";
+  var EMBED = document.documentElement.classList.contains("embed");
 
   /* ---------- 圖示（自繪的單色線條圖示） ---------- */
   var GL = {
@@ -571,6 +587,7 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
     calc: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>',
     days: '<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M8 3v4M16 3v4M9 15.5l2 2 4-4"/>',
     pass: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3M12 15v2"/>',
+    lock: '<path d="M6 3h8l4 4v4M6 3v18h5M14 3v4h4"/><rect x="13" y="15" width="7" height="6" rx="1.5"/><path d="M14.5 15v-1.5a2 2 0 0 1 4 0V15"/>',
     link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
     globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>',
     mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
@@ -596,7 +613,8 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
     count: { name: "字數", title: "字數統計", sub: "貼上或輸入文字，馬上看到結果。" },
     calc: { name: "計算機", title: "計算機", sub: "" },
     days: { name: "倒數日", title: "倒數日", sub: "記下重要的日子，看還有幾天。" },
-    pass: { name: "密碼", title: "密碼產生器", sub: "在你的裝置上隨機產生，不會傳到任何地方。" }
+    pass: { name: "密碼", title: "密碼產生器", sub: "在你的裝置上隨機產生，不會傳到任何地方。" },
+    lock: { name: "帶鎖筆記", title: "帶鎖筆記", sub: "用 nologin.in 傳檔案、傳文字。網址與密碼由你們雙方先約好。" }
   };
   var TOOL_KEYS = Object.keys(TOOLS);
 
@@ -663,8 +681,8 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
   function normalize(o) {
     var base = {
       shortcuts: DEFAULTS.map(function (s) { return { title: s.title, url: s.url, category: s.category }; }),
-      bar: defaultBar(), note: "", todos: [], days: [],
-      engine: "google", accent: "amber", autoOpen: true, favicons: true, tourDone: false, updatedAt: 0, lastBackup: 0
+      bar: defaultBar(), note: "", todos: [], days: [], locks: [], toolsV: 2,
+      engine: "google", accent: "teal", autoOpen: true, favicons: true, tourDone: false, updatedAt: 0, lastBackup: 0
     };
     if (Array.isArray(o)) o = { shortcuts: o };
     if (!o || typeof o !== "object") return base;
@@ -681,7 +699,15 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
       });
       base.shortcuts = list;
     }
-    if (Array.isArray(o.bar)) base.bar = cleanBar(o.bar);
+    if (Array.isArray(o.bar)) {
+      base.bar = cleanBar(o.bar);
+      /* 舊資料（toolsV 小於 2）只補一次「帶鎖筆記」；之後使用者自己移除就不會再被補回 */
+      if ((o.toolsV | 0) < 2 && !base.bar.some(function (b) { return b.type === "tool" && b.key === "lock"; })) base.bar.push({ type: "tool", key: "lock" });
+    }
+    if (Array.isArray(o.locks)) {
+      base.locks = o.locks.filter(function (x) { return x && typeof x.n === "string" && /^[A-Za-z0-9_-]{1,64}$/.test(x.n); })
+        .slice(0, 20).map(function (x) { return { n: x.n, t: typeof x.t === "number" ? x.t : 0 }; });
+    }
     if (typeof o.note === "string") base.note = o.note.slice(0, 20000);
     if (Array.isArray(o.todos)) base.todos = o.todos.filter(function (t) { return t && typeof t.t === "string" && t.t.trim(); }).slice(0, 200).map(function (t) { return { t: t.t.slice(0, 200), d: !!t.d }; });
     if (Array.isArray(o.days)) base.days = o.days.filter(function (t) { return t && typeof t.t === "string" && /^\d{4}-\d{2}-\d{2}$/.test(t.d); }).slice(0, 50).map(function (t) { return { t: t.t.slice(0, 40), d: t.d }; });
@@ -697,11 +723,11 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
 
   var S = normalize(null);
   try { var raw = localStorage.getItem(LS_KEY); if (raw) S = normalize(JSON.parse(raw)); } catch (e) {}
-  var look = { theme: "system" };
+  var look = { theme: EMBED ? "dark" : "system" }; /* 嵌入首頁時預設深色，跟商店一致；使用者自己選過就照使用者的 */
   try { var lr = localStorage.getItem(LS_LOOK); if (lr) look = Object.assign(look, JSON.parse(lr)); } catch (e) {}
 
   function payload() {
-    return { shortcuts: S.shortcuts, bar: S.bar, note: S.note, todos: S.todos, days: S.days, engine: S.engine, accent: S.accent, autoOpen: S.autoOpen, favicons: S.favicons, tourDone: S.tourDone, updatedAt: S.updatedAt, lastBackup: S.lastBackup };
+    return { shortcuts: S.shortcuts, bar: S.bar, note: S.note, todos: S.todos, days: S.days, locks: S.locks, toolsV: 2, engine: S.engine, accent: S.accent, autoOpen: S.autoOpen, favicons: S.favicons, tourDone: S.tourDone, updatedAt: S.updatedAt, lastBackup: S.lastBackup };
   }
   var warned = false;
   function saveLocal() {
@@ -896,6 +922,12 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
     if (focusSearch) setTimeout(function () { $("q").focus(); }, 340);
   }
   function closeDrawer() {
+    if (EMBED) {
+      /* 嵌入模式：側邊欄由外層首頁的面板負責收合，這裡只通知它 */
+      $("lookPop").hidden = true; $("engMenu").hidden = true;
+      try { parent.postMessage({ type: "toolbox-close" }, location.origin); } catch (e) {}
+      return;
+    }
     if (!drawerOpen) return;
     drawerOpen = false;
     drawer.classList.remove("open"); drawer.setAttribute("inert", "");
@@ -1047,7 +1079,7 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
     $("ttTool").textContent = T.title; $("ttToolSub").textContent = T.sub; $("ttToolSub").hidden = !T.sub;
     toolBody.onclick = null; toolBody.oninput = null; toolBody.onchange = null; toolBody.onsubmit = null;
     toolBody.innerHTML = "";
-    ({ backup: toolBackup, todo: toolTodo, note: toolNote, timer: toolTimer, count: toolCount, calc: toolCalc, days: toolDays, pass: toolPass })[key](toolBody);
+    ({ backup: toolBackup, todo: toolTodo, note: toolNote, timer: toolTimer, count: toolCount, calc: toolCalc, days: toolDays, pass: toolPass, lock: toolLock })[key](toolBody);
     openOv("ovTool");
   }
 
@@ -1078,7 +1110,7 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
       '<textarea id="bkPaste" class="ta" rows="3" placeholder="或把備份文字貼在這裡"></textarea>' +
       '<button class="btn" type="button" data-a="paste">用貼上的文字還原</button>' +
       "</div>" +
-      '<div class="danger"><span>回到預設的 10 個捷徑與內建功能列，會清掉待辦與便條。還原後 7 秒內可以復原。</span><button class="btn dng" type="button" data-a="reset">還原預設</button></div>';
+      '<div class="danger"><span>回到預設的 10 個捷徑與內建功能列，會清掉待辦、便條與最近用過的筆記名稱。還原後 7 秒內可以復原。</span><button class="btn dng" type="button" data-a="reset">還原預設</button></div>';
     function meta() {
       var bytes = 0; try { bytes = new Blob([JSON.stringify(payload())]).size; } catch (e) {}
       var last = S.lastBackup ? new Date(S.lastBackup).toLocaleString("zh-TW", { hour12: false }) : "還沒備份過";
@@ -1293,6 +1325,57 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
     };
   }
 
+  /* 帶鎖筆記（nologin.in）：筆記的網址與密碼由你和對方約好；這裡只記筆記名稱，不存密碼。
+     內嵌畫面若被對方網站擋下或顯示空白，用「新分頁開啟」。 */
+  var NL = "https://nologin.in/";
+  function nlName(v) {
+    v = String(v || "").trim();
+    var m = v.match(/^(?:https?:\/\/)?(?:www\.)?nologin\.in\/([^\/?#\s]+)/i);
+    if (m) v = m[1];
+    try { v = decodeURIComponent(v); } catch (e) {}
+    return /^[A-Za-z0-9_-]{1,64}$/.test(v) ? v : "";
+  }
+  function nlUrl(n) { return NL + encodeURIComponent(n); }
+  function toolLock(b) {
+    b.innerHTML =
+      '<div class="note">網址與密碼由你跟對方先約好。這裡只會記下筆記名稱，<b>密碼不會被儲存</b>，每次請自己輸入。筆記到期會自動刪除，記得在期限內取走檔案。</div>' +
+      '<form class="row" id="lkForm" style="margin-top:12px" autocomplete="off"><input id="lkIn" class="inp" type="text" maxlength="120" placeholder="筆記名稱，例如 fpsc8k2m" inputmode="url" autocapitalize="off" spellcheck="false" aria-label="筆記名稱"><button class="btn pri" type="submit">開啟</button></form>' +
+      '<div class="err" id="lkErr" role="alert" style="margin-top:6px"></div>' +
+      '<div id="lkBox" hidden><iframe id="lkFrame" class="lkframe" title="nologin.in 筆記" referrerpolicy="no-referrer" allow="clipboard-write" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads allow-modals"></iframe>' +
+      '<div class="lkbar"><button class="btn" type="button" id="lkCopy">複製網址</button><button class="btn" type="button" id="lkTab">打不開或空白？用新分頁開啟</button><button class="btn" type="button" id="lkHide">收起畫面</button></div></div>' +
+      '<div class="sub">最近用過</div><ul class="list" id="lkList"></ul>';
+    var cur = "";
+    function drawList() {
+      $("lkList").innerHTML = S.locks.length ? S.locks.map(function (x, i) {
+        return '<li class="li"><button class="lkopen" type="button" data-open="' + esc(x.n) + '">' + esc(x.n) + '</button><span class="lkacts">' +
+          '<button class="ib cp" type="button" data-cp="' + esc(x.n) + '" aria-label="複製網址 ' + esc(x.n) + '">' + svgIc("link") + "</button>" +
+          '<button class="ib" type="button" data-rmn="' + i + '" aria-label="刪除記錄 ' + esc(x.n) + '">' + useIc("i-trash") + "</button></span></li>";
+      }).join("") : '<li class="empty" style="list-style:none">還沒有記錄。輸入筆記名稱開啟後，會自動記在這裡。</li>';
+    }
+    function openNote(n) {
+      cur = n; $("lkIn").value = n; $("lkErr").textContent = "";
+      $("lkFrame").src = nlUrl(n); $("lkBox").hidden = false;
+      S.locks = S.locks.filter(function (x) { return x.n !== n; });
+      S.locks.unshift({ n: n, t: Date.now() }); S.locks = S.locks.slice(0, 20);
+      touch(); drawList();
+    }
+    drawList();
+    b.onsubmit = function (e) {
+      e.preventDefault();
+      var n = nlName($("lkIn").value);
+      if (!n) { $("lkErr").textContent = "名稱只能用英文字母、數字、- 和 _（最多 64 字）。也可以直接貼上 nologin.in/名稱 的網址。"; return; }
+      openNote(n);
+    };
+    b.onclick = function (e) {
+      var o = e.target.closest("[data-open]"); if (o) { openNote(o.dataset.open); return; }
+      var c = e.target.closest("[data-cp]"); if (c) { copyText(nlUrl(c.dataset.cp), "網址已複製"); return; }
+      var r = e.target.closest("[data-rmn]"); if (r) { S.locks.splice(+r.dataset.rmn, 1); touch(); drawList(); return; }
+      if (e.target.closest("#lkCopy")) { if (cur) copyText(nlUrl(cur), "網址已複製"); }
+      else if (e.target.closest("#lkTab")) { if (cur) window.open(nlUrl(cur), "_blank", "noopener"); }
+      else if (e.target.closest("#lkHide")) { $("lkFrame").removeAttribute("src"); $("lkBox").hidden = true; cur = ""; }
+    };
+  }
+
   /* ---------- 外觀選單 ---------- */
   $("btnLook").addEventListener("click", function () { var h = $("lookPop").hidden; $("lookPop").hidden = !h; $("btnLook").setAttribute("aria-expanded", String(h)); });
   $("segTheme").addEventListener("click", function (e) {
@@ -1310,7 +1393,7 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
   /* ---------- 導覽 ---------- */
   var TOUR = [
     { sel: '[data-tour="search"]', t: "一個輸入框，兩種用法", b: "輸入網址會直接前往，其他文字會用左側選定的搜尋引擎搜尋。按 / 隨時跳到這裡。" },
-    { sel: '[data-tour="bar"]', t: "功能列", b: "備份、待辦、便條、計時器、字數統計、計算機、倒數日、密碼產生器。按「編輯」可以移除，也能加自己常用的網站。" },
+    { sel: '[data-tour="bar"]', t: "功能列", b: "備份、待辦、便條、計時器、字數統計、計算機、倒數日、密碼產生器、帶鎖筆記。按「編輯」可以移除，也能加自己常用的網站。" },
     { sel: '[data-tour="cats"]', t: "用分類找網站", b: "點一個分類，下方只顯示那一類。新增捷徑時輸入新的分類名稱，這裡會自動多出一格。" },
     { sel: '[data-tour="shelf"]', t: "最常使用排在最前面", b: "依你的點擊次數排序。用滑鼠拖曳、手指左右滑動，或按右上角的箭頭瀏覽。" },
     { sel: '[data-tour="add"]', t: "新增、編輯、刪除", b: "按「新增捷徑」加入網站，也能上傳自己的圖示。刪除後 7 秒內可以復原。" },
@@ -1368,14 +1451,20 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
 
   /* ---------- 啟動 ---------- */
   renderAll(); tick(); setInterval(tick, 1000);
-  handle.hidden = false;
-  if (S.autoOpen) {
-    setTimeout(function () {
-      openDrawer(false);
-      if (!S.tourDone) setTimeout(startTour, 900);
-    }, 350);
-  } else if (!S.tourDone) {
-    setTimeout(startTour, 500);
+  if (EMBED) {
+    /* 嵌入模式：側邊欄一載入就是展開的，不需要把手與自動展開 */
+    drawerOpen = true; drawer.removeAttribute("inert"); drawer.classList.add("open"); handle.hidden = true;
+    if (!S.tourDone) setTimeout(startTour, 700);
+  } else {
+    handle.hidden = false;
+    if (S.autoOpen) {
+      setTimeout(function () {
+        openDrawer(false);
+        if (!S.tourDone) setTimeout(startTour, 900);
+      }, 350);
+    } else if (!S.tourDone) {
+      setTimeout(startTour, 500);
+    }
   }
 })();
 </script>

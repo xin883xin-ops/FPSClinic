@@ -28,6 +28,7 @@
   3. 禱告種子的 Google Play 載點。
   4. 服務條款、隱私權頁面。
   LINE ID、各頁網址、技能清單都在 main.js 最上面設定。
+  工具箱（右上角按鈕）的內容在 side.html；網址加 ?embed=1 是嵌入模式。
   廣告區（最上方）與商品磚（熱門技能）的內容，直接改下面的 HTML。
 -->
 </head>
@@ -43,7 +44,7 @@
       <li>
         <button type="button" aria-haspopup="true">全部分類 ▾</button>
         <div class="mega">
-          <div><h4>遊戲／電腦</h4><a href="https://xin883xin-ops.github.io/FPSClinic/">遊戲效能遠端優化</a></div>
+          <div><h4>遊戲／電腦</h4><a href="fpsclinic.html">遊戲效能遠端優化</a></div>
           <div><h4>網站／上線</h4><a href="site199/">30 分鐘一頁式網頁</a></div>
           <div><h4>App 開發</h4><a class="soon" href="#tiles">Android App 開發</a></div>
           <div><h4>其他平台</h4><a class="soon" href="#tiles">Microsoft Store</a><a class="soon" href="#tiles">iOS App Store</a><a class="soon" href="#tiles">Chrome 擴充功能</a></div>
@@ -52,6 +53,10 @@
       <li><a href="#tiles">熱門技能</a></li>
       <li><a href="#more">作品與加入</a></li>
     </ul>
+    <button class="btn small ghost tools" type="button" id="open-toolbox" aria-haspopup="dialog" aria-controls="toolbox" aria-expanded="false" aria-label="工具箱">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>
+      <span class="lbl">工具箱</span>
+    </button>
     <button class="btn small install" type="button" data-install hidden>安裝到桌面</button>
     <button class="icon-btn" type="button" data-open-search aria-label="搜尋技能">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
@@ -62,6 +67,12 @@
   </div>
 </header>
 <div class="tip" id="install-tip" hidden>在 Safari 點下方的「分享」，再選「加入主畫面」，就能像 App 一樣開啟。</div>
+
+<!-- 工具箱：右側滑出的側邊欄（手機撐滿整個畫面）。內容是 side.html 的嵌入模式，第一次打開才載入 -->
+<div class="toolbox-scrim" id="toolbox-scrim" hidden></div>
+<aside class="toolbox" id="toolbox" role="dialog" aria-modal="true" aria-label="工具箱" inert>
+  <iframe id="toolbox-frame" title="工具箱" data-src="side.html?embed=1"></iframe>
+</aside>
 
 <div class="search" id="search" role="dialog" aria-modal="true" aria-label="搜尋技能">
   <div class="sheet">
@@ -97,7 +108,7 @@
       </div>
     </a>
 
-    <a class="ad a2" href="https://xin883xin-ops.github.io/FPSClinic/">
+    <a class="ad a2" href="fpsclinic.html">
       <span class="sponsor"><b>廣告</b>FPSClinic</span>
       <div class="art" aria-hidden="true"><svg viewBox="0 0 200 200" fill="none" stroke="#5FD3BC" stroke-opacity=".8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 110h42l18-62 28 108 24-80 16 34h56"/></svg></div>
       <div class="in">
@@ -116,7 +127,7 @@
   <div class="wrap">
     <div class="sec-head"><h2>全部分類</h2></div>
     <div class="grid">
-      <a href="https://xin883xin-ops.github.io/FPSClinic/">遊戲／電腦 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="fpsclinic.html">遊戲／電腦 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a href="site199/">網站／上線 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a class="soon" href="#tiles">App 開發 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><small>即將推出</small></a>
       <a class="soon" href="#tiles">Microsoft Store <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg><small>即將推出</small></a>
@@ -142,7 +153,7 @@
           <div class="foot"><span class="price">NT$199 <small>一頁</small></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
         </a>
 
-        <a class="ptile p2" href="https://xin883xin-ops.github.io/FPSClinic/" draggable="false">
+        <a class="ptile p2" href="fpsclinic.html" draggable="false">
           <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96" fill="none" stroke="#5FD3BC" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 54h20l9-30 14 52 12-38 7 16h26"/></svg></div>
           <div class="tag">遊戲／電腦</div>
           <h3>遊戲效能遠端優化</h3>

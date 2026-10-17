@@ -2,7 +2,7 @@ var SCRIPT_URL = (document.currentScript && document.currentScript.src) || locat
 
 /* 站長設定：全站只改這裡 ------------------------------------------- */
 var LINE_ID = "xin883xin";              // 個人 ID 直接填；官方帳號請連 @ 一起填，例如 "@xxxx"
-var FPS_URL = "https://xin883xin-ops.github.io/FPSClinic/"; // FPSClinic 頁面網址
+var FPS_URL = "fpsclinic.html";          // FPSClinic 頁面網址（相對路徑）
 var SITE199_URL = "site199/";           // 199 一頁式網頁服務頁（相對路徑）
 
 /* 技能清單：搜尋與「找對技能」都讀這一份。之後新增技能包，在這裡加一筆 */
@@ -36,6 +36,40 @@ var SKILLS = [
     burger.addEventListener("click", function () {
       var open = menu.classList.toggle("open");
       burger.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  }
+
+  /* 工具箱：右側滑出的側邊欄（內容是 side.html 的嵌入模式）。手機上撐滿整個畫面。
+     第一次靠近或點按鈕時才載入內容；Esc、點遮罩、側邊欄裡的 ✕ 都會收合。 */
+  var tbBtn = $("#open-toolbox"), tb = $("#toolbox"), tbScrim = $("#toolbox-scrim"), tbFrame = $("#toolbox-frame"), tbOpen = false, tbTimer = null;
+  function loadToolbox() { if (tbFrame && !tbFrame.getAttribute("src")) tbFrame.src = tbFrame.getAttribute("data-src"); }
+  function setToolbox(on) {
+    if (!tb || on === tbOpen) return;
+    tbOpen = on; clearTimeout(tbTimer);
+    if (on) {
+      loadToolbox();
+      tb.removeAttribute("inert"); tb.classList.add("open");
+      tbScrim.hidden = false; requestAnimationFrame(function () { tbScrim.classList.add("on"); });
+      document.documentElement.classList.add("toolbox-open");
+      if (tbBtn) tbBtn.setAttribute("aria-expanded", "true");
+      tbTimer = setTimeout(function () { try { tbFrame.contentWindow.focus(); } catch (e) {} }, 360);
+    } else {
+      tb.classList.remove("open"); tb.setAttribute("inert", "");
+      tbScrim.classList.remove("on"); tbTimer = setTimeout(function () { if (!tbOpen) tbScrim.hidden = true; }, 320);
+      document.documentElement.classList.remove("toolbox-open");
+      if (tbBtn) { tbBtn.setAttribute("aria-expanded", "false"); tbBtn.focus(); }
+    }
+  }
+  if (tb && tbScrim && tbFrame) {
+    if (tbBtn) {
+      tbBtn.addEventListener("click", function () { setToolbox(!tbOpen); });
+      ["pointerenter", "focus", "touchstart"].forEach(function (ev) { tbBtn.addEventListener(ev, loadToolbox, { once: true, passive: true }); });
+    }
+    tbScrim.addEventListener("click", function () { setToolbox(false); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && tbOpen) setToolbox(false); });
+    window.addEventListener("message", function (e) {
+      if (e.origin !== location.origin || !e.data || e.data.type !== "toolbox-close") return;
+      setToolbox(false);
     });
   }
 
