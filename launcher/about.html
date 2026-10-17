@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>精選站點啟動台｜免費｜技能商店</title>
+<meta name="description" content="官方挑選的 PWA 與雲遊戲站點，做成車機風的全螢幕啟動台。每兩週更新一期，不用登入，不收集資料。">
+<meta property="og:title" content="精選站點啟動台｜免費">
+<meta property="og:description" content="官方挑選的好站點，一點就開。每兩週更新一期。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="preview.jpg">
+<link rel="icon" href="icons/app-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/app-apple-touch.png">
+<meta name="theme-color" content="#0B141A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="啟動台">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!--
+  精選站點啟動台的商品頁（技能商店裡的免費技能包）。
+  期數、日期、站點數由 sites.json 自動帶入，平常不用改這頁。
+-->
+<style>
+  .s-hero .shot { margin-top: 56px; border-radius: 22px; overflow: hidden; box-shadow: 0 40px 80px -30px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.08); }
+  .s-hero .shot img { width: 100%; height: auto; }
+  .s-hero .acts { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .s-hero .free { display: inline-flex; align-items: center; gap: 8px; font-size: .95rem; color: #C3D2DA; }
+  .s-hero .free b { width: 8px; height: 8px; border-radius: 50%; background: #7cf0b4; box-shadow: 0 0 10px #7cf0b4; }
+  .facts { margin-top: -48px; }
+</style>
+<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="技能商店 首頁">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0B1620"/><rect x="6" y="6" width="9" height="9" rx="2.5" fill="#5FD3BC"/><rect x="17" y="6" width="9" height="9" rx="2.5" fill="#fff"/><rect x="6" y="17" width="9" height="9" rx="2.5" fill="#fff"/><rect x="17" y="17" width="9" height="9" rx="2.5" fill="#fff" fill-opacity=".4"/></svg>
+      <b>技能商店</b><small class="tbd">暫名</small>
+    </a>
+    <a class="btn small" href="./" style="margin-left:auto">啟動</a>
+  </div>
+</header>
+
+<main>
+
+<section class="s-hero">
+  <div class="wrap">
+    <p class="crumb"><a href="../">技能商店</a> › 免費工具 › 精選站點啟動台</p>
+    <h1>好站點，<br><em>一點就開。</em></h1>
+    <p class="sub">我們挑出值得收藏的 PWA 與雲遊戲站點，做成車機風的全螢幕啟動台。每個站點都附推薦理由，按一下就到官方網站。</p>
+    <div class="price-big"><b>免費</b><span>不用登入</span></div>
+    <div class="acts">
+      <a class="btn light" href="./">啟動</a>
+      <button class="btn outline-light" type="button" data-install hidden>裝成 App</button>
+      <span class="free"><b></b><span data-rel-line>官方持續更新中</span></span>
+    </div>
+    <p class="by">提供者 官方
+      <span class="tick" title="已通過審核"><svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5l2.5 2.5L10 3.5"/></svg></span>
+      官方技能包
+    </p>
+    <a class="shot" href="./" aria-label="啟動精選站點啟動台" style="display:block"><img src="preview.jpg" width="1600" height="800" alt="啟動台首頁：左邊是本週精選站點，右邊是時鐘和本期更新，下方是 Dock"></a>
+  </div>
+</section>
+<div class="tip" id="install-tip" hidden>在 Safari 點下方的「分享」，再選「加入主畫面」，就能像 App 一樣開啟。</div>
+
+<div class="wrap">
+  <div class="facts">
+    <div class="fact"><b data-rel-no>每期</b><span data-rel-date>官方更新</span></div>
+    <div class="fact"><b data-rel-count>精選</b><span>收錄的站點</span></div>
+    <div class="fact"><b>兩週一期</b><span>新站點上架，打不開的下架</span></div>
+    <div class="fact"><b>0 筆資料</b><span>不用登入，不收集任何資料</span></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="head rv"><div><h2>怎麼用</h2><p>跟車機一樣，打開就能用。電腦、手機、平板都是同一個畫面。</p></div></div>
+    <ol class="flow">
+      <li class="rv"><h3>打開啟動台</h3><p>首頁是本週精選、時鐘和這一期的更新內容。</p></li>
+      <li class="rv"><h3>往上滑看所有站點</h3><p>所有站點排成一格一格，左右滑換頁，也能直接搜尋。</p></li>
+      <li class="rv"><h3>看理由，再出發</h3><p>每個站點都有推薦理由，按「前往官方網站」就在新分頁打開。</p></li>
+      <li class="rv"><h3>常用的放進 Dock</h3><p>在站點頁按「加到 Dock」，下次打開就在最下面。</p></li>
+    </ol>
+    <p class="rv" style="margin-top:18px;color:var(--muted);font-size:.92rem">接上手把也能用：十字鍵移動、A 確認、B 返回、Y 打開所有站點。</p>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="wrap">
+    <div class="rv">
+      <h2>你不用整理，<br>我們幫你挑好。</h2>
+    </div>
+    <div class="rv">
+      <p>一般的收藏站要你自己滑、自己比較、自己整理我的最愛。這台啟動台反過來：站點由官方挑選、寫介紹、定期巡檢，你打開就是最新版。</p>
+      <p style="color:var(--muted);font-size:.95rem;margin:0">你唯一需要決定的，是哪幾個要放在自己的 Dock 上。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head rv"><div><h2>運作方式，寫清楚</h2><p>誰負責什麼，先講明白。</p></div></div>
+    <div class="terms">
+      <div class="term rv"><h3>我們負責</h3>
+        <ul>
+          <li>挑選站點，寫推薦理由。</li>
+          <li>每兩週發一期更新，打開時會通知你這期改了什麼。</li>
+          <li>定期巡檢，打不開的站點確認後下架。</li>
+        </ul>
+      </div>
+      <div class="term rv"><h3>你可以</h3>
+        <ul>
+          <li>挑幾個站點放進自己的 Dock，只存在你的裝置上。</li>
+          <li>推薦新站點給我們。</li>
+          <li>回報打不開的站點，或告訴我們哪裡可以更好。</li>
+        </ul>
+      </div>
+      <div class="term rv"><h3>我們不做</h3>
+        <ul>
+          <li>不嵌入、不轉載任何站點的內容，一律連到官方網站。</li>
+          <li>不需要登入，不收集任何資料。</li>
+        </ul>
+      </div>
+      <div class="term rv"><h3>給站點的開發者</h3>
+        <ul>
+          <li>收錄的站點都不是我們的作品，名稱與圖示屬原開發者所有。</li>
+          <li>想修改介紹或不希望被收錄，<a class="line-link" href="#ask">告訴我們</a>，我們會處理。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap" style="max-width:860px">
+    <div class="head rv"><div><h2>常見問題</h2></div></div>
+    <details><summary>真的完全免費嗎？</summary><p>是。啟動台是技能商店的免費技能包，不用登入，也沒有付費功能。</p></details>
+    <details><summary>可以自己加站點嗎？</summary><p>不行，這是刻意的。站點由官方挑選和維護，這樣每一個都值得點。你想推薦的站點，按啟動台 Dock 上的「建議」告訴我們。</p></details>
+    <details><summary>怎麼裝成 App？</summary><p>用 Chrome 或 Edge 打開啟動台，網址列會出現安裝圖示；iPhone 用 Safari 的「分享」→「加入主畫面」。裝好後是全螢幕的橫向畫面。</p></details>
+    <details><summary>雲遊戲需要另外付費嗎？</summary><p>要看各平台。啟動台只負責介紹和連結，帳號、訂閱與付費都在各平台的官方網站處理。</p></details>
+  </div>
+</section>
+
+<section class="cta" id="ask">
+  <div class="wrap">
+    <div>
+      <h2>現在就開來看看</h2>
+      <p style="margin:8px 0 0;color:#33545B">推薦站點或回報問題，也可以直接加 LINE 告訴我們。</p>
+      <p class="lineid">LINE ID：<span class="line-id tbd">tbd：待補</span></p>
+    </div>
+    <a class="btn" href="./">啟動</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="copy" style="border:0;margin:0;padding:0">
+      <span><a href="../">← 回技能商店</a></span>
+      <span>© 2026 技能商店<span class="tbd" style="margin-left:6px">暫名</span></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* 期數、日期、站點數從 sites.json 帶入 */
+  fetch("sites.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (d) {
+    var R = d.release, set = function (sel, t) { var el = document.querySelector(sel); if (el) el.textContent = t; };
+    set("[data-rel-no]", "第 " + R.no + " 期");
+    set("[data-rel-date]", R.date + "更新，下一期 " + R.next);
+    set("[data-rel-count]", d.sites.length + " 個");
+    set("[data-rel-line]", "第 " + R.no + " 期 · " + R.date + "更新");
+  }).catch(function () {});
+</script>
+<script src="../main.js"></script>
+</body>
+</html>

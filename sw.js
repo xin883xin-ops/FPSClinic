@@ -1,11 +1,16 @@
 /* 技能商店 service worker：離線可看已載入過的頁面。
    改了頁面或樣式後，把下面的版本號加 1，使用者下次開啟就會更新。 */
-const VERSION = "v4";
+const VERSION = "v5";
 const CACHE = "skillstore-" + VERSION;
 const CORE = [
   "./", "index.html", "store.css", "style.css", "main.js", "side.html", "fpsclinic.html", "images/lol-demo.jpg", "manifest.webmanifest",
   "site199/", "site199/index.html",
-  "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png"
+  "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png",
+  "launcher/", "launcher/index.html", "launcher/about.html", "launcher/sites.json", "launcher/manifest.webmanifest", "launcher/preview.jpg",
+  "launcher/icons/app-192.png", "launcher/icons/app-512.png", "launcher/icons/app-apple-touch.png",
+  "launcher/icons/squoosh.png", "launcher/icons/excalidraw.png", "launcher/icons/photopea.svg", "launcher/icons/tldraw.png",
+  "launcher/icons/pairdrop.png", "launcher/icons/svgomg.png", "launcher/icons/xbox.svg", "launcher/icons/nvidia.svg",
+  "launcher/icons/drawio.png", "launcher/icons/hoppscotch.png"
 ];
 
 self.addEventListener("install", (e) => {
@@ -31,6 +36,16 @@ self.addEventListener("fetch", (e) => {
       fetch(req)
         .then((res) => { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); return res; })
         .catch(() => caches.match(req).then((r) => r || caches.match("index.html")))
+    );
+    return;
+  }
+
+  // 啟動台的站點清單：先連網路拿最新一期，離線才用快取
+  if (url.origin === location.origin && url.pathname.endsWith("/launcher/sites.json")) {
+    e.respondWith(
+      fetch(req)
+        .then((res) => { if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); } return res; })
+        .catch(() => caches.match(req, { ignoreSearch: true }))
     );
     return;
   }
