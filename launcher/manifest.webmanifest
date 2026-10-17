@@ -1,6 +1,6 @@
 {
-  "name": "精選站點啟動台",
-  "short_name": "啟動台",
+  "name": "KitLab Dash · 精選站點啟動台",
+  "short_name": "Dash",
   "description": "官方挑選的 PWA 與雲遊戲站點，車機風全螢幕啟動台，每兩週更新一期。",
   "lang": "zh-Hant-TW",
   "id": "./",

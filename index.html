@@ -25,7 +25,7 @@
   站長筆記：
   條款與隱私在 terms.html。
   LINE ID、各頁網址、技能清單都在 main.js 最上面設定。
-  工具箱（右上角按鈕）的內容在 side.html；網址加 ?embed=1 是嵌入模式。
+  工具箱 KitLab Toolkit（右上角按鈕）的內容在 side.html；網址加 ?embed=1 是嵌入模式。
   廣告區（最上方）與商品磚（熱門技能）的內容，直接改下面的 HTML。
 -->
 </head>
@@ -44,16 +44,16 @@
           <div><h4>遊戲／電腦</h4><a href="fpsclinic.html">遊戲效能遠端優化</a></div>
           <div><h4>網站／上線</h4><a href="site199/">30 分鐘一頁式網頁</a></div>
           <div><h4>App 開發</h4><a class="soon" href="#tiles">Android App 開發</a></div>
-          <div><h4>免費工具</h4><a href="launcher/about.html">精選站點啟動台</a></div>
+          <div><h4>免費工具</h4><a href="launcher/about.html">KitLab Dash 精選站點啟動台</a></div>
           <div><h4>其他平台</h4><a class="soon" href="#tiles">Microsoft Store</a><a class="soon" href="#tiles">iOS App Store</a><a class="soon" href="#tiles">Chrome 擴充功能</a></div>
         </div>
       </li>
       <li><a href="#tiles">熱門技能</a></li>
       <li><a href="#more">作品與加入</a></li>
     </ul>
-    <button class="btn small ghost tools" type="button" id="open-toolbox" aria-haspopup="dialog" aria-controls="toolbox" aria-expanded="false" aria-label="工具箱">
+    <button class="btn small ghost tools" type="button" id="open-toolbox" aria-haspopup="dialog" aria-controls="toolbox" aria-expanded="false" aria-label="KitLab Toolkit 工具箱">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>
-      <span class="lbl">工具箱</span>
+      <span class="lbl">Toolkit</span>
     </button>
     <button class="btn small install" type="button" data-install hidden aria-label="安裝到桌面"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">安裝到桌面</span></button>
     <button class="icon-btn" type="button" data-open-search aria-label="搜尋技能">
@@ -68,8 +68,8 @@
 
 <!-- 工具箱：右側滑出的側邊欄（手機撐滿整個畫面）。內容是 side.html 的嵌入模式，第一次打開才載入 -->
 <div class="toolbox-scrim" id="toolbox-scrim" hidden></div>
-<aside class="toolbox" id="toolbox" role="dialog" aria-modal="true" aria-label="工具箱" inert>
-  <iframe id="toolbox-frame" title="工具箱" data-src="side.html?embed=1"></iframe>
+<aside class="toolbox" id="toolbox" role="dialog" aria-modal="true" aria-label="KitLab Toolkit 工具箱" inert>
+  <iframe id="toolbox-frame" title="KitLab Toolkit 工具箱" data-src="side.html?embed=1"></iframe>
 </aside>
 
 <div class="search" id="search" role="dialog" aria-modal="true" aria-label="搜尋技能">
@@ -161,8 +161,8 @@
 
         <a class="ptile p7" href="launcher/about.html" draggable="false">
           <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96" fill="#fff"><circle cx="26" cy="26" r="7"/><circle cx="48" cy="26" r="7"/><circle cx="70" cy="26" r="7"/><circle cx="26" cy="48" r="7"/><circle cx="48" cy="48" r="7" fill="#7CF0B4"/><circle cx="70" cy="48" r="7"/><circle cx="26" cy="70" r="7"/><circle cx="48" cy="70" r="7"/><circle cx="70" cy="70" r="7"/></svg></div>
-          <div class="tag">免費工具</div>
-          <h3>精選站點啟動台</h3>
+          <div class="tag">免費工具 · 精選站點啟動台</div>
+          <h3>KitLab Dash</h3>
           <div class="by">提供者 KitLab 官方 <span class="tick"><svg viewBox="0 0 12 12" fill="none" stroke="#0B141A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5l2.5 2.5L10 3.5"/></svg></span></div>
           <div class="foot"><span class="price">免費 <small>每兩週更新</small></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
         </a>

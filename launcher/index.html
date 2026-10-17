@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>精選站點啟動台</title>
+<title>KitLab Dash · 精選站點啟動台</title>
 <meta name="description" content="官方挑選的 PWA 與雲遊戲站點，車機風全螢幕啟動台。每兩週更新一期，不用登入，不收集資料。">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/app-192.png">
@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#0A0D12">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="啟動台">
+<meta name="apple-mobile-web-app-title" content="Dash">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -199,7 +199,7 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
     <div class="amb" aria-hidden="true"><i></i><i></i></div>
 
     <header class="bar">
-      <a class="brand" href="about.html" title="關於啟動台"><img src="icons/app-192.png" alt="" width="28" height="28">精選站點啟動台<span>KitLab 商店的免費技能包</span></a>
+      <a class="brand" href="about.html" title="關於 KitLab Dash"><img src="icons/app-192.png" alt="" width="28" height="28">KitLab Dash<span>精選站點啟動台 · KitLab 商店的免費技能包</span></a>
       <div class="sp"></div>
       <button class="chip glass" id="chipUpd" data-nav hidden><b></b><span id="chipTxt"></span></button>
       <div class="padst" id="pad"><svg width="22" height="16" viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 2h12a5 5 0 0 1 5 5.5l-.6 4.2A3.6 3.6 0 0 1 16.3 13L14.5 11h-5l-1.8 2a3.6 3.6 0 0 1-6.1-1.3L1 7.5A5 5 0 0 1 6 2z"/><path d="M7 5.5v4M5 7.5h4"/></svg><span id="padtxt">手把</span></div>
@@ -271,7 +271,7 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
         <div class="grp" id="otaAddG"><h4>本期新增</h4><div class="lst" id="otaAdd"></div></div>
         <div class="grp" id="otaRmG" hidden><h4>本期下架</h4><div class="note" id="otaRm"></div></div>
         <div class="grp"><h4>維護</h4><div class="note" id="otaFix"></div></div>
-        <div class="grp"><h4>這台啟動台怎麼運作</h4><div class="note">由 KitLab 官方維護，固定每兩週更新一期：加入新發現的好站點，打不開的站點確認後會下架。你不用做任何事，打開就是最新版。不用登入，也不收集任何資料；你唯一能調整的 Dock 只存在這台裝置上。</div></div>
+        <div class="grp"><h4>KitLab Dash 怎麼運作</h4><div class="note">由 KitLab 官方維護，固定每兩週更新一期：加入新發現的好站點，打不開的站點確認後會下架。你不用做任何事，打開就是最新版。不用登入，也不收集任何資料；你唯一能調整的 Dock 只存在這台裝置上。</div></div>
       </div>
     </div>
 
@@ -497,7 +497,7 @@ function toast(msg, act) {
   $("#toastTxt").textContent = msg; $("#toastBtn").hidden = !act; $("#toastBtn").onclick = act;
   $("#toast").hidden = false; clearTimeout(tt); tt = setTimeout(function () { $("#toast").hidden = true; }, 7000);
 }
-if (store.get("kitlab-launcher-seen") !== R.no) setTimeout(function () { toast("啟動台已更新到第 " + R.no + " 期" + (added.length ? "，新增 " + added.length + " 個站點" : ""), openOta); }, 900);
+if (store.get("kitlab-launcher-seen") !== R.no) setTimeout(function () { toast("Dash 已更新到第 " + R.no + " 期" + (added.length ? "，新增 " + added.length + " 個站點" : ""), openOta); }, 900);
 
 /* 手勢：首頁往上滑開站點格；站點格左右換頁、往下關；站點頁往下或往右返回 */
 var g = null, wheelLock = false;

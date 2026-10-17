@@ -19,6 +19,6 @@
   ],
   "shortcuts": [
     { "name": "30 分鐘一頁式網頁", "url": "site199/", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "精選站點啟動台", "url": "launcher/", "icons": [{ "src": "launcher/icons/app-192.png", "sizes": "192x192" }] }
+    { "name": "KitLab Dash", "url": "launcher/", "icons": [{ "src": "launcher/icons/app-192.png", "sizes": "192x192" }] }
   ]
 }
