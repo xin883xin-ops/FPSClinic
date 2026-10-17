@@ -9,11 +9,11 @@ var SITE199_URL = "site199/";           // 199 一頁式網頁服務頁（相對
 var SKILLS = [
   { id: "fps",  name: "遊戲效能遠端優化", by: "FPSClinic", url: FPS_URL, price: "試營運免費",
     words: "遊戲 卡頓 掉幀 fps 效能 優化 內顯 筆電 團戰 英雄聯盟 lol 電腦 慢", cat: "遊戲／電腦" },
-  { id: "s199", name: "30 分鐘一頁式網頁", by: "官方", url: SITE199_URL, price: "NT$199",
+  { id: "s199", name: "30 分鐘一頁式網頁", by: "KitLab 官方", url: SITE199_URL, price: "NT$199",
     words: "網站 網頁 一頁 店家 商店 介紹頁 上線 部署 網域 官網", cat: "網站／上線" },
-  { id: "launcher", name: "精選站點啟動台", by: "官方", url: "launcher/about.html", price: "免費",
+  { id: "launcher", name: "精選站點啟動台", by: "KitLab 官方", url: "launcher/about.html", price: "免費",
     words: "免費 啟動台 啟動器 launcher pwa 雲遊戲 cloud game 工具 網站 收藏 推薦 車機", cat: "免費工具" },
-  { id: "app",  name: "Android App 開發", by: "官方", url: "#", price: "即將推出", soon: true,
+  { id: "app",  name: "Android App 開發", by: "KitLab 官方", url: "#", price: "即將推出", soon: true,
     words: "app 應用程式 安卓 android flutter 上架 play 開發", cat: "App 開發" }
 ];
 

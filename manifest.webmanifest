@@ -1,6 +1,6 @@
 {
-  "name": "技能商店",
-  "short_name": "技能商店",
+  "name": "KitLab 商店",
+  "short_name": "KitLab",
   "description": "把你的難題，交給會的人。先說問題，再找對的技能。",
   "lang": "zh-Hant-TW",
   "start_url": "./",
