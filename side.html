@@ -327,6 +327,43 @@ kbd { font-family: var(--f-mono); font-size: 12px; padding: 1px 7px; border-radi
 .imgrow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .imgrow .ico { --ico: 52px; }
 
+/* 網路工具 */
+.dlg.wide { width: min(700px, 100%); }
+.pill { font-family: var(--f-body); font-size: 12px; font-weight: 700; padding: 1px 10px; border-radius: 999px; background: var(--surface-2); color: var(--fg-2); border: 1px solid var(--line-2); white-space: nowrap; }
+.pill.ok { color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); border-color: color-mix(in srgb, var(--ok) 40%, transparent); }
+.pill.warn { color: var(--fg); background: color-mix(in srgb, var(--accent) 24%, transparent); border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+.pill.bad { color: var(--danger); background: color-mix(in srgb, var(--danger) 12%, transparent); border-color: color-mix(in srgb, var(--danger) 40%, transparent); }
+.card { padding: 14px 16px; border-radius: 18px; border: 1px solid var(--line); background: var(--bg-2); }
+.card-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+.card-h h4 { margin: 0; font-size: 15px; }
+.kv > div { display: flex; justify-content: space-between; gap: 16px; padding: 7px 0; border-top: 1px solid var(--line); }
+.kv span { color: var(--fg-3); flex: none; font-size: 13px; }
+.kv b { font-weight: 500; text-align: right; overflow-wrap: anywhere; font-family: var(--f-mono); font-size: 12.5px; min-width: 0; }
+.hint { margin: 8px 0 0; font-size: 13px; color: var(--fg-2); }
+.card form { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 8px; }
+.card form .inp { flex: 1 1 140px; width: auto; }
+select.inp { appearance: auto; }
+.seg.two { grid-template-columns: 1fr 1fr; }
+.drop { display: grid; gap: 4px; place-items: center; text-align: center; margin: 12px 0; padding: 26px 16px; border-radius: 18px; border: 1.5px dashed var(--line-2); cursor: pointer; background: var(--bg-2); }
+.drop:hover, .drop:focus-within { border-color: var(--accent); }
+.drop b { font-size: 16px; }
+.drop small { color: var(--fg-3); }
+.prog { height: 8px; border-radius: 999px; background: var(--bg-2); border: 1px solid var(--line); overflow: hidden; margin: 8px 0; }
+.prog i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .15s; }
+.linkbox { display: flex; gap: 8px; flex-wrap: wrap; }
+.linkbox .inp { flex: 1 1 200px; width: auto; font-family: var(--f-mono); font-size: 14px; }
+.linkbox .btn { flex: none; }
+.gauge { text-align: center; padding: 10px 0 14px; }
+.gv { font-family: var(--f-display); font-size: clamp(60px, 20vw, 104px); font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.gl { color: var(--fg-3); font-size: 14px; margin-top: 4px; }
+.stats.three { grid-template-columns: repeat(3, 1fr); margin: 0 0 12px; }
+.stats.three .stat b { font-size: 22px; }
+.pre { margin: 10px 0 0; padding: 12px 14px; border-radius: 14px; background: var(--bg); border: 1px solid var(--line); font-family: var(--f-mono); font-size: 12.5px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 40vh; overflow: auto; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.tbl th, .tbl td { text-align: left; padding: 6px 8px; border-top: 1px solid var(--line); }
+.tbl td:first-child { font-family: var(--f-mono); }
+.tblwrap { overflow-x: auto; }
+
 /* 導覽 */
 .tour { position: fixed; inset: 0; z-index: 90; }
 .spot { position: fixed; border-radius: 20px; box-shadow: 0 0 0 9999px var(--scrim), 0 0 0 3px var(--accent); transition: top .3s, left .3s, width .3s, height .3s; pointer-events: none; }
@@ -599,7 +636,12 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
     cart: '<path d="M4 5h2l2 11h10l2-8H7M10 20h.01M17 20h.01"/>',
     book: '<path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4zM20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/>',
     chart: '<path d="M4 20V4M4 20h16M8 16v-5M12 16V8M16 16v-3"/>',
-    pin: '<path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>'
+    pin: '<path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+    upload: '<path d="M12 16V4M8 8l4-4 4 4M5 14v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5"/>',
+    short: '<circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M8 7.5L20 18M8 16.5L20 6"/>',
+    net: '<path d="M4.5 10a11 11 0 0 1 15 0M7.5 13.2a6.8 6.8 0 0 1 9 0M12 18h.01"/>',
+    port: '<path d="M9 3v5M15 3v5M6 8h12v4a6 6 0 0 1-12 0zM12 18v3"/>',
+    speed: '<path d="M4.5 17a8.5 8.5 0 1 1 15 0M12 16l4-6M6.5 17h.01M17.5 17h.01"/>'
   };
   var LINK_GL = ["link", "globe", "mail", "home", "star", "chat", "image", "music", "cart", "book", "chart", "pin"];
   function svgIc(k) { return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + (GL[k] || GL.link) + "</svg>"; }
@@ -614,9 +656,15 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
     calc: { name: "計算機", title: "計算機", sub: "" },
     days: { name: "倒數日", title: "倒數日", sub: "記下重要的日子，看還有幾天。" },
     pass: { name: "密碼", title: "密碼產生器", sub: "在你的裝置上隨機產生，不會傳到任何地方。" },
+    upload: { name: "傳檔", title: "傳檔與取得網址", sub: "不用登入，上傳後拿到可分享的連結。", wide: 1 },
+    short: { name: "縮網址", title: "縮網址", sub: "把長網址變短，不用登入。" },
+    net: { name: "網路檢測", title: "網路檢測", sub: "IP、WebRTC、DNS 與瀏覽器資訊，一次列出。", wide: 1 },
+    port: { name: "埠掃描", title: "埠掃描", sub: "只掃描你自己的電腦與你自己的公網 IP。", wide: 1 },
+    speed: { name: "測速", title: "網路測速", sub: "延遲、下載、上傳，使用 Cloudflare 測速伺服器。", wide: 1 },
     lock: { name: "帶鎖筆記", title: "帶鎖筆記", sub: "用 nologin.in 傳檔案、傳文字。網址與密碼由你們雙方先約好。" }
   };
   var TOOL_KEYS = Object.keys(TOOLS);
+  var NEW_TOOLS = ["upload", "short", "net", "port", "speed"];
 
   /* ---------- 資料 ---------- */
   var DEFAULTS = [
@@ -681,7 +729,7 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
   function normalize(o) {
     var base = {
       shortcuts: DEFAULTS.map(function (s) { return { title: s.title, url: s.url, category: s.category }; }),
-      bar: defaultBar(), note: "", todos: [], days: [], locks: [], toolsV: 2,
+      bar: defaultBar(), note: "", todos: [], days: [], locks: [], uploads: [], shorts: [], speeds: [], toolsV: 3,
       engine: "google", accent: "teal", autoOpen: true, favicons: true, tourDone: false, updatedAt: 0, lastBackup: 0
     };
     if (Array.isArray(o)) o = { shortcuts: o };
@@ -702,8 +750,14 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
     if (Array.isArray(o.bar)) {
       base.bar = cleanBar(o.bar);
       /* 舊資料（toolsV 小於 2）只補一次「帶鎖筆記」；之後使用者自己移除就不會再被補回 */
-      if ((o.toolsV | 0) < 2 && !base.bar.some(function (b) { return b.type === "tool" && b.key === "lock"; })) base.bar.push({ type: "tool", key: "lock" });
+      var tv = o.toolsV | 0;
+      function addTool(k) { if (!base.bar.some(function (b) { return b.type === "tool" && b.key === k; })) base.bar.push({ type: "tool", key: k }); }
+      if (tv < 2) addTool("lock");
+      if (tv < 3) NEW_TOOLS.forEach(addTool); /* 同樣只補一次 */
     }
+    if (Array.isArray(o.uploads)) base.uploads = o.uploads.filter(function (u) { return u && typeof u.n === "string" && typeof u.u === "string" && /^https:\/\/\S+$/.test(u.u) && (!u.d || /^https:\/\/\S+$/.test(u.d)); }).slice(0, 20).map(function (u) { var r = { n: u.n.slice(0, 80), u: u.u, at: +u.at || 0 }; if (u.d) r.d = u.d; if (+u.x) r.x = +u.x; return r; });
+    if (Array.isArray(o.shorts)) base.shorts = o.shorts.filter(function (s) { return s && typeof s.l === "string" && typeof s.s === "string" && /^https:\/\/(is|v)\.gd\/\S+$/.test(s.s); }).slice(0, 20).map(function (s) { return { l: s.l.slice(0, 500), s: s.s, at: +s.at || 0 }; });
+    if (Array.isArray(o.speeds)) base.speeds = o.speeds.filter(function (s) { return s && isFinite(s.d) && isFinite(s.u) && isFinite(s.p); }).slice(0, 10).map(function (s) { return { at: +s.at || 0, d: +s.d, u: +s.u, p: +s.p }; });
     if (Array.isArray(o.locks)) {
       base.locks = o.locks.filter(function (x) { return x && typeof x.n === "string" && /^[A-Za-z0-9_-]{1,64}$/.test(x.n); })
         .slice(0, 20).map(function (x) { return { n: x.n, t: typeof x.t === "number" ? x.t : 0 }; });
@@ -727,7 +781,7 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
   try { var lr = localStorage.getItem(LS_LOOK); if (lr) look = Object.assign(look, JSON.parse(lr)); } catch (e) {}
 
   function payload() {
-    return { shortcuts: S.shortcuts, bar: S.bar, note: S.note, todos: S.todos, days: S.days, locks: S.locks, toolsV: 2, engine: S.engine, accent: S.accent, autoOpen: S.autoOpen, favicons: S.favicons, tourDone: S.tourDone, updatedAt: S.updatedAt, lastBackup: S.lastBackup };
+    return { shortcuts: S.shortcuts, bar: S.bar, note: S.note, todos: S.todos, days: S.days, locks: S.locks, uploads: S.uploads, shorts: S.shorts, speeds: S.speeds, toolsV: 3, engine: S.engine, accent: S.accent, autoOpen: S.autoOpen, favicons: S.favicons, tourDone: S.tourDone, updatedAt: S.updatedAt, lastBackup: S.lastBackup };
   }
   var warned = false;
   function saveLocal() {
@@ -1079,7 +1133,8 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
     $("ttTool").textContent = T.title; $("ttToolSub").textContent = T.sub; $("ttToolSub").hidden = !T.sub;
     toolBody.onclick = null; toolBody.oninput = null; toolBody.onchange = null; toolBody.onsubmit = null;
     toolBody.innerHTML = "";
-    ({ backup: toolBackup, todo: toolTodo, note: toolNote, timer: toolTimer, count: toolCount, calc: toolCalc, days: toolDays, pass: toolPass, lock: toolLock })[key](toolBody);
+    $("ovTool").querySelector(".dlg").classList.toggle("wide", !!T.wide);
+    ({ backup: toolBackup, todo: toolTodo, note: toolNote, timer: toolTimer, count: toolCount, calc: toolCalc, days: toolDays, pass: toolPass, lock: toolLock, upload: toolUpload, short: toolShort, net: toolNet, port: toolPort, speed: toolSpeed })[key](toolBody);
     openOv("ovTool");
   }
 
@@ -1374,6 +1429,463 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
       else if (e.target.closest("#lkTab")) { if (cur) window.open(nlUrl(cur), "_blank", "noopener"); }
       else if (e.target.closest("#lkHide")) { $("lkFrame").removeAttribute("src"); $("lkBox").hidden = true; cur = ""; }
     };
+  }
+
+  /* ===== 網路工具共用 ===== */
+  toolBody.addEventListener("click", function (e) { var c = e.target.closest("[data-copy]"); if (c) copyText(c.dataset.copy, "已複製"); });
+  function fmtBytes(n) { return n < 1024 ? n + " B" : n < 1048576 ? (n / 1024).toFixed(1) + " KB" : n < 1073741824 ? (n / 1048576).toFixed(1) + " MB" : (n / 1073741824).toFixed(2) + " GB"; }
+  function fmtWhen(t) { return new Date(t).toLocaleString("zh-TW", { hour12: false, month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }); }
+  function fetchTO(url, opt, ms) {
+    var c = new AbortController(), t = setTimeout(function () { c.abort(); }, ms || 8000);
+    opt = Object.assign({ cache: "no-store" }, opt || {}, { signal: c.signal });
+    return fetch(url, opt).then(function (r) { clearTimeout(t); return r; }, function (e) { clearTimeout(t); throw e; });
+  }
+  function getJSON(url, ms) { return fetchTO(url, {}, ms).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }); }
+  function getText(url, ms) { return fetchTO(url, {}, ms).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); }); }
+  function jsonp(url, ms) {
+    return new Promise(function (res, rej) {
+      var cb = "__sd_" + Math.random().toString(36).slice(2), s = document.createElement("script"), t = setTimeout(function () { clean(); rej(new Error("timeout")); }, ms || 8000);
+      function clean() { clearTimeout(t); try { delete window[cb]; } catch (e) { window[cb] = undefined; } s.remove(); }
+      window[cb] = function (d) { clean(); res(d); };
+      s.onerror = function () { clean(); rej(new Error("network")); };
+      s.src = url + (url.indexOf("?") >= 0 ? "&" : "?") + "callback=" + cb;
+      document.head.appendChild(s);
+    });
+  }
+  function xhrPost(url, fd, onprog) {
+    return new Promise(function (res, rej) {
+      var x = new XMLHttpRequest(); x.open("POST", url); x.timeout = 15 * 60 * 1000;
+      x.upload.onprogress = function (e) { if (e.lengthComputable) onprog(e.loaded / e.total); };
+      x.onload = function () { if (x.status >= 200 && x.status < 300) res(x.responseText); else rej(new Error("HTTP " + x.status)); };
+      x.onerror = function () { rej(new Error("network")); }; x.ontimeout = function () { rej(new Error("timeout")); };
+      x.send(fd);
+    });
+  }
+  function rid(n) { var a = "abcdefghijklmnopqrstuvwxyz0123456789", r = new Uint8Array(n), s = ""; crypto.getRandomValues(r); for (var i = 0; i < n; i++) s += a[r[i] % 36]; return s; }
+  function linkBox(label, u) {
+    return '<div class="fld" style="margin-top:10px"><label>' + esc(label) + '</label><div class="linkbox"><input class="inp" type="text" readonly value="' + esc(u) + '" aria-label="' + esc(label) + '"><button class="btn" type="button" data-copy="' + esc(u) + '">複製</button><a class="btn" href="' + esc(u) + '" target="_blank" rel="noopener noreferrer">開啟</a></div></div>';
+  }
+  function toolAlive(token, ref) { return token === ref.n && !$("ovTool").hidden; }
+
+  /* 傳檔：不用登入，上傳後取得連結（第三方服務，依序嘗試） */
+  var UP = {
+    tmpfiles: { name: "tmpfiles.org", max: 100 * 1048576, site: "https://tmpfiles.org/",
+      send: function (file, opt, prog) {
+        var fd = new FormData(); fd.append("file", file, file.name); fd.append("expire", String(opt.expire));
+        return xhrPost("https://tmpfiles.org/api/v1/upload", fd, prog).then(function (t) {
+          var j = JSON.parse(t), u = j && j.data && j.data.url;
+          if (!/^https:\/\/tmpfiles\.org\/\S+$/.test(u || "")) throw new Error("bad response");
+          return { u: u, d: u.replace("://tmpfiles.org/", "://tmpfiles.org/dl/") };
+        });
+      } },
+    catbox: { name: "catbox.moe", max: 200 * 1048576, site: "https://catbox.moe/",
+      send: function (file, opt, prog) {
+        var fd = new FormData(); fd.append("reqtype", "fileupload"); fd.append("fileToUpload", file, file.name);
+        return xhrPost("https://catbox.moe/user/api.php", fd, prog).then(function (t) {
+          t = t.trim(); if (!/^https:\/\/[\w.-]+\.catbox\.moe\/\S+$/.test(t)) throw new Error("bad response");
+          return { u: t };
+        });
+      } },
+    gofile: { name: "Gofile", max: 0, site: "https://gofile.io/",
+      send: function (file, opt, prog) {
+        return getJSON("https://api.gofile.io/servers", 8000).then(function (j) {
+          var sv = j && j.data && j.data.servers && j.data.servers[0] && j.data.servers[0].name;
+          if (!/^[a-z0-9-]+$/i.test(sv || "")) throw new Error("no server");
+          var fd = new FormData(); fd.append("file", file, file.name);
+          return xhrPost("https://" + sv + ".gofile.io/contents/uploadfile", fd, prog);
+        }).then(function (t) {
+          var j = JSON.parse(t), u = j && j.data && j.data.downloadPage;
+          if (!/^https:\/\/gofile\.io\/\S+$/.test(u || "")) throw new Error("bad response");
+          return { u: u };
+        });
+      } }
+  };
+  function toolUpload(b) {
+    var mode = "long", busy = false;
+    b.innerHTML =
+      '<div class="seg two" id="upMode"><button type="button" data-m="long" aria-pressed="true">取得網址（長期）</button><button type="button" data-m="temp" aria-pressed="false">限時傳送</button></div>' +
+      '<div class="fld" id="upExpWrap" style="margin-top:12px" hidden><label for="upExp">保留時間</label><select id="upExp" class="inp"><option value="3600">1 小時</option><option value="21600">6 小時</option><option value="86400">24 小時</option><option value="172800">48 小時</option></select></div>' +
+      '<label class="drop" id="upDrop" for="upFile"><b>選擇檔案</b><small id="upHint"></small></label><input type="file" id="upFile" class="sr">' +
+      '<div class="prog" id="upProg" hidden><i id="upBar"></i></div><div class="meta" id="upMsg"></div><div id="upRes"></div>' +
+      '<div class="note">檔案會上傳到第三方網站，拿到連結的人都能下載。請不要上傳機密或個資。</div>' +
+      '<div class="sub">最近上傳</div><ul class="list" id="upHist"></ul>';
+    function setMode(m) {
+      mode = m;
+      b.querySelectorAll("#upMode button").forEach(function (x) { x.setAttribute("aria-pressed", String(x.dataset.m === m)); });
+      $("upExpWrap").hidden = m !== "temp";
+      $("upHint").textContent = m === "temp" ? "超過保留時間會自動刪除，最大 100 MB。也可以把檔案拖到這裡。" : "長期連結，最大約 200 MB。也可以把檔案拖到這裡。";
+    }
+    setMode("long");
+    function histDraw() {
+      $("upHist").innerHTML = S.uploads.length ? S.uploads.map(function (r, i) {
+        var exp = r.x ? (r.x < Date.now() ? "　已過期" : "　保留到 " + fmtWhen(r.x)) : "";
+        return '<li class="li"><div style="min-width:0"><div style="overflow-wrap:anywhere">' + esc(r.n) + '</div><div class="meta" style="margin:2px 0 0">' + esc(fmtWhen(r.at)) + esc(exp) + '</div></div><div style="display:flex;gap:6px;flex:none"><button class="ib" type="button" data-copy="' + esc(r.d || r.u) + '" aria-label="複製連結">' + svgIc("link") + '</button><button class="ib" type="button" data-del="' + i + '" aria-label="刪除紀錄">' + useIc("i-trash") + "</button></div></li>";
+      }).join("") : '<li class="empty" style="list-style:none">還沒有上傳紀錄。</li>';
+    }
+    histDraw();
+    function done(file, k, r, opt) {
+      busy = false; $("upProg").hidden = true;
+      $("upMsg").textContent = "完成：" + UP[k].name + (k === "tmpfiles" ? "，保留到 " + fmtWhen(Date.now() + opt.expire * 1000) : "");
+      var rec = { n: file.name.slice(0, 80), u: r.u, at: Date.now() }; if (r.d) rec.d = r.d; if (k === "tmpfiles") rec.x = Date.now() + opt.expire * 1000;
+      S.uploads.unshift(rec); S.uploads = S.uploads.slice(0, 20); touch();
+      $("upRes").innerHTML = linkBox("連結", r.u) + (r.d ? linkBox("直接下載", r.d) : ""); histDraw();
+    }
+    function send(file) {
+      if (busy || !file) return;
+      var keys = (mode === "temp" ? ["tmpfiles"] : ["catbox", "gofile"]).filter(function (k) { return !UP[k].max || file.size <= UP[k].max; }), opt = { expire: +$("upExp").value };
+      $("upRes").innerHTML = "";
+      if (!keys.length) { $("upMsg").textContent = "檔案太大（" + fmtBytes(file.size) + "）。" + (mode === "temp" ? "限時傳送最大 100 MB。" : "長期連結最大約 200 MB。"); return; }
+      busy = true; $("upProg").hidden = false; $("upBar").style.width = "0%";
+      var i = 0;
+      (function next() {
+        if (i >= keys.length) {
+          busy = false; $("upProg").hidden = true;
+          $("upMsg").textContent = "上傳失敗。可能是服務暫時不可用、檔案被拒絕，或對方不允許從網頁直接上傳。";
+          $("upRes").innerHTML = '<div class="stack">' + keys.map(function (k) { return '<a class="btn" href="' + UP[k].site + '" target="_blank" rel="noopener noreferrer">改用 ' + esc(UP[k].name) + " 網站上傳</a>"; }).join("") + "</div>";
+          return;
+        }
+        var k = keys[i++], P = UP[k]; $("upMsg").textContent = "上傳 " + file.name + " 到 " + P.name + "…";
+        P.send(file, opt, function (p) { $("upBar").style.width = Math.round(p * 100) + "%"; }).then(function (r) { done(file, k, r, opt); }, function () { next(); });
+      })();
+    }
+    var dz = $("upDrop");
+    dz.ondragover = function (e) { e.preventDefault(); };
+    dz.ondrop = function (e) { e.preventDefault(); var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) send(f); };
+    b.onchange = function (e) { if (e.target.id === "upFile") { var f = e.target.files && e.target.files[0]; e.target.value = ""; send(f); } };
+    b.onclick = function (e) {
+      var m = e.target.closest("[data-m]"); if (m) { setMode(m.dataset.m); return; }
+      var d = e.target.closest("[data-del]"); if (d) { S.uploads.splice(+d.dataset.del, 1); touch(); histDraw(); }
+    };
+  }
+
+  /* 縮網址：is.gd，失敗再換 v.gd */
+  function shortenVia(host, longUrl, alias) {
+    var api = "https://" + host + "/create.php?format=json&url=" + encodeURIComponent(longUrl) + (alias ? "&shorturl=" + encodeURIComponent(alias) : "");
+    function parse(j) {
+      if (j && j.shorturl && /^https:\/\/(is|v)\.gd\/\S+$/.test(j.shorturl)) return j.shorturl;
+      var e = new Error((j && j.errormessage) || "failed"); e.provider = true; throw e;
+    }
+    return getJSON(api, 8000).then(parse, function (err) { if (err && err.provider) throw err; return jsonp(api, 8000).then(parse); });
+  }
+  function toolShort(b) {
+    b.innerHTML = '<form class="form" id="shForm" autocomplete="off"><div class="fld"><label for="shIn">要縮短的網址</label><input id="shIn" class="inp" type="text" inputmode="url" placeholder="貼上很長的網址" required></div>' +
+      '<div class="fld"><label for="shAlias">自訂短碼（選填）</label><input id="shAlias" class="inp" type="text" maxlength="30" placeholder="5 到 30 個英數字或底線"></div>' +
+      '<div class="row-end"><button class="btn pri" type="submit" id="shGo">縮短</button></div></form><div class="err" id="shErr" role="alert"></div><div id="shRes"></div>' +
+      '<div class="note">使用 is.gd 的免費服務，短網址是公開的，任何人都能點。</div><div class="sub">最近縮短</div><ul class="list" id="shHist"></ul>';
+    function histDraw() {
+      $("shHist").innerHTML = S.shorts.length ? S.shorts.map(function (r, i) {
+        return '<li class="li"><div style="min-width:0"><div style="font-family:var(--f-mono);font-size:14px">' + esc(r.s) + '</div><div class="meta" style="margin:2px 0 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(r.l) + '</div></div><div style="display:flex;gap:6px;flex:none"><button class="ib" type="button" data-copy="' + esc(r.s) + '" aria-label="複製短網址">' + svgIc("link") + '</button><button class="ib" type="button" data-del="' + i + '" aria-label="刪除紀錄">' + useIc("i-trash") + "</button></div></li>";
+      }).join("") : '<li class="empty" style="list-style:none">還沒有紀錄。</li>';
+    }
+    histDraw();
+    b.onsubmit = function (e) {
+      e.preventDefault();
+      var u = cleanUrl($("shIn").value), alias = $("shAlias").value.trim();
+      $("shErr").textContent = ""; $("shRes").innerHTML = "";
+      if (!u) { $("shErr").textContent = "網址格式不正確，請輸入像 example.com/很長的路徑 這樣的網址。"; return; }
+      if (alias && !/^[A-Za-z0-9_]{5,30}$/.test(alias)) { $("shErr").textContent = "短碼要 5 到 30 個英數字或底線。"; return; }
+      $("shGo").disabled = true; $("shGo").textContent = "處理中…";
+      shortenVia("is.gd", u, alias).catch(function (err) { if (err && err.provider) throw err; return shortenVia("v.gd", u, alias); }).then(function (s) {
+        S.shorts.unshift({ l: u, s: s, at: Date.now() }); S.shorts = S.shorts.slice(0, 20); touch();
+        $("shRes").innerHTML = linkBox("短網址", s); histDraw();
+      }, function (err) {
+        $("shErr").textContent = err && err.provider ? "服務回覆：" + err.message : "無法連到縮網址服務，請稍後再試，或直接到 is.gd 網站縮短。";
+      }).then(function () { $("shGo").disabled = false; $("shGo").textContent = "縮短"; });
+    };
+    b.onclick = function (e) { var d = e.target.closest("[data-del]"); if (d) { S.shorts.splice(+d.dataset.del, 1); touch(); histDraw(); } };
+  }
+
+  /* 網路檢測 */
+  var netRef = { n: 0 };
+  function geoLookup() {
+    return getJSON("https://ipwho.is/", 8000).then(function (j) {
+      if (!j || j.success === false) throw new Error("fail");
+      return { ip: j.ip, country: j.country, region: j.region, city: j.city, isp: (j.connection && (j.connection.isp || j.connection.org)) || "", asn: j.connection && j.connection.asn, tz: j.timezone && j.timezone.id };
+    }).catch(function () {
+      return getJSON("https://speed.cloudflare.com/meta", 8000).then(function (j) {
+        return { ip: j.clientIp, country: j.country, region: j.region, city: j.city, isp: j.asOrganization, asn: j.asn, tz: j.timezone };
+      });
+    });
+  }
+  function webrtcProbe() {
+    return new Promise(function (res) {
+      var ips = { host: [], srflx: [] }, pc, done = false;
+      try { pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] }); } catch (e) { res(null); return; }
+      function fin() { if (done) return; done = true; try { pc.close(); } catch (e) {} res(ips); }
+      pc.createDataChannel("x");
+      pc.onicecandidate = function (e) {
+        if (!e.candidate) { fin(); return; }
+        var m = /candidate:\S+ \d+ \w+ \d+ (\S+) \d+ typ (\w+)/.exec(e.candidate.candidate);
+        if (m && ips[m[2]] && ips[m[2]].indexOf(m[1]) < 0) ips[m[2]].push(m[1]);
+      };
+      pc.createOffer().then(function (o) { return pc.setLocalDescription(o); }).catch(fin);
+      setTimeout(fin, 4000);
+    });
+  }
+  function toolNet(b) {
+    var token = ++netRef.n;
+    b.innerHTML = '<div class="row-end" style="margin-bottom:12px"><button class="btn pri" type="button" id="nkRun">重新檢測</button></div><div class="stack" id="nkOut"></div>';
+    $("nkRun").onclick = function () { toolNet(b); };
+    var out = $("nkOut");
+    function alive() { return toolAlive(token, netRef); }
+    function card(title) {
+      var d = document.createElement("section"); d.className = "card";
+      d.innerHTML = '<div class="card-h"><h4>' + title + '</h4><span class="pill">檢測中…</span></div><div class="kv"></div><p class="hint" hidden></p>';
+      out.appendChild(d);
+      var pill = d.querySelector(".pill"), kv = d.querySelector(".kv"), hint = d.querySelector(".hint");
+      return {
+        el: d,
+        set: function (t, c) { pill.textContent = t; pill.className = "pill" + (c ? " " + c : ""); },
+        rows: function (arr) { kv.innerHTML = arr.map(function (r) { return "<div><span>" + esc(r[0]) + "</span><b>" + esc(r[1] == null || r[1] === "" ? "—" : r[1]) + "</b></div>"; }).join(""); },
+        hint: function (t) { hint.textContent = t; hint.hidden = !t; }
+      };
+    }
+    var btz = (Intl.DateTimeFormat().resolvedOptions() || {}).timeZone || "";
+
+    /* 1. IP */
+    var c1 = card("公開 IP 與位置"), pubIps = [];
+    var ipP = Promise.all([
+      getJSON("https://api.ipify.org?format=json", 8000).then(function (j) { return j.ip; }, function () { return null; }),
+      getJSON("https://api6.ipify.org?format=json", 6000).then(function (j) { return j.ip; }, function () { return null; }),
+      geoLookup().catch(function () { return null; })
+    ]).then(function (r) {
+      if (!alive()) return r;
+      var v4 = r[0] || (r[2] && r[2].ip && r[2].ip.indexOf(":") < 0 ? r[2].ip : null), v6 = r[1] || (r[2] && r[2].ip && r[2].ip.indexOf(":") >= 0 ? r[2].ip : null), g = r[2] || {};
+      if (v4) pubIps.push(v4); if (v6) pubIps.push(v6);
+      if (!pubIps.length) { c1.set("無法取得", "bad"); c1.rows([]); c1.hint("連不上 IP 查詢服務，可能是網路離線，或查詢服務被擋住。"); return r; }
+      c1.rows([["IPv4", v4], ["IPv6", v6], ["國家／地區", g.country], ["地區", g.region], ["城市", g.city], ["網路業者", g.isp], ["ASN", g.asn ? "AS" + String(g.asn).replace(/^AS/i, "") : ""], ["IP 推測時區", g.tz], ["瀏覽器時區", btz]]);
+      if (g.tz && btz && g.tz !== btz) { c1.set("時區不一致", "warn"); c1.hint("IP 所在地的時區和瀏覽器設定不同。使用 VPN 或代理時常見，網站可能因此判斷你的位置不一致。"); }
+      else c1.set("完成", "ok");
+      return r;
+    });
+
+    /* 2. WebRTC */
+    var c2 = card("WebRTC 洩漏");
+    Promise.all([webrtcProbe(), ipP]).then(function (r) {
+      if (!alive()) return;
+      var w = r[0];
+      if (!w) { c2.set("不支援", ""); c2.rows([]); c2.hint("這個瀏覽器沒有 WebRTC，或已被停用。"); return; }
+      c2.rows([["本機位址", w.host.join("、")], ["WebRTC 看到的公網位址", w.srflx.join("、")]]);
+      if (!w.srflx.length) { c2.set("未回報公網位址", ""); c2.hint("WebRTC 沒有回報公網位址，可能被瀏覽器設定或外掛封鎖，也可能網路擋住了 STUN。"); }
+      else if (pubIps.length && w.srflx.some(function (ip) { return pubIps.indexOf(ip) < 0; })) { c2.set("可能洩漏", "bad"); c2.hint("WebRTC 看到的公網位址和網頁看到的不同。若你正在用 VPN，這代表網站可能透過 WebRTC 得知你的真實位址。"); }
+      else { c2.set("未發現洩漏", "ok"); c2.hint("WebRTC 看到的公網位址和網頁看到的一致。"); }
+    });
+
+    /* 3. DNS 解析器 */
+    var c3 = card("DNS 解析器（洩漏檢測）");
+    if (location.protocol === "https:") {
+      c3.set("無法檢測", "warn"); c3.rows([]);
+      c3.hint("這個頁面是 https，瀏覽器會擋下這項檢測需要的 http 請求。請把 index.html 存到電腦，用檔案方式開啟再檢測。");
+    } else {
+      Promise.all([1, 2, 3].map(function () { return jsonp("http://" + rid(32) + ".edns.ip-api.com/json/", 10000).catch(function () { return null; }); })).then(function (rs) {
+        if (!alive()) return;
+        var seen = {}, rows = [];
+        rs.forEach(function (d) { if (d && d.dns && d.dns.ip && !seen[d.dns.ip]) { seen[d.dns.ip] = 1; rows.push(["解析器 " + (rows.length + 1), d.dns.ip + (d.dns.geo ? "　" + d.dns.geo : "")]); } });
+        if (!rows.length) { c3.set("無法取得", "bad"); c3.rows([]); c3.hint("連不上 ip-api 的 DNS 檢測服務，可能是網路擋住了 http 請求。"); return; }
+        c3.set("完成", "ok"); c3.rows(rows);
+        c3.hint("這裡列出的是替你查網域的伺服器。用了 VPN 或加密 DNS 時，應該看到 VPN 或你選的 DNS 服務；若看到原本的電信業者，代表 DNS 沒有走 VPN。");
+      });
+    }
+
+    /* 4. DNS 查詢 */
+    var c4 = card("DNS 查詢（DoH）");
+    c4.el.insertAdjacentHTML("beforeend", '<form id="dnForm" autocomplete="off"><input id="dnName" class="inp" type="text" value="example.com" aria-label="網域" maxlength="253"><select id="dnType" class="inp" aria-label="記錄類型" style="flex:0 0 100px"><option>A</option><option>AAAA</option><option>MX</option><option>TXT</option><option>NS</option><option>CNAME</option></select><button class="btn" type="submit">查詢</button></form>');
+    function dnsRun() {
+      var name = $("dnName").value.trim().replace(/\.$/, ""), type = $("dnType").value;
+      if (!/^[A-Za-z0-9._-]+\.[A-Za-z0-9-]{2,}$/.test(name)) { c4.set("網域格式不正確", "warn"); return; }
+      c4.set("查詢中…", ""); var enc = encodeURIComponent(name);
+      var tests = [["Cloudflare 1.1.1.1", "https://cloudflare-dns.com/dns-query?name=" + enc + "&type=" + type, { accept: "application/dns-json" }], ["Google 8.8.8.8", "https://dns.google/resolve?name=" + enc + "&type=" + type, {}]];
+      Promise.all(tests.map(function (t) {
+        var t0 = performance.now();
+        return fetchTO(t[1], { headers: t[2] }, 8000).then(function (r) { return r.json(); }).then(function (j) { return { n: t[0], ms: Math.round(performance.now() - t0), j: j }; }, function () { return { n: t[0], err: true }; });
+      })).then(function (rs) {
+        if (!alive()) return;
+        var ST = { 0: "成功", 2: "伺服器失敗", 3: "網域不存在" }, ok = 0;
+        c4.rows(rs.map(function (r) {
+          if (r.err) return [r.n, "連不上"];
+          ok++; var ans = (r.j.Answer || []).map(function (a) { return a.data; }).join("、");
+          return [r.n, r.ms + " ms　" + (ST[r.j.Status] || "狀態 " + r.j.Status) + (ans ? "　" + ans : "")];
+        }));
+        c4.set(ok ? "完成" : "無法連線", ok ? "ok" : "bad");
+        c4.hint(ok === 2 ? "兩家公開 DNS 都能連上。若答案不同，可能是 CDN 依地區回不同位址。" : "");
+      });
+    }
+    $("dnForm").onsubmit = function (e) { e.preventDefault(); dnsRun(); };
+    dnsRun();
+
+    /* 5. 瀏覽器 */
+    var c5 = card("瀏覽器與裝置"), nv = navigator, cn = nv.connection || {}, off = -new Date().getTimezoneOffset() / 60;
+    c5.rows([["瀏覽器", nv.userAgent], ["語言", (nv.languages || [nv.language]).join("、")], ["時區", btz + "（UTC" + (off >= 0 ? "+" : "") + off + "）"], ["螢幕", screen.width + "×" + screen.height + "，" + (window.devicePixelRatio || 1) + "x"], ["平台", (nv.userAgentData && nv.userAgentData.platform) || nv.platform], ["CPU 核心", nv.hardwareConcurrency], ["記憶體（估）", nv.deviceMemory ? nv.deviceMemory + " GB" : ""], ["連線類型", cn.effectiveType ? cn.effectiveType + "，約 " + cn.downlink + " Mbps，RTT " + cn.rtt + " ms" + (cn.saveData ? "，省流量" : "") : ""], ["Do Not Track", nv.doNotTrack || window.doNotTrack || "未設定"], ["Cookie", nv.cookieEnabled ? "啟用" : "停用"], ["網路狀態", nv.onLine ? "在線" : "離線"]]);
+    c5.set("完成", "ok"); c5.hint("這些是每個網站都能讀到的資訊，也是瀏覽器指紋的來源。");
+  }
+
+  /* 埠掃描：只掃本機與自己的公網 IP */
+  var UNSAFE = [1, 7, 9, 11, 13, 15, 17, 19, 20, 21, 22, 23, 25, 37, 42, 43, 53, 69, 77, 79, 87, 95, 101, 102, 103, 104, 109, 110, 111, 113, 115, 117, 119, 123, 135, 137, 139, 143, 161, 179, 389, 427, 465, 512, 513, 514, 515, 526, 530, 531, 532, 540, 548, 554, 556, 563, 587, 601, 636, 989, 990, 993, 995, 1719, 1720, 1723, 2049, 3659, 4045, 5060, 5061, 6000, 6566, 6665, 6666, 6667, 6668, 6669, 6697, 10080];
+  var DEF_PORTS = [80, 443, 3000, 3001, 3306, 4200, 5000, 5173, 5432, 5500, 6379, 8000, 8080, 8081, 8443, 8888, 9000, 9200, 27017];
+  var PORT_NAME = { 80: "HTTP", 443: "HTTPS", 3000: "Node／React 開發伺服器", 3001: "開發伺服器", 3306: "MySQL", 4200: "Angular 開發伺服器", 5000: "Flask／開發伺服器", 5173: "Vite", 5432: "PostgreSQL", 5500: "Live Server", 6379: "Redis", 8000: "開發伺服器", 8080: "HTTP 替代埠", 8081: "HTTP 替代埠", 8443: "HTTPS 替代埠", 8888: "Jupyter", 9000: "常見服務埠", 9200: "Elasticsearch", 27017: "MongoDB" };
+  var portRef = { n: 0 };
+  function parsePorts(s) {
+    var out = [];
+    s.split(/[\s,，]+/).forEach(function (p) {
+      var m = /^(\d+)(?:-(\d+))?$/.exec(p); if (!m) return;
+      var a = +m[1], z = m[2] ? +m[2] : a; if (a < 1 || z > 65535 || z < a) return;
+      for (var i = a; i <= z && out.length < 200; i++) if (out.indexOf(i) < 0) out.push(i);
+    });
+    return out;
+  }
+  function probePort(port) {
+    return new Promise(function (res) {
+      if (UNSAFE.indexOf(port) >= 0) { res({ port: port, st: "blocked" }); return; }
+      var c = new AbortController(), t0 = performance.now(), tm = setTimeout(function () { c.abort(); }, 1500);
+      fetch("http://127.0.0.1:" + port + "/", { mode: "no-cors", cache: "no-store", credentials: "omit", signal: c.signal }).then(
+        function () { clearTimeout(tm); res({ port: port, st: "open" }); },
+        function (e) { clearTimeout(tm); res({ port: port, st: e && e.name === "AbortError" ? "timeout" : "closed" }); }
+      );
+    });
+  }
+  function toolPort(b) {
+    var token = ++portRef.n, showAll = false, last = null, myIp = null, scanning = false;
+    b.innerHTML =
+      '<div class="sub" style="margin-top:0">本機（127.0.0.1）</div>' +
+      '<div class="fld"><label for="ptList">要探測的埠（逗號分隔，可寫範圍如 3000-3010，最多 200 個）</label><input id="ptList" class="inp" type="text" value="' + DEF_PORTS.join(", ") + '"></div>' +
+      '<div class="row-end" style="margin-top:10px"><label class="opt" style="margin-right:auto"><input type="checkbox" id="ptAll"><span>顯示全部結果</span></label><button class="btn pri" type="button" id="ptGo">開始探測</button></div>' +
+      '<div class="meta" id="ptMsg"></div><div class="tblwrap" id="ptRes"></div>' +
+      '<div class="note">瀏覽器只能偵測有 HTTP 服務的埠。資料庫、SSH 這類非 HTTP 的埠，會顯示成「關閉或非 HTTP」。從本機檔案開啟最準；若在 https 網頁中執行，瀏覽器可能封鎖或詢問「本機網路存取」權限。</div>' +
+      '<div class="sub">外網：你的公網 IP 對外開了哪些埠</div>' +
+      '<div class="meta" id="pxIp">偵測你的公網 IP…</div>' +
+      '<label class="opt"><input type="checkbox" id="pxOk"><span>這個 IP 是我自己的連線，我同意掃描它</span></label>' +
+      '<div class="stack" style="margin-top:10px"><button class="btn" type="button" id="pxGo" disabled>掃描 10 個常見埠（HackerTarget）</button></div>' +
+      '<div id="pxFail"></div><pre class="pre" id="pxOut" hidden></pre>' +
+      '<div class="note">只會掃描上面顯示的 IP，沒有輸入別人網址的欄位。若你正在用 VPN，這是 VPN 出口 IP，不是你自己的機器。</div>';
+    function alive() { return toolAlive(token, portRef); }
+    function draw() {
+      if (!last) return;
+      var rows = last.filter(function (r) { return showAll || r.st === "open"; });
+      var ST = { open: "開啟（有 HTTP 服務）", closed: "關閉，或非 HTTP 服務", timeout: "逾時（可能被防火牆擋住）", blocked: "瀏覽器不允許探測" };
+      $("ptRes").innerHTML = rows.length ? '<table class="tbl"><thead><tr><th>埠</th><th>狀態</th><th>常見用途</th></tr></thead><tbody>' + rows.map(function (r) { return "<tr><td>" + r.port + "</td><td>" + esc(ST[r.st]) + "</td><td>" + esc(PORT_NAME[r.port] || "") + "</td></tr>"; }).join("") + "</tbody></table>" : '<div class="meta">沒有發現開啟的 HTTP 埠。</div>';
+    }
+    function scan() {
+      if (scanning) return;
+      var ports = parsePorts($("ptList").value);
+      if (!ports.length) { $("ptMsg").textContent = "請輸入至少一個有效的埠（1 到 65535）。"; return; }
+      scanning = true; $("ptGo").disabled = true; last = []; var i = 0, finished = 0;
+      function worker() {
+        if (!alive() || i >= ports.length) { return Promise.resolve(); }
+        var p = ports[i++];
+        return probePort(p).then(function (r) { last.push(r); finished++; $("ptMsg").textContent = "探測中… " + finished + " / " + ports.length; }).then(worker);
+      }
+      Promise.all([worker(), worker(), worker(), worker(), worker(), worker()]).then(function () {
+        scanning = false; $("ptGo").disabled = false;
+        last.sort(function (a, c) { return a.port - c.port; });
+        var open = last.filter(function (r) { return r.st === "open"; }).length;
+        $("ptMsg").textContent = "完成：探測 " + last.length + " 個埠，發現 " + open + " 個開啟。"; draw();
+      });
+    }
+    $("ptGo").onclick = scan;
+    $("ptAll").onchange = function () { showAll = $("ptAll").checked; draw(); };
+    getJSON("https://api.ipify.org?format=json", 8000).then(function (j) { return j.ip; }).then(function (ip) {
+      if (!alive()) return; if (!/^\d{1,3}(\.\d{1,3}){3}$/.test(ip)) throw new Error("bad");
+      myIp = ip; $("pxIp").textContent = "你的公網 IP：" + ip; $("pxGo").disabled = !$("pxOk").checked;
+    }, function () { if (alive()) $("pxIp").textContent = "無法取得公網 IP（可能離線，或 IP 查詢服務被擋住）。"; });
+    $("pxOk").onchange = function () { $("pxGo").disabled = !($("pxOk").checked && myIp); };
+    $("pxGo").onclick = function () {
+      if (!myIp || !$("pxOk").checked) return;
+      $("pxGo").disabled = true; $("pxGo").textContent = "掃描中，約需 10–30 秒…"; $("pxFail").innerHTML = ""; $("pxOut").hidden = true;
+      getText("https://api.hackertarget.com/nmap/?q=" + encodeURIComponent(myIp), 60000).then(function (t) {
+        if (!alive()) return; $("pxOut").hidden = false; $("pxOut").textContent = t.trim() || "沒有回傳內容。";
+      }, function () {
+        if (!alive()) return;
+        $("pxFail").innerHTML = '<div class="note" style="margin-top:10px">無法從網頁直接呼叫 HackerTarget（對方不允許，或網路被擋）。你可以複製 IP，改到他們的網站掃描。</div><div class="stack" style="margin-top:8px"><button class="btn" type="button" data-copy="' + esc(myIp) + '">複製我的 IP</button><a class="btn" href="https://hackertarget.com/nmap-online-port-scanner/" target="_blank" rel="noopener noreferrer">開啟 HackerTarget 線上掃描</a></div>';
+      }).then(function () { if (alive()) { $("pxGo").textContent = "掃描 10 個常見埠（HackerTarget）"; $("pxGo").disabled = !($("pxOk").checked && myIp); } });
+    };
+  }
+
+  /* 測速：Cloudflare */
+  var speedRef = { n: 0 };
+  function toolSpeed(b) {
+    var token = speedRef.n, ctl = null;
+    b.innerHTML =
+      '<div class="gauge"><div class="gv" id="spV">—</div><div class="gl" id="spL">按「開始測速」</div></div>' +
+      '<div class="stats three"><div class="stat"><b id="spD">—</b><span>下載 Mbps</span></div><div class="stat"><b id="spU">—</b><span>上傳 Mbps</span></div><div class="stat"><b id="spP">—</b><span>延遲 ms</span></div></div>' +
+      '<div class="meta" id="spI"></div>' +
+      '<div class="two"><button class="btn pri big" type="button" id="spGo">開始測速</button><button class="btn big" type="button" id="spStop" disabled>停止</button></div>' +
+      '<div class="sub">最近結果</div><ul class="list" id="spHist"></ul>' +
+      '<div class="meta">測速伺服器：speed.cloudflare.com。整個測試會用掉數十 MB 到上百 MB 流量。</div>';
+    function histDraw() {
+      $("spHist").innerHTML = S.speeds.length ? S.speeds.map(function (r) { return '<li class="li"><div class="meta" style="margin:0">' + esc(fmtWhen(r.at)) + "</div><div>↓ " + r.d.toFixed(1) + "　↑ " + r.u.toFixed(1) + "　" + Math.round(r.p) + " ms</div></li>"; }).join("") : '<li class="empty" style="list-style:none">還沒有紀錄。</li>';
+    }
+    histDraw();
+    function stopped(t) { return t !== speedRef.n || $("ovTool").hidden; }
+    function q(arr, p) { var s = arr.slice().sort(function (a, c) { return a - c; }); return s[Math.floor(p * (s.length - 1))]; }
+    async function go() {
+      var t = ++speedRef.n; token = t; ctl = new AbortController();
+      $("spGo").disabled = true; $("spStop").disabled = false;
+      ["spD", "spU", "spP"].forEach(function (id) { $(id).textContent = "—"; }); $("spV").textContent = "—"; $("spI").textContent = "";
+      var down = 0, up = 0, ping = 0;
+      try {
+        try {
+          var m = await getJSON("https://speed.cloudflare.com/meta", 6000);
+          $("spI").textContent = "測速伺服器：" + [m.colo, m.city, m.country].filter(Boolean).join(" · ") + "　你的 IP：" + (m.clientIp || "") + (m.asOrganization ? "　" + m.asOrganization : "");
+        } catch (e) {}
+        /* 延遲 */
+        $("spL").textContent = "測試延遲…";
+        var lat = [];
+        for (var i = 0; i < 11; i++) {
+          if (stopped(t)) return;
+          var t0 = performance.now();
+          var r0 = await fetch("https://speed.cloudflare.com/__down?bytes=0&r=" + Math.random(), { cache: "no-store", signal: ctl.signal }); await r0.arrayBuffer();
+          lat.push(performance.now() - t0);
+        }
+        lat.shift(); ping = q(lat, 0.5);
+        var jit = 0; for (var j = 1; j < lat.length; j++) jit += Math.abs(lat[j] - lat[j - 1]); jit = jit / (lat.length - 1);
+        $("spP").innerHTML = Math.round(ping) + '<small style="display:block;font-size:11px;font-weight:400;opacity:.7">抖動 ' + jit.toFixed(1) + "</small>";
+        /* 下載 */
+        $("spL").textContent = "下載中…";
+        var dl = [], plan = [[1e5, 1], [1e6, 3], [1e7, 3], [2.5e7, 2]], deadline = Date.now() + 14000;
+        for (var pi = 0; pi < plan.length; pi++) {
+          for (var k = 0; k < plan[pi][1]; k++) {
+            if (stopped(t)) return; if (Date.now() > deadline) break;
+            var rs = await fetch("https://speed.cloudflare.com/__down?bytes=" + plan[pi][0] + "&r=" + Math.random(), { cache: "no-store", signal: ctl.signal });
+            var rd = rs.body.getReader(), got = 0, tf = 0, x;
+            while (!(x = await rd.read()).done) {
+              if (!tf) tf = performance.now(); got += x.value.length;
+              var el = (performance.now() - tf) / 1000; if (el > 0.2) $("spV").textContent = (got * 8 / el / 1e6).toFixed(1);
+            }
+            var secs = (performance.now() - tf) / 1000;
+            if (plan[pi][0] >= 1e6 && secs > 0) dl.push(got * 8 / secs / 1e6);
+          }
+          if (pi === 3 && dl.length && Math.max.apply(null, dl) > 200 && Date.now() < deadline) {
+            var rb = await fetch("https://speed.cloudflare.com/__down?bytes=1e8&r=" + Math.random(), { cache: "no-store", signal: ctl.signal }), rr = rb.body.getReader(), g2 = 0, tf2 = 0, x2;
+            while (!(x2 = await rr.read()).done) { if (!tf2) tf2 = performance.now(); g2 += x2.value.length; }
+            var s2 = (performance.now() - tf2) / 1000; if (s2 > 0) dl.push(g2 * 8 / s2 / 1e6);
+          }
+        }
+        if (!dl.length) throw new Error("no download");
+        down = q(dl, 0.9); $("spD").textContent = down.toFixed(1);
+        /* 上傳 */
+        $("spL").textContent = "上傳中…"; $("spV").textContent = "—";
+        var ul = [], uplan = [[1e6, 3], [5e6, 3]], udead = Date.now() + 12000;
+        for (var ui = 0; ui < uplan.length; ui++) {
+          for (var uk = 0; uk < uplan[ui][1]; uk++) {
+            if (stopped(t)) return; if (Date.now() > udead) break;
+            var blob = new Blob([new Uint8Array(uplan[ui][0])]), u0 = performance.now();
+            await fetch("https://speed.cloudflare.com/__up", { method: "POST", body: blob, signal: ctl.signal });
+            var us = Math.max(0.05, (performance.now() - u0) / 1000 - ping / 1000);
+            ul.push(uplan[ui][0] * 8 / us / 1e6); $("spV").textContent = ul[ul.length - 1].toFixed(1);
+          }
+        }
+        if (!ul.length) throw new Error("no upload");
+        up = q(ul, 0.9); $("spU").textContent = up.toFixed(1);
+        $("spV").textContent = down.toFixed(1); $("spL").textContent = "完成（大字是下載速度，單位 Mbps）";
+        S.speeds.unshift({ at: Date.now(), d: down, u: up, p: ping }); S.speeds = S.speeds.slice(0, 10); touch(); histDraw();
+      } catch (e) {
+        if (!stopped(t)) { $("spL").textContent = e && e.name === "AbortError" ? "已停止" : "測速失敗：連不上 Cloudflare 測速伺服器，可能是網路離線或被擋住。"; }
+      } finally {
+        if (t === speedRef.n) { $("spGo").disabled = false; $("spStop").disabled = true; }
+      }
+    }
+    $("spGo").onclick = go;
+    $("spStop").onclick = function () { speedRef.n++; if (ctl) ctl.abort(); $("spL").textContent = "已停止"; $("spGo").disabled = false; $("spStop").disabled = true; };
   }
 
   /* ---------- 外觀選單 ---------- */
