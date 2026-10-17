@@ -219,7 +219,23 @@ footer .copy { border-top: 1px solid #1C2A33; margin-top: 32px; padding-top: 18p
 .tip { background: #0E2A29; border-bottom: 1px solid #1B4440; color: #CFE6E2; padding: 12px 20px; text-align: center; font-size: .95rem; }
 .linklike { background: none; border: 0; padding: 0; font: inherit; color: #8FA3AE; cursor: pointer; text-decoration: none; }
 .linklike:hover { color: #fff; text-decoration: underline; }
-@media (max-width: 560px) { .top .install { padding: 8px 12px; font-size: .85rem; } }
+.top .install svg { width: 18px; height: 18px; flex: none; }
+.brand, .brand b { white-space: nowrap; flex: none; }
+.top .icon-btn { flex: none; }
+/* 窄螢幕：安裝和工具箱都縮成圓形圖示，品牌字不換行 */
+@media (max-width: 760px) {
+  .top .install { width: 44px; height: 44px; padding: 0; justify-content: center; border-radius: 50%; flex: none; }
+  .top .install .lbl { display: none; }
+  .top .install svg { width: 22px; height: 22px; }
+}
+@media (max-width: 400px) {
+  .top .wrap { gap: 4px; }
+  .brand { gap: 8px; }
+  .brand svg { width: 28px; height: 28px; }
+  .brand b { font-size: 1.15rem; }
+  .top .install, .top .tools, .top .icon-btn { width: 40px; height: 40px; }
+}
+@media (max-width: 350px) { .brand .brand-sub { display: none; } }
 
 /* ---------- 工具箱側邊欄 ---------- */
 .btn.ghost { background: transparent; border-color: var(--line); color: var(--ink); }
@@ -238,7 +254,7 @@ footer .copy { border-top: 1px solid #1C2A33; margin-top: 32px; padding-top: 18p
 .toolbox iframe { display: block; width: 100%; height: 100%; border: 0; background: #0a0c11; }
 html.toolbox-open { overflow: hidden; }
 @media (max-width: 560px) {
-  .top .tools { width: 44px; height: 44px; padding: 0; justify-content: center; border-radius: 50%; }
+  .top .tools { width: 44px; height: 44px; padding: 0; justify-content: center; border-radius: 50%; flex: none; }
   .top .tools .lbl { display: none; }
   .top .tools svg { width: 22px; height: 22px; }
 }
@@ -253,3 +269,6 @@ html.toolbox-open { overflow: hidden; }
   .grid a { font-size: .98rem; padding: 30px 6px; gap: 0; }
   .grid a svg { display: none; }
 }
+
+/* 最窄的手機：頂列按鈕再縮一點（放在檔尾，蓋過上面的工具箱尺寸） */
+@media (max-width: 400px) { .top .tools { width: 40px; height: 40px; } }
