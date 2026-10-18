@@ -1,0 +1,28 @@
+# kitlab.store 整站：靜態網頁 + /api 後端 + D1 資料庫，全部在 Cloudflare Workers
+name = "kitlab-store"
+main = "worker/src/index.js"
+compatibility_date = "2025-06-01"
+
+# 網址：kitlab.store（部署前要先刪掉 Cloudflare DNS 裡指向 GitHub Pages 的舊紀錄）
+routes = [{ pattern = "kitlab.store", custom_domain = true }, { pattern = "www.kitlab.store", custom_domain = true }]
+
+# 網站檔案：整個資料夾就是網站；.assetsignore 列出不要公開的檔案
+[assets]
+directory = "."
+binding = "ASSETS"
+run_worker_first = true   # 每個請求先經過 worker：/api 給後端，.html 網址原樣提供（不轉址）
+
+[triggers]
+crons = ["17 19 * * *"]   # 每天台灣時間 03:17 清理過期的同步資料與舊回報
+
+[vars]
+ALLOWED_ORIGINS = "https://kitlab.store"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kitlab-dash"
+database_id = "906e851a-f6d6-4709-8a17-3274e1965421"
+
+# 機密值用指令設定，不要寫在這裡：
+#   npx wrangler secret put ADMIN_TOKEN
+#   npx wrangler secret put SALT

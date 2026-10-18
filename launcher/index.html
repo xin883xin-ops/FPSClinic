@@ -13,12 +13,15 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Dash">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script src="../sync.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,500;12..96,700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
 <!--
   精選站點啟動台。收錄清單與每期更新內容都在 sites.json，這個檔案平常不用動。
   站點圖示放 icons/，檔名寫進 sites.json 的 icon 欄位。
+  應用商店在 store/：訪客按「安裝」的應用存在 localStorage 的 kitlab-dash-installed，
+  這頁讀進來排在官方站點後面，可以加到 Dock，也能在站點頁「從 Dash 移除」。
 -->
 <style>
 /* 一台固定 1600×800 的車機螢幕，等比縮放到任何畫面。
@@ -58,6 +61,7 @@ a{color:inherit;text-decoration:none}
 
 .ic{flex:none;display:block;object-fit:contain}
 .ic.mask{border-radius:23%;object-fit:cover}
+.ic.fav{border-radius:23%;background:#fff;padding:13%;object-fit:contain}
 .mono{flex:none;display:grid;place-items:center;font-family:var(--disp);font-weight:700;color:var(--ink);border-radius:23%}
 .icw{position:relative;display:inline-block;line-height:0}
 .badge{position:absolute;top:-6px;right:-10px;font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.06em;line-height:1;padding:5px 8px;border-radius:999px;background:var(--new);color:var(--ink);box-shadow:0 0 0 3px var(--bg)}
@@ -71,6 +75,9 @@ a{color:inherit;text-decoration:none}
 .chip{display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;font-size:14px;color:var(--soft)}
 .chip b{width:7px;height:7px;border-radius:50%;background:var(--new)}
 .chip:hover{color:var(--fg)}
+.syncc i{width:14px;height:14px;border-radius:50%;border:2px solid var(--mute);display:block}
+.syncc.on i{border-color:var(--new);background:radial-gradient(circle,var(--new) 0 3px,transparent 3.5px)}
+.syncc.err i{border-color:#ff8a8a}
 .padst{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--mute)}
 .padst svg{opacity:.5}
 .padst.on{color:var(--fg)}.padst.on svg{opacity:1}
@@ -124,6 +131,12 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
 .sugg{display:flex;align-items:center;gap:8px;height:60px;padding:0 20px;border-radius:18px;background:var(--glass2);font-size:15px;color:var(--fg)}
 .done{height:60px;padding:0 22px;border-radius:18px;background:var(--fg);color:var(--ink);font-weight:700}
 .dempty{font-size:14px;color:var(--mute);padding:0 6px}
+.storeb{display:flex;align-items:center;gap:10px;height:60px;padding:0 20px 0 16px;border-radius:18px;background:var(--fg);color:var(--ink);font-size:16px;font-weight:700;position:relative}
+.storeb:hover,.storeb:focus-visible{transform:translateY(-3px)}
+.storeb{transition:transform .18s}
+.storeb .n{position:absolute;top:-8px;right:-8px;min-width:22px;height:22px;border-radius:11px;background:var(--new);color:var(--ink);font-family:var(--disp);font-size:12px;line-height:22px;text-align:center;padding:0 6px;box-shadow:0 0 0 3px var(--bg)}
+.mine{position:absolute;bottom:-6px;right:-8px;font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.04em;line-height:1;padding:4px 7px;border-radius:999px;background:var(--glass2);color:var(--soft);box-shadow:0 0 0 3px var(--bg);backdrop-filter:blur(10px)}
+.app .icw{line-height:0}
 
 .layer{position:absolute;inset:60px 0 0 0;display:flex;flex-direction:column;z-index:5}
 
@@ -201,6 +214,7 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
     <header class="bar">
       <a class="brand" href="about.html" title="關於 KitLab Dash"><img src="icons/app-192.png" alt="" width="28" height="28">KitLab Dash<span>精選站點啟動台 · KitLab 商店的免費技能包</span></a>
       <div class="sp"></div>
+      <button class="chip glass syncc" id="syncb" data-nav aria-label="加密雲端同步"><i></i><span id="synctxt">雲端同步</span></button>
       <button class="chip glass" id="chipUpd" data-nav hidden><b></b><span id="chipTxt"></span></button>
       <div class="padst" id="pad"><svg width="22" height="16" viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 2h12a5 5 0 0 1 5 5.5l-.6 4.2A3.6 3.6 0 0 1 16.3 13L14.5 11h-5l-1.8 2a3.6 3.6 0 0 1-6.1-1.3L1 7.5A5 5 0 0 1 6 2z"/><path d="M7 5.5v4M5 7.5h4"/></svg><span id="padtxt">手把</span></div>
       <div class="btime" id="btime">--:--</div>
@@ -222,6 +236,7 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
       <div class="handle"><i></i>往上滑看所有站點</div>
       <nav class="dock glass" id="dock" aria-label="我的 Dock">
         <button class="gbtn" id="openApps" data-nav aria-label="所有站點"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></button>
+        <a class="storeb" id="openStore" href="store/" data-nav aria-label="應用商店"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>商店<span class="n" id="storeN" hidden></span></a>
         <span class="vsep"></span>
         <span id="favs" style="display:flex;gap:14px;align-items:center"></span>
         <span class="vsep"></span>
@@ -249,16 +264,17 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
         <div class="tags" id="stags"></div>
       </div>
       <div class="sr">
-        <div class="kick">推薦理由</div>
+        <div class="kick" id="skick">推薦理由</div>
         <p class="why" id="swhy"></p>
         <div class="url" id="surl"></div>
         <div class="row">
           <a class="btn" id="sgo" target="_blank" rel="noopener" data-nav>前往官方網站 <span aria-hidden="true">↗</span></a>
           <button class="btn2 glass" id="spin" data-nav></button>
+          <button class="btn2" id="sdel" data-nav hidden>從 Dash 移除</button>
           <button class="btn2" id="sreport" data-nav>回報問題</button>
           <button class="btn2" data-back data-nav>返回</button>
         </div>
-        <div class="fine">這是我們收錄的站點，不是我們的作品。我們只寫推薦介紹並連到官方網站，不嵌入、不轉載；名稱與圖示屬原開發者所有。開發者如想修改介紹或不希望被收錄，歡迎告訴我們。完整說明在 kitlab.store/terms.html。</div>
+        <div class="fine" id="sfine">這是我們收錄的站點，不是我們的作品。我們只寫推薦介紹並連到官方網站，不嵌入、不轉載；名稱與圖示屬原開發者所有。開發者如想修改介紹或不希望被收錄，歡迎告訴我們。完整說明在 kitlab.store/terms.html。</div>
       </div>
     </section>
 
@@ -271,20 +287,21 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
         <div class="grp" id="otaAddG"><h4>本期新增</h4><div class="lst" id="otaAdd"></div></div>
         <div class="grp" id="otaRmG" hidden><h4>本期下架</h4><div class="note" id="otaRm"></div></div>
         <div class="grp"><h4>維護</h4><div class="note" id="otaFix"></div></div>
-        <div class="grp"><h4>KitLab Dash 怎麼運作</h4><div class="note">由 KitLab 官方維護，固定每兩週更新一期：加入新發現的好站點，打不開的站點確認後會下架。你不用做任何事，打開就是最新版。不用登入，也不收集任何資料；你唯一能調整的 Dock 只存在這台裝置上。</div></div>
+        <div class="grp"><h4>KitLab Dash 怎麼運作</h4><div class="note">由 KitLab 官方維護，固定每兩週更新一期：加入新發現的好站點，打不開的站點確認後會下架。你不用做任何事，打開就是最新版。想要更多應用，到 Dock 上的「商店」按安裝就會出現在站點格。不用登入，也不追蹤你；你安裝的應用和 Dock 存在這台裝置上，想在多台裝置一起用，按右上角的「雲端同步」，資料會先加密再上傳。</div></div>
       </div>
     </div>
 
     <div class="scrim" id="sug" hidden>
       <form class="sheet glass" id="sugForm" role="dialog" aria-modal="true" aria-labelledby="sugT">
         <header>
-          <div><h2 id="sugT">給我們建議</h2><div class="sub">寫好按送出，內容會自動複製並打開 LINE，貼上傳給我們就好</div></div>
+          <div><h2 id="sugT">給我們建議</h2><div class="sub">寫好按送出，我們就會收到。不用登入，也不用留聯絡方式</div></div>
           <span class="sp"></span><button type="button" class="xbtn" data-back data-nav aria-label="關閉">×</button>
         </header>
         <div class="seg" id="seg"><button type="button" aria-pressed="true" data-m="add" data-nav>推薦新站點</button><button type="button" aria-pressed="false" data-m="fix" data-nav>回報問題或優化</button></div>
         <label class="fld" id="fUrlW">站點網址<input id="fUrl" type="url" placeholder="https://" data-nav></label>
         <label class="fld">說說看<textarea id="fMsg" rows="4" data-nav></textarea></label>
-        <div class="sendrow"><button class="btn" type="submit" data-nav>複製並打開 LINE</button><span>LINE ID：<b id="lineId"></b></span></div>
+        <input id="fWeb" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+        <div class="sendrow"><button class="btn" type="submit" id="fSend" data-nav>送出</button><span>也可以直接 LINE 我們：<b id="lineId"></b></span></div>
       </form>
     </div>
 
@@ -296,7 +313,8 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
 <script>
 (function () {
 "use strict";
-var LINE_ID = "xin883xin";               /* 建議送到這個 LINE；之後改成直接送出時再換掉 */
+var LINE_ID = "xin883xin";               /* API 連不上時，改請訪客用 LINE 傳 */
+var API = "/api";   /* Cloudflare Worker：建議與回報存進 D1 */
 var MAX_DOCK = 7, PER = 21;
 var $ = function (s) { return document.querySelector(s); };
 var stage = $("#stage");
@@ -330,14 +348,24 @@ fetch("sites.json", { cache: "no-cache" })
   .catch(function () { $("#boot").innerHTML = "站點清單載入失敗。<br>請確認網路後重新整理。"; });
 
 function start(DATA) {
-var SITES = DATA.sites, R = DATA.release, byId = {};
-SITES.forEach(function (s) { byId[s.id] = s; });
+var OFFICIAL = DATA.sites, R = DATA.release, byId = {};
+OFFICIAL.forEach(function (s) { byId[s.id] = s; });
+/* 從應用商店安裝的應用：排在官方站點後面 */
+var INST_KEY = "kitlab-dash-installed", JUST_KEY = "kitlab-dash-just";
+var mine = (store.get(INST_KEY) || []).filter(function (s) { return s && s.id && s.url && s.name && !byId[s.id]; });
+mine.forEach(function (s) { s.installed = true; s.tags = s.tags || []; byId[s.id] = s; });
+var SITES = OFFICIAL.concat(mine);
 $("#boot").hidden = true; $("#home").hidden = false; $("#dockw").hidden = false; $("#chipUpd").hidden = false;
 
+function monoTxt(s) { return s.name.replace(/[^A-Za-z0-9]/g, "").slice(0, 2) || s.name.trim().slice(0, 1); }
 function icon(s, px, badge) {
+  if (s.fav) {
+    var fm = '<img class="ic fav" src="' + esc(s.icon) + '" width="' + px + '" height="' + px + '" alt="" draggable="false" referrerpolicy="no-referrer" data-mono="' + esc(monoTxt(s)) + '" data-color="' + esc(s.color) + '">';
+    return badge ? '<span class="icw">' + fm + '<span class="mine">已安裝</span></span>' : fm;
+  }
   var im = s.icon
     ? '<img class="ic' + (s.mask ? " mask" : "") + '" src="' + esc(s.icon) + '" width="' + px + '" height="' + px + '" alt="" draggable="false">'
-    : '<span class="mono" style="width:' + px + 'px;height:' + px + 'px;font-size:' + (px * .38) + 'px;background:' + esc(s.color) + '">' + esc(s.name.replace(/[^A-Za-z0-9]/g, "").slice(0, 2)) + '</span>';
+    : '<span class="mono" style="width:' + px + 'px;height:' + px + 'px;font-size:' + (px * .38) + 'px;background:' + esc(s.color) + '">' + esc(monoTxt(s)) + '</span>';
   return badge && s.isNew ? '<span class="icw">' + im + '<span class="badge">NEW</span></span>' : im;
 }
 function setHue(h, h2) { stage.style.setProperty("--hue", h); if (h2) stage.style.setProperty("--hue2", h2); }
@@ -351,18 +379,19 @@ $("#hero").innerHTML = '<div class="ghost" aria-hidden="true">' + icon(F, 470) +
   '<p>' + esc(F.why) + '</p>' +
   '<div class="row"><span class="btn">看推薦理由</span><span class="tagline">' + F.tags.map(esc).join("　·　") + '</span></div>';
 $("#hero").onclick = function () { openSite(F.id); };
-var added = SITES.filter(function (s) { return s.isNew; });
+var added = OFFICIAL.filter(function (s) { return s.isNew; });
 $("#chipTxt").textContent = "第 " + R.no + " 期 · 已是最新";
 $("#updCard").innerHTML = '<div class="k"><b></b>官方更新 · ' + esc(R.date) + '</div>' +
   '<h3>第 ' + R.no + ' 期上架了</h3>' +
   '<div class="stack">' + added.map(function (s) { return icon(s, 52); }).join("") + '<span class="more">' + (added.length ? "新增 " + added.length + " 個站點" : "本期以維護為主") + '</span></div>' +
-  '<div class="rule">共收錄 ' + SITES.length + ' 個站點，下一期預計 ' + esc(R.next) + '。點開看這期改了什麼。</div>';
+  '<div class="rule">共收錄 ' + OFFICIAL.length + ' 個站點，下一期預計 ' + esc(R.next) + '。點開看這期改了什麼。</div>';
 $("#updCard").onclick = $("#chipUpd").onclick = function () { openOta(); };
 
 /* Dock：訪客唯一能調整的地方，只存在這台裝置 */
 var dock = (store.get("kitlab-launcher-dock") || DATA.defaultDock).filter(function (id) { return byId[id]; });
 var editing = false, swiped = false;
-function saveDock() { store.set("kitlab-launcher-dock", dock); }
+function saveDock() { store.set("kitlab-launcher-dock", dock); pushSync(); }
+function pushSync() { if (window.KitLabSync) window.KitLabSync.sync().catch(function () {}); }
 function renderDock() {
   $("#favs").innerHTML = dock.length ? dock.map(function (id) {
     return '<button class="dk" data-nav data-id="' + id + '" aria-label="' + esc(byId[id].name) + '">' + icon(byId[id], 60) + '<span class="x" aria-hidden="true">−</span></button>';
@@ -395,7 +424,7 @@ function renderApps() {
     var chunk = list.slice(p * PER, (p + 1) * PER);
     html += '<div class="page">' + (chunk.length ? chunk.map(function (s, j) {
       return '<button class="app" style="animation-delay:' + (j * 22) + 'ms" data-nav data-id="' + s.id + '" data-page="' + p + '">' + icon(s, 112, true) + '<span class="lbl">' + esc(s.name) + '</span></button>';
-    }).join("") : '<div class="empty">還沒收錄「' + esc($("#q").value) + '」<br>按 Dock 上的「建議」推薦給我們</div>') + '</div>';
+    }).join("") : '<div class="empty">Dash 裡還沒有「' + esc($("#q").value) + '」<br>到 Dock 上的「商店」找找，或按「建議」推薦給我們</div>') + '</div>';
   }
   $("#track").innerHTML = html;
   Array.prototype.forEach.call($("#track").querySelectorAll(".app"), function (b) { b.onclick = function () { openSite(b.dataset.id); }; });
@@ -425,7 +454,7 @@ function openApps() {
   setTimeout(function () { var a = $("#track .app"); if (a) a.focus({ preventScroll: true }); }, 30);
 }
 $("#openApps").onclick = openApps;
-var cur = null;
+var cur = null, FINE = $("#sfine").textContent;
 function openSite(id) {
   var s = byId[id]; if (!s) return; cur = s;
   if (topLayer() === "ota") back();
@@ -434,6 +463,9 @@ function openSite(id) {
   $("#stags").innerHTML = [s.kind].concat(s.tags).map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("");
   $("#swhy").textContent = s.why; $("#surl").textContent = s.url.replace(/^https:\/\//, "").replace(/\/$/, "");
   $("#sgo").href = s.url; pinLabel();
+  $("#skick").textContent = s.installed ? "應用介紹 · 你從商店安裝" : "推薦理由";
+  $("#sdel").hidden = !s.installed;
+  $("#sfine").textContent = s.installed ? "這是其他開發者的網頁應用，你從 KitLab Dash 應用商店把它加進 Dash。點「前往官方網站」會開啟原網站；名稱與圖示屬原開發者所有。不想要了就按「從 Dash 移除」，不影響其他設定。" : FINE;
   if (topLayer() !== "site") show("site");
   setTimeout(function () { $("#sgo").focus({ preventScroll: true }); }, 30);
 }
@@ -444,6 +476,33 @@ $("#spin").onclick = function () {
   saveDock(); renderDock(); pinLabel();
 };
 $("#sreport").onclick = function () { openSugg("fix", cur); };
+$("#sdel").onclick = function () {
+  if (!cur || !cur.installed) return;
+  var id = cur.id, name = cur.name;
+  store.set(INST_KEY, (store.get(INST_KEY) || []).filter(function (x) { return x.id !== id; }));
+  mine = mine.filter(function (x) { return x.id !== id; }); SITES = OFFICIAL.concat(mine); delete byId[id];
+  dock = dock.filter(function (x) { return x !== id; }); saveDock(); renderDock(); storeCount();
+  back(); if (topLayer() === "apps") renderApps();
+  toast("已從 Dash 移除 " + name, null);
+};
+function storeCount() { $("#storeN").hidden = !mine.length; $("#storeN").textContent = mine.length; }
+storeCount();
+/* 剛從商店回來：提示新裝的應用 */
+var just = (store.get(JUST_KEY) || []).filter(function (id) { return byId[id] && byId[id].installed; });
+store.set(JUST_KEY, []);
+if (just.length) setTimeout(function () {
+  toast("剛安裝 " + just.length + " 個應用：" + just.slice(0, 3).map(function (id) { return byId[id].name; }).join("、") + (just.length > 3 ? "…" : ""), function () { $("#toast").hidden = true; openApps(); setPage(pageCount - 1); });
+}, 700);
+/* 在別的分頁裝了新應用，或從商店按返回鍵回來 */
+addEventListener("storage", function (e) { if (e.key === INST_KEY && !topLayer()) location.reload(); });
+addEventListener("pageshow", function (e) { if (e.persisted) location.reload(); });
+/* 商店應用的圖示載不到時，換成字母圖塊 */
+document.addEventListener("error", function (e) {
+  var im = e.target; if (!im || !im.classList || !im.classList.contains("fav")) return;
+  var px = +im.getAttribute("width"), sp = document.createElement("span");
+  sp.className = "mono"; sp.style.cssText = "width:" + px + "px;height:" + px + "px;font-size:" + (px * .38) + "px;background:" + im.dataset.color;
+  sp.textContent = im.dataset.mono; im.replaceWith(sp);
+}, true);
 
 function openOta() {
   $("#otaT").textContent = "第 " + R.no + " 期更新";
@@ -472,20 +531,41 @@ function setMode(m, s) {
 }
 Array.prototype.forEach.call($("#seg").querySelectorAll("button"), function (b) { b.onclick = function () { setMode(b.dataset.m); }; });
 function openSugg(m, s) {
-  setMode(m || "add", s || null); show("sug");
+  target = s || null; setMode(m || "add", s || null); show("sug");
   setTimeout(function () { (m === "fix" ? $("#fMsg") : $("#fUrl")).focus({ preventScroll: true }); }, 30);
 }
 $("#openSugg").onclick = function () { openSugg("add"); };
+var target = null;
 $("#sugForm").addEventListener("submit", function (e) {
   e.preventDefault();
-  var text = "【啟動台" + (mode === "add" ? "推薦站點" : "回報") + "】" + (mode === "add" && $("#fUrl").value ? " " + $("#fUrl").value : "") + "\n" + $("#fMsg").value;
-  var done = function (ok) { back(); toast(ok ? "已複製建議內容，在 LINE 貼上傳給我們就好" : "請在 LINE 傳給我們：" + LINE_ID, null); };
-  if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); }); else done(false);
-  window.open("https://line.me/ti/p/~" + encodeURIComponent(LINE_ID), "_blank", "noopener");
+  var url = mode === "add" ? $("#fUrl").value.trim() : (target ? target.url : "");
+  var msg = $("#fMsg").value.trim();
+  if (!msg && !url) { $("#fMsg").focus(); return; }
+  var btn = $("#fSend"); btn.disabled = true; btn.textContent = "送出中…";
+  fetch(API + "/v1/feedback", { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ kind: mode, source: "dash", app_id: target ? target.id : null, app_name: target ? target.name : null, url: url, message: msg, website: $("#fWeb").value }) })
+    .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.ok) throw new Error(j.error || "送出失敗"); }); })
+    .then(function () { back(); toast("收到了，謝謝你的建議", null); })
+    .catch(function (err) {
+      var text = "【Dash" + (mode === "add" ? "推薦站點" : "回報") + "】" + (url ? " " + url : "") + "\n" + msg;
+      if (navigator.clipboard) navigator.clipboard.writeText(text).catch(function () {});
+      toast((err && err.message && !/fetch|network/i.test(err.message) ? err.message + "。" : "") + "暫時送不出去，內容已複製，可以用 LINE 傳給我們：" + LINE_ID, null);
+    })
+    .then(function () { btn.disabled = false; btn.textContent = "送出"; });
 });
 
 Array.prototype.forEach.call(document.querySelectorAll("[data-back]"), function (b) { b.onclick = back; });
 Array.prototype.forEach.call(document.querySelectorAll(".scrim"), function (sc) { sc.addEventListener("click", function (e) { if (e.target === sc) back(); }); });
+/* 加密雲端同步（免登入，用復原碼還原；程式在 ../sync.js） */
+$("#syncb").onclick = function () { if (window.KitLabSync) window.KitLabSync.open(); else toast("同步功能載入失敗，請重新整理", null); };
+function watchSync() {
+  if (!window.KitLabSync) return setTimeout(watchSync, 300);
+  window.KitLabSync.onChange(function (st) {
+    $("#syncb").classList.toggle("on", st.on && !st.error); $("#syncb").classList.toggle("err", !!(st.on && st.error));
+    $("#synctxt").textContent = st.on ? (st.error ? "同步失敗" : "已同步") : "雲端同步";
+  });
+}
+watchSync();
 $("#fs").onclick = function () {
   var p = document.fullscreenElement ? document.exitFullscreen() : (document.documentElement.requestFullscreen ? document.documentElement.requestFullscreen() : Promise.reject());
   Promise.resolve(p).catch(function () { $("#fs").textContent = "不支援"; });

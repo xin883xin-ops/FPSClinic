@@ -1,0 +1,10 @@
+{
+  "name": "kitlab-store",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute kitlab-dash --remote --file worker/schema.sql && wrangler d1 execute kitlab-dash --remote --file worker/seed.sql"
+  },
+  "devDependencies": { "wrangler": "^4.20.0" }
+}

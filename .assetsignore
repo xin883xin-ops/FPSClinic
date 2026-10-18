@@ -1,0 +1,15 @@
+# 這些檔案不會公開到網站上
+.git
+.github
+.gitignore
+.assetsignore
+.wrangler
+.dev.vars
+node_modules
+worker
+wrangler.toml
+package.json
+package-lock.json
+README.md
+DEPLOY.md
+*.log

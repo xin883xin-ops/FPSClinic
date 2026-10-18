@@ -397,6 +397,7 @@ html.embed body { min-height: 0; height: 100vh; height: 100dvh; overflow: hidden
 html.embed .home, html.embed .handle { display: none !important; }
 html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: none; visibility: visible; transition: none; }
 </style>
+<script src="sync.js" defer></script>
 </head>
 <body>
 
@@ -785,11 +786,15 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
   }
   var warned = false;
   function saveLocal() {
-    try { localStorage.setItem(LS_KEY, JSON.stringify(payload())); return true; }
+    try { localStorage.setItem(LS_KEY, JSON.stringify(payload())); pushSync(); return true; }
     catch (e) { if (!warned) { warned = true; toast("這個瀏覽器目前無法儲存資料（可能是無痕模式）。請記得用「備份」存成檔案。"); } return false; }
   }
   function touch() { S.updatedAt = Date.now(); saveLocal(); }
-  function needBackup() { return !S.lastBackup || Date.now() - S.lastBackup > 7 * 864e5; }
+  function needBackup() { if (cloudOn()) return false; return !S.lastBackup || Date.now() - S.lastBackup > 7 * 864e5; }
+  /* 加密雲端同步（../sync.js）：開啟後改動會在幾秒內加密上傳，不用再提醒備份 */
+  var syncT = null;
+  function cloudOn() { return !!(window.KitLabSync && window.KitLabSync.status().on); }
+  function pushSync() { clearTimeout(syncT); syncT = setTimeout(function () { if (window.KitLabSync) window.KitLabSync.sync().catch(function () {}); }, 4000); }
 
   /* ---------- 外觀 ---------- */
   function applyLook() {
@@ -1152,7 +1157,13 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
   }
   function toolBackup(b) {
     b.innerHTML =
-      '<div class="note">資料存在<b>這個瀏覽器</b>裡，不需要登入任何帳號。清除網站資料、換手機或換瀏覽器之前，請先下載備份。</div>' +
+      '<div class="note">資料存在<b>這個瀏覽器</b>裡，不需要登入任何帳號。要在手機和電腦之間同步，開啟<b>加密雲端同步</b>；也可以照舊下載備份檔。</div>' +
+      '<div class="sub">加密雲端同步</div>' +
+      '<div class="stack">' +
+      '<button class="btn' + (cloudOn() ? "" : " pri") + ' big" type="button" data-a="cloud">' + svgIc("lock") + (cloudOn() ? "同步中 · 查看復原碼與設定" : "開啟同步或用復原碼還原") + "</button>" +
+      '<div class="meta" id="cloudMeta">' + (cloudOn() ? "改動會在幾秒內加密上傳，其他裝置打開時會自動拿到。" : "不用帳號：資料在這台裝置加密後才上傳，換裝置時輸入復原碼就能還原。") + "</div>" +
+      "</div>" +
+      '<div class="sub">備份檔</div>' +
       '<div class="meta" id="bkMeta"></div>' +
       '<div class="stack">' +
       '<button class="btn pri big" type="button" data-a="dl">' + svgIc("backup") + "下載備份檔</button>" +
@@ -1176,6 +1187,7 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
     b.onclick = function (e) {
       var a = e.target.closest("[data-a]"); if (!a) return;
       var k = a.dataset.a, text = JSON.stringify(payload(), null, 2);
+      if (k === "cloud") { if (window.KitLabSync) window.KitLabSync.open(); else toast("同步功能載入失敗，請重新整理"); return; }
       if (k === "dl") {
         try {
           var blob = new Blob([text], { type: "application/json" }), el = document.createElement("a");
