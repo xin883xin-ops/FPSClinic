@@ -164,6 +164,18 @@ details.more[open] summary{margin-bottom:10px}
 .flow b{display:block;color:var(--ink);font-size:.95rem;margin-bottom:2px}
 .flow div::before{counter-increment:f;content:counter(f);font-family:var(--mono);font-weight:700;color:var(--teal-bright);font-size:.8rem}
 
+/* tools */
+.tools{margin-block:34px 0}
+.tools h2{font-size:1.3rem;font-weight:900}
+.tools>p{color:var(--muted);font-size:.9rem;margin-top:6px;max-width:48em}
+.tool-grp{margin-top:18px}
+.tool-grp h3{font-size:.95rem;font-weight:700;color:var(--muted)}
+.tool-grp .warn{color:var(--warn);font-weight:500}
+.tool-list{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:10px;padding:0;list-style:none}
+.tool-list li a{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1.5px solid var(--line);border-radius:999px;font-size:.88rem;font-weight:700;text-decoration:none;color:var(--ink)}
+.tool-list li a:hover{border-color:var(--teal-bright);color:var(--teal-bright)}
+.tool-list li a svg{width:13px;height:13px;flex:none;color:var(--dim)}
+
 /* cta */
 .cta{margin-block:30px 10px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;border:1px solid var(--line);border-radius:18px;padding:20px 22px;background:linear-gradient(110deg,var(--bg2),#0f2a28)}
 .cta h3{font-size:1.1rem;font-weight:900}
@@ -300,6 +312,34 @@ footer a{color:var(--muted)}
       <div class="step-h"><span class="no">03</span><h2>重開機後再檢查一次</h2></div>
       <p>回到「檢查驅動」再跑一次。如果還有裝置缺驅動，那通常是備份時就沒有的，照建議的連結補裝即可。</p>
       <div class="row"><button class="btn ghost sm" type="button" data-goto="check">回到檢查驅動</button></div>
+    </div>
+  </section>
+
+  <section class="tools" aria-label="延伸工具">
+    <h2>延伸工具</h2>
+    <p>驅動之外，實測過品質不錯的開源工具。各家調校的著重點不同，自己挑合用的即可，KitLab 不代管、不掛保證。</p>
+
+    <div class="tool-grp">
+      <h3>套件管理</h3>
+      <ul class="tool-list">
+        <li><a href="https://github.com/Devolutions/UniGetUI" target="_blank" rel="noopener">UniGetUI<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></li>
+        <li><a href="https://github.com/BCUninstaller/Bulk-Crap-Uninstaller" target="_blank" rel="noopener">BCUninstaller<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></li>
+      </ul>
+    </div>
+
+    <div class="tool-grp">
+      <h3>系統優化（進階，<span class="warn">用前先建還原點</span>）</h3>
+      <ul class="tool-list">
+        <li><a href="https://github.com/ChrisTitusTech/winutil" target="_blank" rel="noopener">WinUtil<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></li>
+        <li><a href="https://github.com/rayenghanmi/RyTuneX" target="_blank" rel="noopener">RyTuneX<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></li>
+        <li><a href="https://github.com/memstechtips/Winhance" target="_blank" rel="noopener">Winhance<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></li>
+        <li><a href="https://github.com/Chuyu-Team/Dism-Multi-language" target="_blank" rel="noopener">Dism++<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></li>
+        <li><a href="https://github.com/PrimeBuild-pc/TweakHub" target="_blank" rel="noopener">TweakHub<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></li>
+        <li><a href="https://github.com/itsfatduck/optimizerDuck" target="_blank" rel="noopener">OptimizerDuck<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></li>
+        <li><a href="https://github.com/flick9000/winscript" target="_blank" rel="noopener">WinScript<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></li>
+        <li><a href="https://github.com/Raphire/Win11Debloat" target="_blank" rel="noopener">Win11Debloat<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></li>
+        <li><a href="https://github.com/builtbybel/Winslop" target="_blank" rel="noopener">FluentTweaker（原 Winslop）<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a></li>
+      </ul>
     </div>
   </section>
 
