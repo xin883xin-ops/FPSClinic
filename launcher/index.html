@@ -101,18 +101,19 @@ a{color:inherit;text-decoration:none}
 button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
 .tagline{font-size:16px;color:var(--soft);padding:0 10px}
 
-.side{display:grid;grid-template-rows:auto 1fr;gap:20px;min-height:0}
-.clockc{border-radius:30px;padding:28px 32px}
+.side{display:grid;grid-template-rows:auto auto minmax(0,1fr);gap:16px;min-height:0}
+.clockc{border-radius:30px;padding:22px 32px}
 .clock{font-family:var(--disp);font-weight:300;font-size:104px;line-height:.9;letter-spacing:-.04em;font-variant-numeric:tabular-nums;white-space:nowrap}
 .date{font-size:19px;color:var(--soft);margin-top:12px}
-.upd{border-radius:30px;padding:26px 30px;text-align:left;display:flex;flex-direction:column;gap:14px;min-height:0;transition:background .2s}
+.upd{border-radius:30px;padding:18px 30px;text-align:left;display:flex;flex-direction:column;gap:8px;min-height:0;transition:background .2s}
 .upd:hover,.upd:focus-visible{background:var(--glass2)}
 .upd .k{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--soft);letter-spacing:.06em}
 .upd .k b{width:8px;height:8px;border-radius:50%;background:var(--new);box-shadow:0 0 12px var(--new)}
-.upd h3{margin:0;font-family:var(--disp);font-weight:700;font-size:34px;letter-spacing:-.02em}
-.upd .stack{display:flex;align-items:center;gap:10px}
+.upd h3{margin:0;font-family:var(--disp);font-weight:700;font-size:28px;letter-spacing:-.02em}
+.upd .stack{display:flex;align-items:center;gap:8px}
+.upd .stack .ic,.upd .stack .mono{width:36px!important;height:36px!important;font-size:14px!important}
 .upd .stack .more{margin-left:8px;font-size:15px;color:var(--soft)}
-.upd .rule{margin-top:auto;font-size:14px;line-height:1.65;color:var(--mute)}
+.upd .rule{display:none}
 
 .dockw{display:flex;flex-direction:column;align-items:center;gap:8px;padding-bottom:20px}
 .handle{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--mute);letter-spacing:.1em}
@@ -201,6 +202,28 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
 .toast b{width:8px;height:8px;border-radius:50%;background:var(--new)}
 .toast .btn{padding:9px 18px;font-size:15px}
 
+/* 我的捷徑：使用者自己加的網站，存在這台裝置，可折疊 */
+.mylinks{border-radius:30px;padding:16px 22px 18px;display:flex;flex-direction:column;min-height:0;align-self:stretch}
+.mylinks.col{align-self:start}
+.mlh{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--soft);flex:none}
+.mlh .tt{flex:1;display:flex;align-items:center;gap:8px;text-align:left;font-weight:700;color:var(--fg);font-family:var(--disp);font-size:18px;min-width:0}
+.mlh .tt small{font-weight:400;font-size:13px;color:var(--mute)}
+.mlh .arr{width:20px;height:20px;transition:transform .2s;flex:none}
+.mylinks.col .arr{transform:rotate(-90deg)}
+.mlh .mb{font-size:14px;color:var(--soft);padding:6px 12px;border-radius:999px;flex:none}
+.mlh .mb:hover,.mlh .mb:focus-visible{background:var(--glass2);color:var(--fg)}
+.mlb{display:grid;grid-template-columns:repeat(5,1fr);gap:12px 8px;margin-top:14px;overflow-y:auto;min-height:0;padding:6px 2px 2px;scrollbar-width:thin}
+.mylinks.col .mlb{display:none}
+.mlb .ml{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--soft);border-radius:14px;padding:4px 0;min-width:0}
+.mlb .ml span.n{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mlb .ml:hover,.mlb .ml:focus-visible{background:var(--glass);color:var(--fg)}
+.mlb .ml .x{position:absolute;top:-4px;left:4px;width:20px;height:20px;border-radius:50%;background:var(--fg);color:var(--ink);font-weight:700;font-size:14px;line-height:20px;display:none}
+.mylinks.edit .ml .x{display:block}
+.mylinks.edit .ml{animation:wig .32s ease-in-out infinite alternate}
+.mlb .mlempty{grid-column:1/-1;font-size:13px;line-height:1.6;color:var(--mute);padding:4px 2px}
+.mlb .mladd{border:1.5px dashed var(--stroke)}
+.mlb .mladd i{width:44px;height:44px;border-radius:23%;display:grid;place-items:center;font-style:normal;font-size:24px;color:var(--soft);border:1.5px dashed var(--mute)}
+
 .home>*,.dockw{animation:rise .6s cubic-bezier(.2,.8,.2,1) backwards}
 .side{animation-delay:.08s}.dockw{animation-delay:.16s}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -229,6 +252,14 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
           <div class="date" id="date"></div>
         </section>
         <button class="upd glass" id="updCard" data-nav></button>
+        <section class="mylinks glass" id="mylinks" aria-label="我的捷徑">
+          <div class="mlh">
+            <button class="tt" id="mlTog" data-nav aria-expanded="true"><svg class="arr" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>我的捷徑<small id="mlCnt"></small></button>
+            <button class="mb" id="mlEdit" data-nav hidden>整理</button>
+            <button class="mb" id="mlAdd" data-nav>＋ 新增</button>
+          </div>
+          <div class="mlb" id="mlb"></div>
+        </section>
       </div>
     </main>
 
@@ -302,6 +333,18 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
         <label class="fld">說說看<textarea id="fMsg" rows="4" data-nav></textarea></label>
         <input id="fWeb" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
         <div class="sendrow"><button class="btn" type="submit" id="fSend" data-nav>送出</button><span>也可以直接 LINE 我們：<b id="lineId"></b></span></div>
+      </form>
+    </div>
+
+    <div class="scrim" id="lnk" hidden>
+      <form class="sheet glass" id="lnkForm" role="dialog" aria-modal="true" aria-labelledby="lnkT" style="width:640px">
+        <header>
+          <div><h2 id="lnkT">新增我的捷徑</h2><div class="sub">只存在這台裝置；開啟雲端同步後會加密備份。不用登入</div></div>
+          <span class="sp"></span><button type="button" class="xbtn" data-back data-nav aria-label="關閉">×</button>
+        </header>
+        <label class="fld">網址<input id="lUrl" type="text" inputmode="url" placeholder="https://" autocomplete="off" data-nav></label>
+        <label class="fld">名稱（可留空，自動用網域）<input id="lName" type="text" maxlength="24" autocomplete="off" data-nav></label>
+        <div class="sendrow"><button class="btn" type="submit" data-nav>加入</button><span id="lErr" style="color:#ff8a8a"></span></div>
       </form>
     </div>
 
@@ -412,6 +455,51 @@ function renderDock() {
 function setEdit(v) { editing = v; renderDock(); if (v) $("#doneEdit").focus({ preventScroll: true }); }
 $("#doneEdit").onclick = function () { setEdit(false); };
 renderDock();
+
+/* 我的捷徑：使用者自己加的網站（獨立存放，不連工具箱），可折疊，會跟著加密雲端同步 */
+var LINK_KEY = "kitlab-dash-links", LINK_COL = "kitlab-dash-links-col", links = (store.get(LINK_KEY) || []).filter(function (l) { return l && l.id && l.url && l.name; }), linkEdit = false;
+function saveLinks() { store.set(LINK_KEY, links); pushSync(); }
+function linkSite(l) {
+  var h = ""; try { h = new URL(l.url).hostname; } catch (e) {}
+  return { id: l.id, name: l.name, url: l.url, fav: 1, color: "#5FD3BC", icon: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + encodeURIComponent("https://" + h) + "&size=128" };
+}
+function renderLinks() {
+  var box = $("#mylinks"), col = !!store.get(LINK_COL);
+  box.classList.toggle("col", col); box.classList.toggle("edit", linkEdit && !col);
+  $("#mlTog").setAttribute("aria-expanded", String(!col));
+  $("#mlCnt").textContent = links.length ? links.length + " 個" : "";
+  $("#mlEdit").hidden = col || !links.length; $("#mlEdit").textContent = linkEdit ? "完成" : "整理";
+  $("#mlAdd").hidden = col;
+  $("#mlb").innerHTML = (links.length ? links.map(function (l) {
+    return '<button class="ml" data-nav data-id="' + esc(l.id) + '" title="' + esc(l.url) + '">' + icon(linkSite(l), 44) + '<span class="n">' + esc(l.name) + '</span><span class="x" aria-hidden="true">−</span></button>';
+  }).join("") : '<div class="mlempty">還沒有捷徑。按「＋ 新增」把常用網站放在這裡。</div>');
+  Array.prototype.forEach.call($("#mlb").querySelectorAll(".ml"), function (b) {
+    b.onclick = function () {
+      if (linkEdit) { links = links.filter(function (x) { return x.id !== b.dataset.id; }); saveLinks(); if (!links.length) linkEdit = false; renderLinks(); }
+      else { var l = links.filter(function (x) { return x.id === b.dataset.id; })[0]; if (l) window.open(l.url, "_blank", "noopener"); }
+    };
+  });
+}
+$("#mlTog").onclick = function () { store.set(LINK_COL, !store.get(LINK_COL)); linkEdit = false; renderLinks(); };
+$("#mlEdit").onclick = function () { linkEdit = !linkEdit; renderLinks(); };
+$("#mlAdd").onclick = function () {
+  if (links.length >= 60) { toast("最多 60 個捷徑，先整理掉不用的吧"); return; }
+  $("#lUrl").value = ""; $("#lName").value = ""; $("#lErr").textContent = ""; show("lnk");
+  setTimeout(function () { $("#lUrl").focus({ preventScroll: true }); }, 30);
+};
+$("#lnkForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  var raw = $("#lUrl").value.trim(), u;
+  if (!raw) { $("#lErr").textContent = "請貼上網址"; return; }
+  if (!/^[a-z][a-z0-9+.-]*:/i.test(raw)) raw = "https://" + raw;
+  try { u = new URL(raw); } catch (x) { $("#lErr").textContent = "網址看起來不對"; return; }
+  if (u.protocol !== "https:" && u.protocol !== "http:") { $("#lErr").textContent = "只能加入 http 或 https 網址"; return; }
+  if (links.some(function (l) { return l.url === u.href; })) { $("#lErr").textContent = "這個網址已經在捷徑裡了"; return; }
+  var nm = $("#lName").value.trim() || u.hostname.replace(/^www\./, "");
+  links.push({ id: "u" + Date.now().toString(36), name: nm.slice(0, 24), url: u.href, at: Date.now() });
+  saveLinks(); back(); renderLinks(); toast("已加入「" + nm.slice(0, 24) + "」");
+});
+renderLinks();
 
 /* 站點格：GNOME 式分頁 */
 var page = 0, pageCount = 1;

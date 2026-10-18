@@ -1,7 +1,7 @@
 /*
  * KitLab 加密雲端同步（免登入）
  *
- * 同步 kitlab.store 上這些資料：Toolkit 工具箱（捷徑、待辦、便條、外觀）、Dash 的 Dock、從商店安裝的應用。
+ * 同步 kitlab.store 上這些資料：Toolkit 工具箱（捷徑、待辦、便條、外觀）、Dash 的 Dock、從商店安裝的應用、我的捷徑。
  * 1. 瀏覽器隨機產生 160 位元的復原碼，格式像 KL7Q-X2M9-…（8 組）。
  * 2. 用 HKDF 從復原碼推導三樣東西：保險箱編號、寫入權杖、AES-256-GCM 金鑰。
  * 3. 資料在這台裝置加密後才上傳；伺服器只拿到編號、權杖雜湊與密文，看不到內容，也沒有復原碼。
@@ -14,7 +14,7 @@
   "use strict";
   if (window.KitLabSync) return;
   var API = "/api";
-  var KEYS = ["sd_state_v3", "sd_look_v1", "kitlab-launcher-dock", "kitlab-dash-installed"];
+  var KEYS = ["sd_state_v3", "sd_look_v1", "kitlab-launcher-dock", "kitlab-dash-installed", "kitlab-dash-links", "kitlab-dash-links-col"];
   var CFG_KEY = "kitlab-sync";
   var A32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"; // Crockford Base32，不含 I L O U，抄寫不易出錯
   var te = new TextEncoder(), td = new TextDecoder();
