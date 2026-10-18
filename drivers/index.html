@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="免費驅動工具：貼一段指令就知道 Windows 缺哪些驅動、去哪下載官方版本，還能一行指令備份與還原整套驅動。資料不上傳。">
+<meta property="og:title" content="驅動檢查・備份・還原｜KitLab">
+<meta name="theme-color" content="#0B141A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B1620'/%3E%3Crect x='6' y='6' width='9' height='9' rx='2.5' fill='%235FD3BC'/%3E%3Crect x='17' y='6' width='9' height='9' rx='2.5' fill='white'/%3E%3Crect x='6' y='17' width='9' height='9' rx='2.5' fill='white'/%3E%3Crect x='17' y='17' width='9' height='9' rx='2.5' fill='white' fill-opacity='.4'/%3E%3C/svg%3E">
+<link rel="manifest" href="../manifest.webmanifest">
+<!-- KitLab 官方免費技能包：驅動檢查・備份・還原。全部在瀏覽器裡處理，沒有後端。廠商與原廠連結在程式的 VENDORS、OEMS。 -->
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>KitLab 驅動工具</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: KitLab 商店深色頁面 — 頂部標題 + 三個分頁（檢查／備份／還原），每頁是「步驟卡 → 指令框 → 結果」的直向流程 */
+:root{
+  --bg:#0B141A; --bg2:#111D25; --card:#16242D; --card2:#1B2B35; --line:#243541;
+  --ink:#EAF1F4; --muted:#93A6B1; --dim:#6E8591;
+  --teal:#0A7F6E; --teal-deep:#075E51; --teal-bright:#5FD3BC;
+  --warn:#F2C14E; --bad:#FF8A7A; --good:#5FD3BC;
+  --term:#0A1015; --term-ink:#CFE9E2;
+  --font:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,Menlo,monospace;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.7}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+a{color:var(--teal-bright)}
+h1,h2,h3{margin:0;line-height:1.25;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--teal-bright);outline-offset:3px;border-radius:8px}
+.wrap{max-width:960px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(11,20,26,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;min-height:60px;max-width:1100px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:900;font-size:1.1rem}
+.brand svg{width:30px;height:30px;display:block}
+.top .sp{flex:1}
+.back{font-size:.88rem;font-weight:700;text-decoration:none;color:var(--ink);padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;white-space:nowrap}
+.back:hover{border-color:var(--teal-bright);color:var(--teal-bright)}
+
+/* hero */
+.hero{padding-block:36px 8px}
+.kick{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-weight:700;letter-spacing:.06em;color:var(--muted)}
+.kick b{background:var(--teal-bright);color:var(--bg);padding:1px 8px;border-radius:4px}
+.hero h1{font-size:clamp(1.9rem,4.4vw,2.8rem);font-weight:900;letter-spacing:-.01em;margin-top:10px}
+.hero p{color:#C3D1D8;margin-top:10px;max-width:40em}
+.promise{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:16px;font-size:.88rem;color:var(--muted)}
+.promise span{display:flex;align-items:center;gap:6px}
+.promise svg{width:16px;height:16px;color:var(--teal-bright);flex:none}
+
+/* tabs */
+.tabs{display:flex;gap:6px;margin-top:26px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:0;background:none;color:var(--muted);font-weight:700;font-size:1rem;padding:12px 16px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:8px}
+.tab .n{font-family:var(--mono);font-size:.75rem;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--card2);color:var(--muted)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--teal-bright)}
+.tab[aria-selected="true"] .n{background:var(--teal-bright);color:var(--bg)}
+.tab:hover{color:var(--ink)}
+.panel{padding-block:24px 10px;display:grid;gap:18px}
+
+/* step card */
+.step{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px;display:grid;gap:12px;min-width:0}
+.step-h{display:flex;align-items:baseline;gap:12px}
+.step-h .no{font-family:var(--mono);font-weight:700;color:var(--teal-bright);font-size:.9rem;flex:none}
+.step-h h2{font-size:1.15rem;font-weight:700}
+.step p{color:#C3D1D8;font-size:.95rem}
+.hint{font-size:.86rem;color:var(--muted)}
+.hint b{color:var(--ink)}
+kbd{font-family:var(--mono);font-size:.8em;background:var(--card2);border:1px solid #33485a;border-bottom-width:2px;border-radius:5px;padding:1px 6px}
+
+/* terminal block */
+.term{background:var(--term);border:1px solid #1E2D37;border-radius:14px;overflow:hidden;min-width:0}
+.term-h{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;border-bottom:1px solid #1E2D37;font-size:.8rem;color:var(--dim)}
+.term-h .who{display:flex;align-items:center;gap:6px}
+.term-h .who i{width:8px;height:8px;border-radius:50%;background:#3A86FF;display:block}
+.term-h .who.admin i{background:var(--warn)}
+.term-h .sp{flex:1}
+.copy{border:1px solid #2E4452;background:var(--card2);color:var(--ink);font-weight:700;font-size:.84rem;padding:6px 14px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.copy:hover{background:var(--teal-bright);border-color:var(--teal-bright);color:var(--bg)}
+.copy.ok{background:var(--teal-bright);border-color:var(--teal-bright);color:var(--bg)}
+.copy svg{width:14px;height:14px}
+.term pre{margin:0;padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:.82rem;line-height:1.65;color:var(--term-ink);white-space:pre;tab-size:2}
+.term pre .c{color:#5E7A86}
+
+/* explain rows */
+.explain{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.explain li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;font-size:.88rem;color:#C3D1D8}
+.explain code{font-family:var(--mono);font-size:.8rem;color:var(--teal-bright);background:rgba(95,211,188,.08);padding:1px 6px;border-radius:5px;white-space:nowrap}
+
+/* inputs */
+textarea,input[type=text]{width:100%;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font:inherit;font-size:.92rem;outline:0}
+textarea{font-family:var(--mono);font-size:.78rem;min-height:120px;resize:vertical}
+textarea:focus,input[type=text]:focus{border-color:var(--teal-bright)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;font-size:.95rem;line-height:1.2;padding:11px 20px;border-radius:999px;border:2px solid var(--teal);background:var(--teal);color:#fff;cursor:pointer}
+.btn:hover{background:var(--teal-deep);border-color:var(--teal-deep)}
+.btn.ghost{background:transparent;border-color:#36505f;color:var(--ink)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn.sm{padding:7px 14px;font-size:.84rem}
+.err{color:var(--bad);font-size:.88rem;min-height:1.2em}
+.samples{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.samples span{font-size:.84rem;color:var(--muted)}
+.chip{border:1px solid var(--line);background:transparent;color:var(--muted);font-size:.84rem;padding:5px 12px;border-radius:999px;cursor:pointer}
+.chip:hover{color:var(--ink);border-color:#3a5668}
+
+/* options */
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;background:var(--bg2)}
+.opt:has(input:checked){border-color:var(--teal-bright);background:rgba(95,211,188,.06)}
+.opt input{accent-color:var(--teal-bright);margin-top:5px}
+.opt b{display:block;font-size:.95rem}
+.opt small{display:block;color:var(--muted);font-size:.8rem;line-height:1.5}
+.inline{display:flex;gap:8px;align-items:center;margin-top:6px}
+.inline input{width:5.5em;text-transform:uppercase;font-family:var(--mono);padding:8px 10px}
+
+/* results */
+.sys{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.sys h3{font-size:1.15rem;font-weight:900;word-break:break-word}
+.sys .meta{color:var(--muted);font-size:.86rem;margin-top:2px;word-break:break-word}
+.sum{display:flex;gap:10px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;padding:4px 12px;border-radius:999px;background:var(--card2);color:var(--muted)}
+.pill i{width:8px;height:8px;border-radius:50%;display:block}
+.pill.bad{background:rgba(255,138,122,.12);color:var(--bad)}.pill.bad i{background:var(--bad)}
+.pill.warn{background:rgba(242,193,78,.12);color:var(--warn)}.pill.warn i{background:var(--warn)}
+.pill.good{background:rgba(95,211,188,.12);color:var(--good)}.pill.good i{background:var(--good)}
+.group-h{font-size:.95rem;font-weight:700;margin-top:6px;display:flex;align-items:center;gap:8px}
+.devs{display:grid;gap:10px}
+.dev{display:grid;grid-template-columns:4px minmax(0,1fr);gap:0;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.dev .bar{background:var(--line)}
+.dev.bad .bar{background:var(--bad)}.dev.warn .bar{background:var(--warn)}.dev.good .bar{background:var(--good)}
+.dev .in{padding:14px 16px;display:grid;gap:8px;min-width:0}
+.dev .t{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.dev .t b{font-size:1rem;word-break:break-word}
+.dev .t span{font-size:.8rem;color:var(--muted)}
+.dev .why{font-size:.88rem;color:#C3D1D8}
+.dev .id{font-family:var(--mono);font-size:.74rem;color:var(--dim);word-break:break-all}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.lk{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;font-weight:700;text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid #2E4452;color:var(--ink);background:var(--card2)}
+.lk:hover{border-color:var(--teal-bright);color:var(--teal-bright)}
+.lk.pri{background:var(--teal-bright);border-color:var(--teal-bright);color:var(--bg)}
+.lk.pri:hover{background:#7fe0cc;color:var(--bg)}
+.lk svg{width:12px;height:12px}
+details.more{border:1px solid var(--line);border-radius:14px;background:var(--bg2);padding:10px 14px}
+details.more summary{cursor:pointer;font-weight:700;font-size:.92rem;color:var(--muted)}
+details.more[open] summary{margin-bottom:10px}
+.note{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;font-size:.88rem;color:#C3D1D8;background:rgba(242,193,78,.06);border:1px solid rgba(242,193,78,.25);border-radius:12px;padding:12px 14px}
+.note svg{width:18px;height:18px;color:var(--warn);margin-top:2px}
+.note.ok{background:rgba(95,211,188,.06);border-color:rgba(95,211,188,.25)}.note.ok svg{color:var(--teal-bright)}
+
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;counter-reset:f}
+.flow div{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:.86rem;color:#C3D1D8}
+.flow b{display:block;color:var(--ink);font-size:.95rem;margin-bottom:2px}
+.flow div::before{counter-increment:f;content:counter(f);font-family:var(--mono);font-weight:700;color:var(--teal-bright);font-size:.8rem}
+
+/* cta */
+.cta{margin-block:30px 10px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;border:1px solid var(--line);border-radius:18px;padding:20px 22px;background:linear-gradient(110deg,var(--bg2),#0f2a28)}
+.cta h3{font-size:1.1rem;font-weight:900}
+.cta p{color:var(--muted);font-size:.9rem;margin-top:4px}
+footer{border-top:1px solid var(--line);margin-top:26px}
+footer .wrap{padding-block:20px 36px;color:var(--dim);font-size:.82rem;display:grid;gap:6px}
+footer a{color:var(--muted)}
+
+@media (max-width:720px){
+  .flow{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sys,.cta{grid-template-columns:minmax(0,1fr)}
+  .step{padding:16px}
+  .back .lbl{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="KitLab 商店">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#16242D"/><rect x="6" y="6" width="9" height="9" rx="2.5" fill="#5FD3BC"/><rect x="17" y="6" width="9" height="9" rx="2.5" fill="#fff"/><rect x="6" y="17" width="9" height="9" rx="2.5" fill="#fff"/><rect x="17" y="17" width="9" height="9" rx="2.5" fill="#fff" fill-opacity=".4"/></svg>
+      KitLab
+    </a>
+    <span class="sp"></span>
+    <a class="back" href="../"><span aria-hidden="true">←</span><span class="lbl"> 回商店</span></a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="kick"><b>免費技能包</b>KitLab 官方</span>
+    <h1>驅動檢查・備份・還原</h1>
+    <p>不用下載任何軟體。複製一段指令到 Windows 執行，就能看出哪些裝置缺驅動、去哪裡下載官方版本；裝好之後，再用一行指令把整套驅動備份起來，重灌完一鍵裝回。</p>
+    <div class="promise">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>檢查用的指令只讀取，不安裝、不修改</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>貼上的資料只在你的瀏覽器分析，不會上傳</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>只連到原廠與微軟官方，不提供來路不明的檔案</span>
+    </div>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="功能">
+    <button class="tab" role="tab" id="t-check" aria-controls="p-check" aria-selected="true"><span class="n">1</span>檢查驅動</button>
+    <button class="tab" role="tab" id="t-backup" aria-controls="p-backup" aria-selected="false"><span class="n">2</span>備份</button>
+    <button class="tab" role="tab" id="t-restore" aria-controls="p-restore" aria-selected="false"><span class="n">3</span>還原</button>
+  </div>
+
+  <!-- 檢查 -->
+  <section class="panel" id="p-check" role="tabpanel" aria-labelledby="t-check">
+    <div class="step">
+      <div class="step-h"><span class="no">01</span><h2>打開 PowerShell</h2></div>
+      <p>按 <kbd>Win</kbd> + <kbd>X</kbd>，選「終端機」或「Windows PowerShell」。這一步<b>不需要</b>系統管理員。</p>
+    </div>
+    <div class="step">
+      <div class="step-h"><span class="no">02</span><h2>複製這段指令，貼上後按 Enter</h2></div>
+      <div class="term">
+        <div class="term-h"><span class="who"><i></i>PowerShell · 一般權限</span><span class="sp"></span><button class="copy" type="button" data-copy="cmdCheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg>複製</button></div>
+        <pre id="cmdCheck"></pre>
+      </div>
+      <details class="more"><summary>這段指令在做什麼？</summary>
+        <ul class="explain">
+          <li><code>Win32_ComputerSystem</code><span>讀電腦品牌與型號，例如 HP ProBook 450 G8。</span></li>
+          <li><code>Win32_BaseBoard</code><span>讀主機板廠牌與型號，組裝電腦要靠這個找驅動。</span></li>
+          <li><code>Win32_OperatingSystem</code><span>讀 Windows 版本，例如 Windows 11 23H2。</span></li>
+          <li><code>Win32_PnPEntity</code><span>讀裝置清單，只挑出有問題的裝置，以及顯示卡、網卡、音效、藍牙、相機。</span></li>
+          <li><code>Set-Clipboard</code><span>把結果複製到剪貼簿，方便你貼回來。不會傳到任何地方。</span></li>
+        </ul>
+        <p class="hint" style="margin-top:10px">不會讀取序號、帳號、檔案或網路紀錄。</p>
+      </details>
+    </div>
+    <div class="step">
+      <div class="step-h"><span class="no">03</span><h2>看到「已複製」後，貼到這裡</h2></div>
+      <label class="sr" for="paste">貼上指令的結果</label>
+      <textarea id="paste" spellcheck="false" placeholder='貼上後會像這樣：{"kitlab":"drivers-v1","maker":"ASUSTeK COMPUTER INC.", ...}'></textarea>
+      <div class="row"><button class="btn" type="button" id="analyze">分析</button><button class="btn ghost" type="button" id="clear">清空</button></div>
+      <p class="err" id="perr" role="alert"></p>
+      <div class="samples"><span>先看範例：</span><button class="chip" type="button" data-sample="laptop">剛重灌的 ASUS 筆電</button><button class="chip" type="button" data-sample="diy">AMD 組裝桌機</button><button class="chip" type="button" data-sample="ok">驅動都裝好的 HP 筆電</button></div>
+    </div>
+    <div id="result" class="panel" style="padding:0" aria-live="polite"></div>
+  </section>
+
+  <!-- 備份 -->
+  <section class="panel" id="p-backup" role="tabpanel" aria-labelledby="t-backup" hidden>
+    <div class="flow" aria-label="重灌流程">
+      <div><b>備份驅動</b>在原本的系統，趁驅動都正常時先做</div>
+      <div><b>存到安全的地方</b>隨身碟、外接硬碟，或你自己的雲端</div>
+      <div><b>重灌 Windows</b>照你原本的方式進行</div>
+      <div><b>一行還原</b>到「還原」分頁，把驅動裝回去</div>
+    </div>
+    <div class="step">
+      <div class="step-h"><span class="no">01</span><h2>選備份要放哪裡</h2></div>
+      <div class="opts" role="radiogroup" aria-label="備份位置">
+        <label class="opt"><input type="radio" name="dest" value="desktop" checked><span><b>桌面</b><small>最好找，備份完再自己搬到隨身碟</small></span></label>
+        <label class="opt"><input type="radio" name="dest" value="d"><span><b>D 槽</b><small>另一個磁碟，重灌 C 槽時不會被清掉</small></span></label>
+        <label class="opt"><input type="radio" name="dest" value="usb"><span><b>隨身碟或外接硬碟</b><small>輸入它的磁碟代號</small>
+          <span class="inline"><label class="sr" for="usbL">磁碟代號</label><input type="text" id="usbL" value="E" maxlength="1" inputmode="text" autocomplete="off"><small>槽</small></span></span></label>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-h"><span class="no">02</span><h2>用系統管理員開 PowerShell，貼上這段</h2></div>
+      <p>按 <kbd>Win</kbd> + <kbd>X</kbd>，選「終端機（系統管理員）」，跳出確認視窗按「是」。匯出驅動需要這個權限。</p>
+      <div class="term">
+        <div class="term-h"><span class="who admin"><i></i>PowerShell · 系統管理員</span><span class="sp"></span><button class="copy" type="button" data-copy="cmdBackup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg>複製</button></div>
+        <pre id="cmdBackup"></pre>
+      </div>
+      <details class="more"><summary>這段指令在做什麼？</summary>
+        <ul class="explain">
+          <li><code>pnputil /export-driver *</code><span>Windows 內建的工具，匯出所有另外安裝的驅動（顯示卡、網卡、音效、藍牙等）。Windows 本來就有的驅動不會匯出，所以檔案不會太大。</span></li>
+          <li><code>Get-WindowsDriver</code><span>另外存一份 <code>driver-list.csv</code>，記下每個驅動的廠商、版本和日期。</span></li>
+          <li><code>Compress-Archive</code><span>打包成一個 zip，方便搬移和保存。</span></li>
+        </ul>
+      </details>
+    </div>
+    <div class="note ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg><span>備份檔只存在你的電腦上，KitLab 不保存、也看不到。建議複製一份到隨身碟，或放進你自己的 Google Drive、OneDrive。</span></div>
+    <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><span>這份備份只適合裝回<b>同一台電腦</b>，或同型號的電腦。換了不同的機器，請回到「檢查驅動」找對應的版本。</span></div>
+  </section>
+
+  <!-- 還原 -->
+  <section class="panel" id="p-restore" role="tabpanel" aria-labelledby="t-restore" hidden>
+    <div class="step">
+      <div class="step-h"><span class="no">01</span><h2>先把備份的 zip 解壓縮</h2></div>
+      <p>在 zip 上按右鍵 →「解壓縮全部」。解壓縮後的資料夾路徑貼到下面，例如 <code style="font-family:var(--mono);font-size:.85em">E:\DriverBackup-20261018</code>。</p>
+      <label class="hint" for="rPath">備份資料夾的位置</label>
+      <input type="text" id="rPath" value="E:\DriverBackup-20261018" spellcheck="false" autocomplete="off" style="font-family:var(--mono)">
+    </div>
+    <div class="step">
+      <div class="step-h"><span class="no">02</span><h2>用系統管理員開 PowerShell，貼上這段</h2></div>
+      <div class="term">
+        <div class="term-h"><span class="who admin"><i></i>PowerShell · 系統管理員</span><span class="sp"></span><button class="copy" type="button" data-copy="cmdRestore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg>複製</button></div>
+        <pre id="cmdRestore"></pre>
+      </div>
+      <p class="hint"><code style="font-family:var(--mono)">pnputil /add-driver … /subdirs /install</code> 會把資料夾裡所有驅動加進 Windows 並安裝到對應的裝置。跑完建議重新開機。</p>
+    </div>
+    <div class="step">
+      <div class="step-h"><span class="no">03</span><h2>重開機後再檢查一次</h2></div>
+      <p>回到「檢查驅動」再跑一次。如果還有裝置缺驅動，那通常是備份時就沒有的，照建議的連結補裝即可。</p>
+      <div class="row"><button class="btn ghost sm" type="button" data-goto="check">回到檢查驅動</button></div>
+    </div>
+  </section>
+
+  <section class="cta" aria-label="需要協助">
+    <div><h3>找到驅動，遊戲還是卡？</h3><p>FPSClinic 遠端幫你調校 Windows 與顯示卡設定，不滿意全額退款。</p></div>
+    <a class="btn" href="../fpsclinic.html">看遠端調校方案</a>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>驅動由各硬體廠商與微軟提供，KitLab 只整理官方下載位置。廠商網站的改版可能讓連結失效，遇到請按商店的「回報問題」告訴我們。</span>
+    <span>KitLab 官方技能包 · 免費</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const EXT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+
+/* ---------- 指令 ---------- */
+const CMD_CHECK=[
+'$cs=Get-CimInstance Win32_ComputerSystem; $bb=Get-CimInstance Win32_BaseBoard',
+'$os=Get-CimInstance Win32_OperatingSystem; $bi=Get-CimInstance Win32_BIOS',
+'$dev=Get-CimInstance Win32_PnPEntity | Where-Object { $_.ConfigManagerErrorCode -ne 0 -or $_.PNPClass -in \'Display\',\'Net\',\'MEDIA\',\'Bluetooth\',\'Camera\' } |',
+'  Select-Object Name,PNPClass,@{n=\'Code\';e={$_.ConfigManagerErrorCode}},@{n=\'Id\';e={@($_.HardwareID)[0]}}',
+'[ordered]@{kitlab=\'drivers-v1\';maker=$cs.Manufacturer;model=$cs.Model;board=\"$($bb.Manufacturer) $($bb.Product)\";',
+'  bios=$bi.SMBIOSBIOSVersion;os=$os.Caption;build=$os.BuildNumber;devices=@($dev)} |',
+'  ConvertTo-Json -Depth 3 -Compress | Set-Clipboard',
+'Write-Host "已複製，回到網頁按貼上" -ForegroundColor Green'].join('\n');
+function backupCmd(){
+  const v=(document.querySelector('input[name=dest]:checked')||{}).value||'desktop';
+  let L=($('#usbL').value||'E').toUpperCase().replace(/[^A-Z]/g,'')||'E'; if(L==='C')L='E';
+  const base=v==='desktop'?'"$env:USERPROFILE\\Desktop\\DriverBackup-$(Get-Date -Format yyyyMMdd)"':v==='d'?'"D:\\DriverBackup-$(Get-Date -Format yyyyMMdd)"':`"${L}:\\DriverBackup-$(Get-Date -Format yyyyMMdd)"`;
+  return ['$d = '+base,
+  'New-Item -ItemType Directory -Force $d | Out-Null',
+  'pnputil /export-driver * "$d"',
+  'Get-WindowsDriver -Online | Select-Object ProviderName,ClassName,Version,Date,OriginalFileName |',
+  '  Export-Csv "$d\\driver-list.csv" -NoTypeInformation -Encoding UTF8',
+  'Compress-Archive "$d\\*" "$d.zip" -Force',
+  'Write-Host "完成：$d.zip" -ForegroundColor Green'].join('\n');
+}
+function restoreCmd(){
+  let p=($('#rPath').value||'').trim().replace(/^"+|"+$/g,'').replace(/[\\\/]+$/,'')||'E:\\DriverBackup';
+  p=p.replace(/"/g,'');
+  return ['pnputil /add-driver "'+p+'\\*.inf" /subdirs /install','Write-Host "還原完成，建議重新開機" -ForegroundColor Green'].join('\n');
+}
+function renderCmds(){$('#cmdCheck').textContent=CMD_CHECK;$('#cmdBackup').textContent=backupCmd();$('#cmdRestore').textContent=restoreCmd()}
+document.addEventListener('change',e=>{if(e.target.name==='dest')renderCmds()});
+$('#usbL').addEventListener('input',()=>{const r=document.querySelector('input[value=usb]');r.checked=true;renderCmds()});
+$('#rPath').addEventListener('input',renderCmds);
+renderCmds();
+
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-copy]');if(!c)return;
+  const el=$('#'+c.dataset.copy),txt=el.textContent;
+  const done=()=>{const o=c.innerHTML;c.classList.add('ok');c.textContent='已複製';setTimeout(()=>{c.classList.remove('ok');c.innerHTML=o},1600)};
+  const fallback=()=>{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);c.textContent='已選取，按 Ctrl+C'};
+  try{navigator.clipboard.writeText(txt).then(done,fallback)}catch(err){fallback()}
+});
+
+/* ---------- 分頁 ---------- */
+const TABS=['check','backup','restore'];
+function show(k){TABS.forEach(t=>{$('#t-'+t).setAttribute('aria-selected',t===k);$('#p-'+t).hidden=t!==k});try{history.replaceState(null,'','#'+k)}catch(e){}}
+TABS.forEach(t=>$('#t-'+t).addEventListener('click',()=>show(t)));
+document.querySelector('[role=tablist]').addEventListener('keydown',e=>{const i=TABS.findIndex(t=>$('#t-'+t).getAttribute('aria-selected')==='true');if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=TABS[(i+(e.key==='ArrowRight'?1:2))%3];show(n);$('#t-'+n).focus()}});
+document.addEventListener('click',e=>{const g=e.target.closest('[data-goto]');if(g){show(g.dataset.goto);window.scrollTo({top:0})}});
+const h=(location.hash||'').slice(1);if(TABS.includes(h))show(h);
+
+/* ---------- 知識庫：廠商、品牌、錯誤代碼 ---------- */
+const VENDORS={
+ '10DE':{n:'NVIDIA',url:'https://www.nvidia.com/Download/index.aspx',l:'NVIDIA 官方驅動'},
+ '1002':{n:'AMD',url:'https://www.amd.com/en/support/download/drivers.html',l:'AMD 官方驅動'},
+ '1022':{n:'AMD',url:'https://www.amd.com/en/support/download/drivers.html',l:'AMD 晶片組驅動'},
+ '8086':{n:'Intel',url:'https://www.intel.com/content/www/us/en/support/detect.html',l:'Intel 驅動程式支援助理'},
+ '8087':{n:'Intel',url:'https://www.intel.com/content/www/us/en/support/detect.html',l:'Intel 驅動程式支援助理'},
+ '10EC':{n:'Realtek'},'0BDA':{n:'Realtek'},'14E4':{n:'Broadcom'},'168C':{n:'Qualcomm Atheros'},'17CB':{n:'Qualcomm'},
+ '0CF3':{n:'Qualcomm Atheros'},'14C3':{n:'MediaTek'},'0E8D':{n:'MediaTek'},'1B21':{n:'ASMedia'},'1987':{n:'Phison'},
+ '144D':{n:'Samsung'},'15B7':{n:'SanDisk / WD'},'1E0F':{n:'KIOXIA'},'1C5C':{n:'SK hynix'},'1217':{n:'O2 Micro'},'1180':{n:'Ricoh'},
+ '04CA':{n:'Lite-On'},'13D3':{n:'AzureWave'},'0489':{n:'Foxconn'},'046D':{n:'Logitech'},'045E':{n:'Microsoft'},'1532':{n:'Razer'},
+ '1B1C':{n:'Corsair'},'1038':{n:'SteelSeries'},'04F3':{n:'ELAN'},'06CB':{n:'Synaptics'},'1106':{n:'VIA'},'5986':{n:'Acer / Bison'},'0C45':{n:'Microdia'}
+};
+const ACPI={INT:'Intel',INTC:'Intel',AMDI:'AMD',ELAN:'ELAN',SYNA:'Synaptics',MSFT:'Microsoft',ASUS:'ASUS',HPQ:'HP',DELL:'Dell',LEN:'Lenovo',ACPI:'系統'};
+const OEMS=[
+ [/hewlett|^hp\b|\bhp\b/i,'HP','https://support.hp.com/drivers'],
+ [/dell/i,'Dell','https://www.dell.com/support/home'],
+ [/lenovo/i,'Lenovo','https://pcsupport.lenovo.com'],
+ [/asus/i,'ASUS','https://www.asus.com/support/download-center/'],
+ [/acer/i,'Acer','https://www.acer.com/support'],
+ [/micro-star|\bmsi\b/i,'MSI','https://www.msi.com/support'],
+ [/gigabyte/i,'GIGABYTE','https://www.gigabyte.com/Support'],
+ [/asrock/i,'ASRock','https://www.asrock.com/support/index.asp'],
+ [/microsoft/i,'Microsoft Surface','https://support.microsoft.com/surface'],
+ [/samsung/i,'Samsung','https://www.samsung.com/support/'],
+ [/razer/i,'Razer','https://mysupport.razer.com'],
+ [/dynabook|toshiba/i,'Dynabook','https://support.dynabook.com']
+];
+const GENERIC=/system manufacturer|system product name|to be filled|default string|o\.e\.m|^$|none|not applicable/i;
+const CODES={1:'裝置設定不正確，通常是沒有驅動',3:'驅動可能損毀，或記憶體不足',10:'裝置無法啟動，常見於驅動版本不對',12:'找不到足夠的資源給這個裝置',14:'需要重新開機才會生效',18:'需要重新安裝驅動',19:'登錄資料有問題，建議重新安裝驅動',21:'Windows 正在移除這個裝置',22:'這個裝置被停用了',24:'裝置不存在或沒有正常運作',28:'這個裝置還沒有安裝驅動',29:'裝置在 BIOS 被關閉了',31:'驅動載入失敗',32:'驅動服務被停用了',37:'驅動初始化失敗',38:'驅動已經在記憶體裡，需要重新開機',39:'驅動損毀或遺失',41:'找不到硬體，驅動已載入',43:'硬體回報有問題，可能是驅動或硬體本身',45:'裝置目前沒有連接',47:'裝置已準備好安全移除',48:'驅動被封鎖，可能和系統版本不相容',52:'驅動沒有數位簽章'};
+const CLASS={Display:'顯示卡',Net:'網路',MEDIA:'音效',Media:'音效',Bluetooth:'藍牙',Camera:'相機',Image:'相機／掃描器',USB:'USB',System:'系統裝置',HIDClass:'輸入裝置',Biometric:'指紋／臉部辨識',SoftwareComponent:'軟體元件',Printer:'印表機',Monitor:'螢幕',Keyboard:'鍵盤',Mouse:'滑鼠',SCSIAdapter:'儲存控制器',HDC:'儲存控制器',Other:'未知裝置'};
+
+function parseId(id){
+  id=String(id||'').toUpperCase();
+  let m=id.match(/VEN_([0-9A-F]{4})/)||id.match(/VID_([0-9A-F]{4})/);
+  if(m){const d=(id.match(/DEV_([0-9A-F]{4})/)||id.match(/PID_([0-9A-F]{4})/)||[])[1];return{bus:id.split('\\')[0],vid:m[1],did:d||''}}
+  m=id.match(/^ACPI\\(?:VEN_)?([A-Z]{3,4})/);
+  if(m)return{bus:'ACPI',acpi:m[1]};
+  return{bus:id.split('\\')[0]||''};
+}
+function oemOf(sys){
+  const mk=(sys.maker||'').trim(),md=(sys.model||'').trim();
+  const diy=GENERIC.test(mk)||GENERIC.test(md);
+  const src=diy?(sys.board||''):mk;
+  for(const [re,n,u] of OEMS)if(re.test(src))return{n,u,diy};
+  return{n:diy?'主機板原廠':(mk||'原廠'),u:'',diy};
+}
+function boardModel(b){b=String(b||'').trim();const m=b.match(/^.*?\b(?:inc|ltd|corp|corporation|limited)\.?,?\s+(.+)$/i);return m?m[1]:b.replace(/^\S+\s+/,'')}
+const catalog=id=>'https://www.catalog.update.microsoft.com/Search.aspx?q='+encodeURIComponent(String(id||'').split('&REV_')[0].split('&SUBSYS_')[0]);
+
+function guessClass(d){
+  if(d.PNPClass)return d.PNPClass;
+  const n=String(d.Name||''),id=String(d.Id||'').toUpperCase();
+  if(/顯示|視訊|video|display|vga|3d/i.test(n))return 'Display';
+  if(/網路|乙太|ethernet|network|wi-?fi|wireless|wlan/i.test(n))return 'Net';
+  if(/音訊|音效|audio|sound/i.test(n)||id.startsWith('HDAUDIO'))return 'MEDIA';
+  if(/藍牙|bluetooth/i.test(n))return 'Bluetooth';
+  if(/相機|camera|webcam/i.test(n))return 'Camera';
+  if(/匯流排|sm bus|smbus|pci 裝置|pci device|控制器|controller/i.test(n))return 'System';
+  return 'Other';
+}
+function classify(d,oem){
+  d=Object.assign({},d,{PNPClass:guessClass(d)});
+  const code=+d.Code||0, p=parseId(d.Id), v=VENDORS[p.vid]||null;
+  const vname=v?v.n:(p.acpi?(ACPI[p.acpi]||ACPI[p.acpi.slice(0,3)]||p.acpi):'');
+  const basic=/basic display|基本顯示|microsoft 基本/i.test(d.Name||'');
+  let state='good',why='驅動已安裝，運作正常';
+  if(code===22){state='warn';why=CODES[22]+'。如果不是你自己停用的，到裝置管理員按右鍵「啟用裝置」。'}
+  else if(code){state='bad';why=(CODES[code]||'裝置有問題')+`（錯誤代碼 ${code}）`}
+  else if(basic){state='bad';why='目前用的是 Windows 內建的「基本顯示介面卡」，代表顯示卡驅動還沒裝，遊戲和影片都會很慢'}
+  const links=[];
+  const gpuVendor=['10DE','1002','8086'].includes(p.vid)&&(d.PNPClass==='Display'||basic);
+  if(oem.u)links.push({u:oem.u,t:oem.n+' 支援頁',pri:!(gpuVendor&&oem.diy)});
+  if(v&&v.url)links.push({u:v.url,t:v.l,pri:gpuVendor&&oem.diy});
+  if(d.Id)links.push({u:catalog(d.Id),t:'微軟驅動目錄'});
+  if(!links.some(l=>l.pri)&&links.length)links[0].pri=true;
+  let tip='';
+  if(state!=='good'){
+    if(gpuVendor&&!oem.diy)tip=`筆電建議先用 ${oem.n} 支援頁的版本；遊戲需要較新的版本時，再用 ${vname} 官方驅動。`;
+    else if(gpuVendor)tip=`組裝電腦的顯示卡，直接裝 ${vname} 官方驅動即可。`;
+    else if(oem.diy&&vname)tip=`到主機板原廠支援頁，用型號找「${CLASS[d.PNPClass]||'這類'}」驅動；${vname} 晶片的驅動通常放在那裡。`;
+    else if(vname)tip=`${vname} 晶片的驅動，建議用 ${oem.n} 支援頁提供的版本，最穩定。`;
+    else tip='用下面的微軟驅動目錄，以硬體 ID 搜尋。';
+  }
+  return{d,code,state,why,tip,links,vname,cls:CLASS[d.PNPClass]||d.PNPClass||'裝置'};
+}
+
+function analyze(text){
+  const t=String(text||'').trim(); if(!t)throw new Error('先把 PowerShell 的結果貼進來。');
+  const a=t.indexOf('{'),b=t.lastIndexOf('}'); if(a<0||b<a)throw new Error('看不出是指令的結果。請確認貼上的是以 { 開頭的那一整段。');
+  let sys; try{sys=JSON.parse(t.slice(a,b+1))}catch(e){throw new Error('內容不完整，可能只貼了一部分。請回到 PowerShell 重新執行一次，再整段貼上。')}
+  if(sys.kitlab!=='drivers-v1')throw new Error('這不是本頁指令產生的結果。請用上面那段指令重新執行。');
+  let devs=sys.devices; if(devs&&!Array.isArray(devs))devs=[devs]; devs=(devs||[]).filter(x=>x&&(x.Name||x.Id));
+  return{sys,devs};
+}
+
+function render({sys,devs}){
+  const oem=oemOf(sys);
+  const rows=devs.map(d=>classify(d,oem));
+  const order={bad:0,warn:1,good:2};rows.sort((x,y)=>order[x.state]-order[y.state]);
+  const nb=rows.filter(r=>r.state==='bad').length,nw=rows.filter(r=>r.state==='warn').length,ng=rows.filter(r=>r.state==='good').length;
+  const title=oem.diy?(sys.board||'組裝電腦'):`${sys.maker||''} ${sys.model||''}`.trim();
+  const win=String(sys.os||'').replace('Microsoft ','')+(sys.build?` · 組建 ${sys.build}`:'');
+  const card=r=>`<article class="dev ${r.state}"><span class="bar"></span><div class="in">
+      <div class="t"><b>${esc(r.d.Name||'未知裝置')}</b><span>${esc(r.cls)}${r.vname?' · '+esc(r.vname):''}</span></div>
+      <p class="why">${esc(r.why)}</p>${r.tip?`<p class="why" style="color:var(--muted)">${esc(r.tip)}</p>`:''}
+      ${r.state!=='good'?`<div class="links">${r.links.map(l=>`<a class="lk${l.pri?' pri':''}" href="${esc(l.u)}" target="_blank" rel="noopener noreferrer">${esc(l.t)}${EXT}</a>`).join('')}</div>`:''}
+      ${r.d.Id?`<p class="id">${esc(r.d.Id)}</p>`:''}</div></article>`;
+  const bad=rows.filter(r=>r.state!=='good'),good=rows.filter(r=>r.state==='good');
+  $('#result').innerHTML=`
+    <div class="sys"><div><h3>${esc(title||'這台電腦')}</h3><p class="meta">${esc(win)}${sys.bios?' · BIOS '+esc(sys.bios):''}${oem.diy?' · 組裝電腦，驅動以主機板原廠為準':''}</p></div>
+      ${oem.u?`<a class="lk pri" href="${esc(oem.u)}" target="_blank" rel="noopener noreferrer">${esc(oem.n)} 支援頁${EXT}</a>`:''}</div>
+    <div class="sum">${nb?`<span class="pill bad"><i></i>${nb} 個需要驅動</span>`:''}${nw?`<span class="pill warn"><i></i>${nw} 個被停用</span>`:''}<span class="pill good"><i></i>${ng} 個正常</span></div>
+    ${oem.u?`<p class="hint">到 ${esc(oem.n)} 支援頁時，輸入型號 <b>${esc(oem.diy?boardModel(sys.board):sys.model||'')}</b> 就能找到這台電腦專用的驅動。</p>`:''}
+    ${bad.length?`<h3 class="group-h">需要處理</h3><div class="devs">${bad.map(card).join('')}</div>`:
+      `<div class="note ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>沒有找到缺驅動的裝置。現在是備份驅動的好時機，到「備份」分頁一行指令存起來。</span></div>`}
+    ${good.length?`<details class="more"${bad.length?'':' open'}><summary>運作正常的裝置（${good.length}）</summary><div class="devs">${good.map(card).join('')}</div></details>`:''}
+    ${!bad.length?`<div class="row"><button class="btn sm" type="button" data-goto="backup">去備份驅動</button></div>`:''}`;
+  $('#result').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+}
+
+/* ---------- 範例資料（不是你的電腦） ---------- */
+const SAMPLES={
+ laptop:{kitlab:'drivers-v1',maker:'ASUSTeK COMPUTER INC.',model:'ASUS TUF Gaming F15 FX507ZC4',board:'ASUSTeK COMPUTER INC. FX507ZC4',bios:'FX507ZC4.312',os:'Microsoft Windows 11 家用版',build:'22631',devices:[
+  {Name:'Microsoft 基本顯示介面卡',PNPClass:'Display',Code:0,Id:'PCI\\VEN_8086&DEV_46A6&SUBSYS_1D3E1043&REV_0C'},
+  {Name:'3D 視訊控制卡',PNPClass:null,Code:28,Id:'PCI\\VEN_10DE&DEV_25A2&SUBSYS_1D3E1043&REV_A1'},
+  {Name:'網路控制卡',PNPClass:null,Code:28,Id:'PCI\\VEN_8086&DEV_51F0&SUBSYS_00948086&REV_01'},
+  {Name:'PCI 裝置',PNPClass:null,Code:28,Id:'PCI\\VEN_8086&DEV_51C8&SUBSYS_1D3E1043&REV_01'},
+  {Name:'高解析度音訊裝置',PNPClass:'MEDIA',Code:0,Id:'HDAUDIO\\FUNC_01&VEN_10EC&DEV_0256&SUBSYS_10431D3E'},
+  {Name:'Intel(R) Wireless Bluetooth(R)',PNPClass:'Bluetooth',Code:0,Id:'USB\\VID_8087&PID_0026&REV_0002'},
+  {Name:'USB2.0 HD UVC WebCam',PNPClass:'Camera',Code:0,Id:'USB\\VID_13D3&PID_56DD&REV_2005&MI_00'}]},
+ diy:{kitlab:'drivers-v1',maker:'System manufacturer',model:'System Product Name',board:'ASUSTeK COMPUTER INC. ROG STRIX B550-F GAMING',bios:'3404',os:'Microsoft Windows 11 專業版',build:'26100',devices:[
+  {Name:'AMD Radeon RX 6700 XT',PNPClass:'Display',Code:0,Id:'PCI\\VEN_1002&DEV_73DF&SUBSYS_E4451DA2&REV_C1'},
+  {Name:'乙太網路控制卡',PNPClass:null,Code:28,Id:'PCI\\VEN_8086&DEV_15F3&SUBSYS_87D21043&REV_03'},
+  {Name:'網路控制卡',PNPClass:null,Code:28,Id:'PCI\\VEN_8086&DEV_2723&SUBSYS_00848086&REV_1A'},
+  {Name:'SM 匯流排控制器',PNPClass:null,Code:28,Id:'PCI\\VEN_1022&DEV_790B&SUBSYS_87C01043&REV_61'},
+  {Name:'Realtek USB Audio',PNPClass:'MEDIA',Code:0,Id:'USB\\VID_0B05&PID_1A52&REV_0001&MI_00'},
+  {Name:'Generic Bluetooth Adapter',PNPClass:'Bluetooth',Code:22,Id:'USB\\VID_8087&PID_0029&REV_0001'}]},
+ ok:{kitlab:'drivers-v1',maker:'HP',model:'HP ProBook 450 15.6 inch G8 Notebook PC',board:'HP 8846',bios:'T87 Ver. 01.18.00',os:'Microsoft Windows 11 專業版',build:'22631',devices:[
+  {Name:'Intel(R) Iris(R) Xe Graphics',PNPClass:'Display',Code:0,Id:'PCI\\VEN_8086&DEV_9A49&SUBSYS_8846103C&REV_01'},
+  {Name:'Intel(R) Wi-Fi 6 AX201 160MHz',PNPClass:'Net',Code:0,Id:'PCI\\VEN_8086&DEV_A0F0&SUBSYS_00748086&REV_20'},
+  {Name:'Realtek PCIe GbE Family Controller',PNPClass:'Net',Code:0,Id:'PCI\\VEN_10EC&DEV_8168&SUBSYS_8846103C&REV_15'},
+  {Name:'Realtek(R) Audio',PNPClass:'MEDIA',Code:0,Id:'HDAUDIO\\FUNC_01&VEN_10EC&DEV_0236&SUBSYS_103C8846'},
+  {Name:'Intel(R) Wireless Bluetooth(R)',PNPClass:'Bluetooth',Code:0,Id:'USB\\VID_8087&PID_0026&REV_0002'},
+  {Name:'HP HD Camera',PNPClass:'Camera',Code:0,Id:'USB\\VID_04F2&PID_B6BF&REV_0013&MI_00'}]}
+};
+document.addEventListener('click',e=>{const s=e.target.closest('[data-sample]');if(!s)return;$('#paste').value=JSON.stringify(SAMPLES[s.dataset.sample]);run(true)});
+function run(isSample){
+  $('#perr').textContent='';
+  try{const r=analyze($('#paste').value);render(r);if(isSample)$('#result').insertAdjacentHTML('afterbegin','<p class="hint">這是範例資料，不是你的電腦。</p>')}
+  catch(err){$('#result').innerHTML='';$('#perr').textContent=err.message}
+}
+$('#analyze').addEventListener('click',()=>run(false));
+$('#clear').addEventListener('click',()=>{$('#paste').value='';$('#result').innerHTML='';$('#perr').textContent='';$('#paste').focus()});
+$('#paste').addEventListener('paste',()=>setTimeout(()=>{if($('#paste').value.includes('drivers-v1'))run(false)},0));
+
+/* 首次打開就展示一份範例，讓人一眼看懂結果長什麼樣 */
+$('#paste').value=JSON.stringify(SAMPLES.laptop);
+(function(){try{const r=analyze($('#paste').value);render(r);$('#result').insertAdjacentHTML('afterbegin','<p class="hint">下面是範例結果，不是你的電腦。執行上面的指令後，把結果貼進來就會換成你的。</p>');$('#paste').value='';window.scrollTo(0,0)}catch(e){}})();
+})();
+</script>
+
+</body>
+</html>
