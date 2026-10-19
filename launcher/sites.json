@@ -5,7 +5,7 @@
     "date": "10 月 19 日",
     "next": "11 月 2 日",
     "featured": "vscode",
-    "fix": "新增 VS Code（vscode.dev）與 ShiftEdit 兩個網頁寫程式的工具，VS Code 當本期精選。首頁多了「官方群組」資料夾（Google、Microsoft），「我的捷徑」可以拖曳合成資料夾，上限提高到 90 個。",
+    "fix": "新增 VS Code（vscode.dev）與 ShiftEdit 兩個網頁寫程式的工具，VS Code 當本期精選。首頁多了「官方群組」資料夾（Google、Microsoft），「我的捷徑」可以拖曳合成資料夾，上限提高到 90 個。另外新增免登入的開源網頁版 Office：CryptPad、EtherCalc、Univer。",
     "removed": []
   },
   "defaultDock": [
@@ -182,6 +182,60 @@
         "網頁開發",
         "FTP",
         "終端機"
+      ]
+    },
+    {
+      "id": "cryptpad",
+      "name": "CryptPad",
+      "dev": "CryptPad（XWiki SAS）",
+      "kind": "PWA",
+      "color": "#4591c4",
+      "isNew": true,
+      "url": "https://cryptpad.fr/",
+      "short": "免登入的開源網頁 Office",
+      "why": "開源的網頁版辦公室：文件、試算表、簡報、表單、白板、看板都有，不用註冊就能新增，分享連結就能多人一起編。內容在瀏覽器端加密，連伺服器都看不到。想長期保存可以另外註冊免費帳號。",
+      "tags": [
+        "Office",
+        "文件",
+        "試算表",
+        "簡報",
+        "免登入",
+        "開源"
+      ]
+    },
+    {
+      "id": "ethercalc",
+      "name": "EtherCalc",
+      "dev": "EtherCalc 開源社群",
+      "kind": "網頁",
+      "color": "#2e7d32",
+      "isNew": true,
+      "url": "https://ethercalc.net/",
+      "short": "免登入的多人試算表",
+      "why": "打開網頁、取個名字就有一張試算表，把網址傳給別人就能同時編輯，不用帳號。支援公式、匯出 CSV 與 Excel，適合臨時算帳、揪團統計。",
+      "tags": [
+        "試算表",
+        "免登入",
+        "開源",
+        "多人協作"
+      ]
+    },
+    {
+      "id": "univer",
+      "name": "Univer",
+      "dev": "Univer（開源專案）",
+      "kind": "網頁",
+      "color": "#1f6feb",
+      "isNew": true,
+      "url": "https://univer.ai/",
+      "short": "開源的 Sheets、Docs、Slides",
+      "why": "開源的辦公套件，有試算表、文件、簡報三種線上展示可以直接試用，介面接近 Excel 與 Word。想看看開源 Office 能做到什麼程度，從這裡開始。",
+      "tags": [
+        "Office",
+        "試算表",
+        "文件",
+        "簡報",
+        "開源"
       ]
     },
     {
