@@ -149,6 +149,229 @@
           "color": "#D83B01"
         }
       ]
+    },
+    {
+      "id": "social",
+      "name": "社交",
+      "color": "#1877F2",
+      "items": [
+        {
+          "name": "Facebook",
+          "url": "https://www.facebook.com",
+          "color": "#1877F2"
+        },
+        {
+          "name": "Instagram",
+          "url": "https://www.instagram.com",
+          "color": "#E4405F"
+        },
+        {
+          "name": "Threads",
+          "url": "https://www.threads.com",
+          "color": "#101010"
+        },
+        {
+          "name": "X",
+          "url": "https://x.com",
+          "color": "#101010"
+        },
+        {
+          "name": "Discord",
+          "url": "https://discord.com/app",
+          "color": "#5865F2"
+        },
+        {
+          "name": "Reddit",
+          "url": "https://www.reddit.com",
+          "color": "#FF4500"
+        },
+        {
+          "name": "Telegram",
+          "url": "https://web.telegram.org",
+          "color": "#26A5E4"
+        },
+        {
+          "name": "WhatsApp",
+          "url": "https://web.whatsapp.com",
+          "color": "#25D366"
+        },
+        {
+          "name": "LinkedIn",
+          "url": "https://www.linkedin.com",
+          "color": "#0A66C2"
+        },
+        {
+          "name": "Pinterest",
+          "url": "https://www.pinterest.com",
+          "color": "#E60023"
+        },
+        {
+          "name": "PTT 網頁版",
+          "url": "https://term.ptt.cc",
+          "color": "#2d2d2d"
+        }
+      ]
+    },
+    {
+      "id": "music",
+      "name": "音樂",
+      "color": "#1DB954",
+      "items": [
+        {
+          "name": "YouTube Music",
+          "url": "https://music.youtube.com",
+          "color": "#FF0000"
+        },
+        {
+          "name": "Spotify",
+          "url": "https://open.spotify.com",
+          "color": "#1DB954"
+        },
+        {
+          "name": "KKBOX",
+          "url": "https://play.kkbox.com",
+          "color": "#06C3FF"
+        },
+        {
+          "name": "Apple Music",
+          "url": "https://music.apple.com",
+          "color": "#FA243C"
+        },
+        {
+          "name": "SoundCloud",
+          "url": "https://soundcloud.com",
+          "color": "#FF5500"
+        },
+        {
+          "name": "Bandcamp",
+          "url": "https://bandcamp.com",
+          "color": "#1DA0C3"
+        },
+        {
+          "name": "Tidal",
+          "url": "https://listen.tidal.com",
+          "color": "#101010"
+        },
+        {
+          "name": "Deezer",
+          "url": "https://www.deezer.com",
+          "color": "#A238FF"
+        }
+      ]
+    },
+    {
+      "id": "video",
+      "name": "影視",
+      "color": "#E50914",
+      "items": [
+        {
+          "name": "YouTube",
+          "url": "https://www.youtube.com",
+          "color": "#FF0000"
+        },
+        {
+          "name": "Netflix",
+          "url": "https://www.netflix.com",
+          "color": "#E50914"
+        },
+        {
+          "name": "Disney+",
+          "url": "https://www.disneyplus.com",
+          "color": "#113CCF"
+        },
+        {
+          "name": "Prime Video",
+          "url": "https://www.primevideo.com",
+          "color": "#00A8E1"
+        },
+        {
+          "name": "Twitch",
+          "url": "https://www.twitch.tv",
+          "color": "#9146FF"
+        },
+        {
+          "name": "bilibili",
+          "url": "https://www.bilibili.com",
+          "color": "#00A1D6"
+        },
+        {
+          "name": "巴哈姆特動畫瘋",
+          "url": "https://ani.gamer.com.tw",
+          "color": "#00B4D8"
+        },
+        {
+          "name": "愛奇藝",
+          "url": "https://www.iq.com",
+          "color": "#00CC36"
+        },
+        {
+          "name": "Max",
+          "url": "https://www.max.com",
+          "color": "#002BE7"
+        },
+        {
+          "name": "Apple TV+",
+          "url": "https://tv.apple.com",
+          "color": "#101010"
+        },
+        {
+          "name": "MyVideo",
+          "url": "https://www.myvideo.net.tw",
+          "color": "#FF6B00"
+        },
+        {
+          "name": "LINE TV",
+          "url": "https://www.linetv.tw",
+          "color": "#06C755"
+        }
+      ]
+    },
+    {
+      "id": "ai",
+      "name": "AI 助理",
+      "color": "#7B6CF6",
+      "items": [
+        {
+          "name": "ChatGPT",
+          "url": "https://chatgpt.com",
+          "color": "#10A37F"
+        },
+        {
+          "name": "Claude",
+          "url": "https://claude.ai",
+          "color": "#D97757"
+        },
+        {
+          "name": "Gemini",
+          "url": "https://gemini.google.com",
+          "color": "#7B6CF6"
+        },
+        {
+          "name": "Copilot",
+          "url": "https://copilot.microsoft.com",
+          "color": "#0078D4"
+        },
+        {
+          "name": "Perplexity",
+          "url": "https://www.perplexity.ai",
+          "color": "#20808D"
+        },
+        {
+          "name": "DeepSeek",
+          "url": "https://chat.deepseek.com",
+          "color": "#4D6BFE"
+        },
+        {
+          "name": "Grok",
+          "url": "https://grok.com",
+          "color": "#101010"
+        },
+        {
+          "name": "NotebookLM",
+          "url": "https://notebooklm.google.com",
+          "color": "#4285F4"
+        }
+      ]
     }
   ],
   "sites": [
