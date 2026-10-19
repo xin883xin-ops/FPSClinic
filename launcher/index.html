@@ -476,7 +476,7 @@ function setHue(h, h2) { stage.style.setProperty("--hue", h); if (h2) stage.styl
 /* 首頁 */
 var F = byId[R.featured] || SITES[0], HUE2 = "#3d5bff";
 setHue(F.color, HUE2);
-$("#hero").innerHTML = '<div class="ghost" aria-hidden="true">' + icon(F, 470) + '</div>' +
+$("#hero").innerHTML = '<div class="ghost" aria-hidden="true">' + icon(F.ghost ? Object.assign({}, F, { icon: F.ghost }) : F, 470) + '</div>' +
   '<div class="kick">本週精選站點</div><div>' + icon(F, 96) + '</div>' +
   '<h2>' + esc(F.name) + '</h2><div class="dev">' + esc(F.dev) + '</div>' +
   '<p>' + esc(F.why) + '</p>' +

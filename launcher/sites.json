@@ -458,7 +458,8 @@
         "GitHub",
         "免安裝"
       ],
-      "icon": "icons/brand/vscode.svg"
+      "icon": "icons/brand/vscode.svg",
+      "ghost": "icons/brand/vscode-ghost.svg"
     },
     {
       "id": "shiftedit",
