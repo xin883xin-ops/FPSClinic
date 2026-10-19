@@ -1,14 +1,20 @@
 {
   "_說明": "啟動台的收錄清單。發新一期：release.no 加 1、改日期，新站點把 isNew 設 true（上一期的改回 false），下架就把那一筆刪掉並寫進 release.removed。改完把 ../sw.js 的版本號加 1。",
   "release": {
-    "no": 3,
-    "date": "10 月 18 日",
-    "next": "11 月 1 日",
-    "featured": "photopea",
-    "fix": "更新了 Photopea、tldraw 的推薦介紹。巡檢結果全部站點都能正常開啟，本期沒有下架。",
+    "no": 4,
+    "date": "10 月 19 日",
+    "next": "11 月 2 日",
+    "featured": "vscode",
+    "fix": "新增 VS Code（vscode.dev）與 ShiftEdit 兩個網頁寫程式的工具，VS Code 當本期精選。首頁多了「官方群組」資料夾（Google、Microsoft），「我的捷徑」可以拖曳合成資料夾，上限提高到 90 個。",
     "removed": []
   },
-  "defaultDock": ["squoosh", "excalidraw", "photopea", "xbox", "gfn"],
+  "defaultDock": [
+    "squoosh",
+    "excalidraw",
+    "photopea",
+    "xbox",
+    "gfn"
+  ],
   "groups": [
     {
       "id": "google",
@@ -146,49 +152,216 @@
     }
   ],
   "sites": [
-    { "id": "squoosh", "name": "Squoosh", "dev": "Google Chrome 團隊", "kind": "PWA", "icon": "icons/squoosh.png", "mask": true, "color": "#f78a3c",
-      "url": "https://squoosh.app", "short": "圖片壓縮",
+    {
+      "id": "vscode",
+      "name": "VS Code",
+      "dev": "Microsoft",
+      "kind": "PWA",
+      "color": "#0078d4",
+      "isNew": true,
+      "url": "https://vscode.dev/",
+      "short": "瀏覽器裡的 VS Code",
+      "why": "不用安裝，打開網頁就是 VS Code。Chrome、Edge 能直接開本機資料夾來改，也能把 GitHub 專案網址的 github.com 換成 vscode.dev/github 直接編輯。換電腦、借電腦、用平板，開網頁就能繼續寫。",
+      "tags": [
+        "程式編輯",
+        "GitHub",
+        "免安裝"
+      ]
+    },
+    {
+      "id": "shiftedit",
+      "name": "ShiftEdit",
+      "dev": "ShiftEdit Ltd",
+      "kind": "工具",
+      "color": "#2f80ed",
+      "isNew": true,
+      "url": "https://shiftedit.net/",
+      "short": "網頁開發線上 IDE",
+      "why": "專門寫網站的線上編輯器，可以直接連 FTP、SFTP、Dropbox、Google Drive 或本機檔案來改，內建終端機、Git、即時預覽和多人同步編輯，維護虛擬主機上的網站特別順手。",
+      "tags": [
+        "網頁開發",
+        "FTP",
+        "終端機"
+      ]
+    },
+    {
+      "id": "squoosh",
+      "name": "Squoosh",
+      "dev": "Google Chrome 團隊",
+      "kind": "PWA",
+      "icon": "icons/squoosh.png",
+      "mask": true,
+      "color": "#f78a3c",
+      "url": "https://squoosh.app",
+      "short": "圖片壓縮",
       "why": "圖片壓縮器，所有運算都在瀏覽器裡完成，圖片不會上傳。裝成 PWA 後離線也能用，是示範 PWA 能做到什麼程度的代表作。",
-      "tags": ["圖片", "離線可用", "開源"] },
-    { "id": "excalidraw", "name": "Excalidraw", "dev": "Excalidraw 團隊", "kind": "PWA", "icon": "icons/excalidraw.png", "mask": true, "color": "#6965db",
-      "url": "https://excalidraw.com", "short": "手繪風白板",
+      "tags": [
+        "圖片",
+        "離線可用",
+        "開源"
+      ]
+    },
+    {
+      "id": "excalidraw",
+      "name": "Excalidraw",
+      "dev": "Excalidraw 團隊",
+      "kind": "PWA",
+      "icon": "icons/excalidraw.png",
+      "mask": true,
+      "color": "#6965db",
+      "url": "https://excalidraw.com",
+      "short": "手繪風白板",
       "why": "手繪質感的白板，打開就畫，支援多人協作和加密分享。很多開發者拿它畫系統架構草圖。",
-      "tags": ["白板", "協作", "開源"] },
-    { "id": "photopea", "name": "Photopea", "dev": "Ivan Kutskir", "kind": "PWA", "icon": "icons/photopea.svg", "color": "#18a497",
-      "url": "https://www.photopea.com", "short": "網頁修圖",
+      "tags": [
+        "白板",
+        "協作",
+        "開源"
+      ]
+    },
+    {
+      "id": "photopea",
+      "name": "Photopea",
+      "dev": "Ivan Kutskir",
+      "kind": "PWA",
+      "icon": "icons/photopea.svg",
+      "color": "#18a497",
+      "url": "https://www.photopea.com",
+      "short": "網頁修圖",
       "why": "一個人開發的網頁版修圖軟體，介面接近 Photoshop，能直接開 PSD、XCF、Sketch 檔。獨立開發者的傳奇作品。",
-      "tags": ["修圖", "PSD", "獨立開發"] },
-    { "id": "tldraw", "name": "tldraw", "dev": "tldraw 團隊", "kind": "PWA", "icon": "icons/tldraw.png", "mask": true, "color": "#8d97a5",
-      "url": "https://www.tldraw.com", "short": "無限畫布",
+      "tags": [
+        "修圖",
+        "PSD",
+        "獨立開發"
+      ]
+    },
+    {
+      "id": "tldraw",
+      "name": "tldraw",
+      "dev": "tldraw 團隊",
+      "kind": "PWA",
+      "icon": "icons/tldraw.png",
+      "mask": true,
+      "color": "#8d97a5",
+      "url": "https://www.tldraw.com",
+      "short": "無限畫布",
       "why": "手感非常順的無限畫布白板，箭頭會自動吸附形狀，適合腦力激盪和畫流程。",
-      "tags": ["白板", "畫布"] },
-    { "id": "pairdrop", "name": "PairDrop", "dev": "開源社群", "kind": "PWA", "icon": "icons/pairdrop.png", "mask": true, "isNew": true, "color": "#3d7bff",
-      "url": "https://pairdrop.net", "short": "裝置互傳檔案",
+      "tags": [
+        "白板",
+        "畫布"
+      ]
+    },
+    {
+      "id": "pairdrop",
+      "name": "PairDrop",
+      "dev": "開源社群",
+      "kind": "PWA",
+      "icon": "icons/pairdrop.png",
+      "mask": true,
+      "color": "#3d7bff",
+      "url": "https://pairdrop.net",
+      "short": "裝置互傳檔案",
       "why": "像 AirDrop 一樣在手機和電腦之間傳檔，任何系統都能用，不用裝 App 也不用登入。",
-      "tags": ["傳檔", "跨平台", "開源"] },
-    { "id": "svgomg", "name": "SVGOMG", "dev": "Jake Archibald", "kind": "PWA", "icon": "icons/svgomg.png", "mask": true, "color": "#00bcd4",
-      "url": "https://jakearchibald.github.io/svgomg/", "short": "SVG 瘦身",
+      "tags": [
+        "傳檔",
+        "跨平台",
+        "開源"
+      ]
+    },
+    {
+      "id": "svgomg",
+      "name": "SVGOMG",
+      "dev": "Jake Archibald",
+      "kind": "PWA",
+      "icon": "icons/svgomg.png",
+      "mask": true,
+      "color": "#00bcd4",
+      "url": "https://jakearchibald.github.io/svgomg/",
+      "short": "SVG 瘦身",
       "why": "把 SVG 檔裡多餘的程式碼清掉，每個優化選項都能即時看到效果，做網頁圖示的常備工具。",
-      "tags": ["SVG", "前端", "離線可用"] },
-    { "id": "xbox", "name": "Xbox Cloud", "dev": "Microsoft", "kind": "雲遊戲", "icon": "icons/xbox.svg", "color": "#107c10",
-      "url": "https://www.xbox.com/play", "short": "主機遊戲串流",
+      "tags": [
+        "SVG",
+        "前端",
+        "離線可用"
+      ]
+    },
+    {
+      "id": "xbox",
+      "name": "Xbox Cloud",
+      "dev": "Microsoft",
+      "kind": "雲遊戲",
+      "icon": "icons/xbox.svg",
+      "color": "#107c10",
+      "url": "https://www.xbox.com/play",
+      "short": "主機遊戲串流",
       "why": "有 Game Pass Ultimate 就能在瀏覽器串流玩主機遊戲，接上手把體驗最好。",
-      "tags": ["雲遊戲", "手把", "訂閱"] },
-    { "id": "gfn", "name": "GeForce NOW", "dev": "NVIDIA", "kind": "雲遊戲", "icon": "icons/nvidia.svg", "color": "#76b900",
-      "url": "https://play.geforcenow.com", "short": "串流自有遊戲",
+      "tags": [
+        "雲遊戲",
+        "手把",
+        "訂閱"
+      ]
+    },
+    {
+      "id": "gfn",
+      "name": "GeForce NOW",
+      "dev": "NVIDIA",
+      "kind": "雲遊戲",
+      "icon": "icons/nvidia.svg",
+      "color": "#76b900",
+      "url": "https://play.geforcenow.com",
+      "short": "串流自有遊戲",
       "why": "串流你自己在 Steam、Epic 擁有的遊戲，有免費方案可以先試。",
-      "tags": ["雲遊戲", "Steam", "免費方案"] },
-    { "id": "boosteroid", "name": "Boosteroid", "dev": "Boosteroid", "kind": "雲遊戲", "isNew": true, "color": "#ff7a3d",
-      "url": "https://cloud.boosteroid.com", "short": "雲遊戲平台",
+      "tags": [
+        "雲遊戲",
+        "Steam",
+        "免費方案"
+      ]
+    },
+    {
+      "id": "boosteroid",
+      "name": "Boosteroid",
+      "dev": "Boosteroid",
+      "kind": "雲遊戲",
+      "color": "#ff7a3d",
+      "url": "https://cloud.boosteroid.com",
+      "short": "雲遊戲平台",
       "why": "獨立營運的雲遊戲平台，支援多家商店的遊戲庫，瀏覽器就能玩。",
-      "tags": ["雲遊戲", "手把"] },
-    { "id": "drawio", "name": "draw.io", "dev": "JGraph", "kind": "工具", "icon": "icons/drawio.png", "mask": true, "color": "#f08705",
-      "url": "https://app.diagrams.net", "short": "流程圖編輯器",
+      "tags": [
+        "雲遊戲",
+        "手把"
+      ]
+    },
+    {
+      "id": "drawio",
+      "name": "draw.io",
+      "dev": "JGraph",
+      "kind": "工具",
+      "icon": "icons/drawio.png",
+      "mask": true,
+      "color": "#f08705",
+      "url": "https://app.diagrams.net",
+      "short": "流程圖編輯器",
       "why": "老牌圖表工具，圖形庫完整，檔案可以存在自己的雲端硬碟，不綁帳號。",
-      "tags": ["流程圖", "開源"] },
-    { "id": "hoppscotch", "name": "Hoppscotch", "dev": "Hoppscotch 團隊", "kind": "工具", "icon": "icons/hoppscotch.png", "mask": true, "isNew": true, "color": "#10b981",
-      "url": "https://hoppscotch.io", "short": "API 測試台",
+      "tags": [
+        "流程圖",
+        "開源"
+      ]
+    },
+    {
+      "id": "hoppscotch",
+      "name": "Hoppscotch",
+      "dev": "Hoppscotch 團隊",
+      "kind": "工具",
+      "icon": "icons/hoppscotch.png",
+      "mask": true,
+      "color": "#10b981",
+      "url": "https://hoppscotch.io",
+      "short": "API 測試台",
       "why": "開源的 API 請求工具，打開瀏覽器就能測 REST、GraphQL、WebSocket。",
-      "tags": ["API", "開發", "開源"] }
+      "tags": [
+        "API",
+        "開發",
+        "開源"
+      ]
+    }
   ]
 }
