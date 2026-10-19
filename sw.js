@@ -1,6 +1,6 @@
 /* KitLab 商店 service worker：離線可看已載入過的頁面。
    改了頁面或樣式後，把下面的版本號加 1，使用者下次開啟就會更新。 */
-const VERSION = "v13";
+const VERSION = "v14";
 const CACHE = "skillstore-" + VERSION;
 const CORE = [
   "./", "index.html", "terms.html", "store.css", "style.css", "main.js", "side.html", "fpsclinic.html", "images/lol-demo.jpg", "manifest.webmanifest",
@@ -35,7 +35,10 @@ self.addEventListener("fetch", (e) => {
     e.respondWith(
       fetch(req)
         .then((res) => { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); return res; })
-        .catch(() => caches.match(req).then((r) => r || caches.match("index.html")))
+        // 失敗時退回快取。嵌在頁面裡的 iframe（例如首頁的工具箱）找不到就直接失敗，不能退回首頁，
+        // 否則工具箱會顯示成首頁、看起來像「按了沒反應又跳回首頁」。
+        .catch(() => caches.match(req, { ignoreSearch: req.destination === "iframe" })
+          .then((r) => r || (req.destination === "iframe" ? Response.error() : caches.match("index.html"))))
     );
     return;
   }
