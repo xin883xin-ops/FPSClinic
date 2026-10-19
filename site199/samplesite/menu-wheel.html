@@ -510,5 +510,12 @@ $("copyBtn").addEventListener("click",async()=>{
 renderWheel(); refresh(false);
 addEventListener("resize",()=>{ wheel.scrollTop=state.sel*ROW(); paintRows(); });
 </script>
+
+<!-- KitLab 回主站：樣品頁左上角的小標籤，點了回到 NT$199 頁面的樣品區 -->
+<a class="kl-back" href="../index.html#samples" aria-label="回到 KitLab 商店的樣品列表">← KitLab</a>
+<style>
+.kl-back{position:fixed;z-index:2147483000;top:max(8px,env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;font:700 12px/1 "Noto Sans TC",system-ui,sans-serif;letter-spacing:.02em;color:#fff;background:rgba(11,22,32,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:7px 13px;border-radius:999px;text-decoration:none;box-shadow:0 0 0 1px rgba(255,255,255,.18),0 6px 18px rgba(0,0,0,.25);white-space:nowrap}
+.kl-back:hover,.kl-back:focus-visible{background:#0A7F6E}
+</style>
 </body>
 </html>
