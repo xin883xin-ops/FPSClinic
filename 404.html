@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>404｜這一頁被貓咪搬走了</title>
+<meta name="description" content="找不到這個網址。有一隻翻跟斗的貓咪正盯著你看。">
+<meta name="theme-color" content="#0B141A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B1620'/%3E%3Ccircle cx='16' cy='17' r='8' fill='%23F4A259'/%3E%3Cpath d='M9 13 10 6l5 4zM23 13l-1-7-5 4z' fill='%23F4A259'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B141A; --bg2:#111D25; --card:#16242D; --line:#243541;
+    --ink:#EAF1F4; --muted:#93A6B1; --teal:#0A7F6E; --teal-bright:#5FD3BC;
+    --font:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{
+    font-family:var(--font); color:var(--ink); background:
+      radial-gradient(900px 520px at 50% 18%, rgba(95,211,188,.13), transparent 70%),
+      var(--bg);
+    min-height:100vh; min-height:100dvh; display:grid; place-items:center; padding:24px 16px;
+    overflow-x:hidden;
+  }
+  main{width:100%; max-width:560px; text-align:center}
+  .big{font-size:clamp(4.4rem,18vw,7.4rem); font-weight:900; letter-spacing:-.04em; line-height:1; margin:0;
+       color:transparent; -webkit-text-stroke:2px rgba(234,241,244,.35)}
+  .stage{position:relative; width:min(78vw,280px); margin:-18px auto -6px; cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none}
+  .stage svg{display:block; width:100%; height:auto; overflow:visible}
+  h1{font-size:clamp(1.5rem,5.6vw,2rem); margin:14px 0 10px; letter-spacing:.01em}
+  p{color:var(--muted); line-height:1.75; margin:0 auto; max-width:30em}
+  .path{display:inline-block; max-width:100%; margin:14px 0 0; padding:5px 12px; border:1px dashed var(--line); border-radius:999px;
+        font:500 .86rem/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color:var(--teal-bright); overflow-wrap:anywhere}
+  .btns{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:26px}
+  .btn{display:inline-block; padding:12px 22px; border-radius:999px; text-decoration:none; font-weight:700; font-size:1rem;
+       border:1px solid var(--line); color:var(--ink); background:var(--card); transition:transform .15s, border-color .15s}
+  .btn.main{background:var(--teal-bright); color:#06201A; border-color:var(--teal-bright)}
+  .btn:hover,.btn:focus-visible{transform:translateY(-2px); border-color:var(--teal-bright)}
+  .path[hidden]{display:none}
+  .hint{margin-top:22px; font-size:.84rem; color:#6F8591; min-height:1.4em}
+  .bubble{position:absolute; left:50%; top:-6px; transform:translate(-50%,-100%) scale(.8); opacity:0; pointer-events:none;
+          background:var(--ink); color:#0B141A; font-weight:700; font-size:.95rem; padding:8px 14px; border-radius:14px; white-space:nowrap;
+          transition:opacity .2s, transform .2s}
+  .bubble::after{content:""; position:absolute; left:50%; bottom:-6px; width:12px; height:12px; background:inherit; transform:translateX(-50%) rotate(45deg); border-radius:2px}
+  .bubble.on{opacity:1; transform:translate(-50%,-100%) scale(1)}
+
+  /* 貓咪：蹲下 → 跳起翻一圈 → 落地壓扁 → 盯著你看 */
+  .hop{transform-box:view-box; transform-origin:120px 222px; animation:hop 5.2s cubic-bezier(.3,.1,.3,1) infinite}
+  .spin{transform-box:view-box; transform-origin:120px 140px; animation:spin 5.2s cubic-bezier(.45,.05,.35,1) infinite}
+  .shadow{transform-box:view-box; transform-origin:120px 224px; animation:shadow 5.2s cubic-bezier(.3,.1,.3,1) infinite}
+  .stage.pop .hop,.stage.pop .spin,.stage.pop .shadow{animation-duration:2.2s}
+  @keyframes hop{
+    0%,12%{transform:translateY(0) scale(1,1)}
+    18%{transform:translateY(6px) scale(1.12,.84)}
+    38%{transform:translateY(-62px) scale(.94,1.08)}
+    56%{transform:translateY(0) scale(1.14,.82)}
+    62%{transform:translateY(0) scale(.97,1.04)}
+    68%,100%{transform:translateY(0) scale(1,1)}
+  }
+  @keyframes spin{
+    0%,18%{transform:rotate(0)}
+    56%{transform:rotate(360deg)}
+    100%{transform:rotate(360deg)}
+  }
+  @keyframes shadow{
+    0%,12%{transform:scale(1); opacity:.35}
+    38%{transform:scale(.62); opacity:.16}
+    56%,100%{transform:scale(1); opacity:.35}
+  }
+  .tail{transform-box:view-box; transform-origin:176px 156px; animation:tail 1.6s ease-in-out infinite}
+  @keyframes tail{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(10deg)}}
+  .blink{transform-box:fill-box; transform-origin:center; animation:blink 4.1s infinite}
+  @keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+  .pupil{transition:transform .12s ease-out}
+  @media (prefers-reduced-motion:reduce){
+    .hop,.spin,.shadow,.tail,.blink{animation:none!important}
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="big" aria-hidden="true">404</p>
+
+  <div class="stage" id="stage" role="img" aria-label="一隻在翻跟斗、同時盯著你看的橘色貓咪">
+    <div class="bubble" id="bubble">喵？</div>
+    <svg viewBox="0 0 240 240" aria-hidden="true">
+      <ellipse class="shadow" cx="120" cy="224" rx="62" ry="8" fill="#000" opacity=".35"/>
+      <g class="hop">
+        <g class="spin">
+          <!-- 尾巴 -->
+          <g class="tail">
+            <path d="M168 168 C 214 160, 222 112, 192 100" fill="none" stroke="#F4A259" stroke-width="15" stroke-linecap="round"/>
+            <path d="M200 106 C 192 100, 192 100, 190 98" fill="none" stroke="#C9722A" stroke-width="15" stroke-linecap="round"/>
+          </g>
+          <!-- 身體 -->
+          <ellipse cx="120" cy="162" rx="52" ry="44" fill="#F4A259"/>
+          <ellipse cx="120" cy="170" rx="31" ry="27" fill="#FFE3BD"/>
+          <path d="M76 150 q6 -4 12 0 M80 164 q6 -4 12 0" stroke="#D9822B" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <!-- 腳 -->
+          <ellipse cx="88" cy="203" rx="15" ry="9" fill="#F4A259"/>
+          <ellipse cx="152" cy="203" rx="15" ry="9" fill="#F4A259"/>
+          <path d="M82 205 v4 M89 206 v4 M146 206 v4 M153 207 v4" stroke="#C9722A" stroke-width="2.4" stroke-linecap="round"/>
+          <!-- 耳朵：右耳軟趴趴 -->
+          <path d="M70 76 L76 30 L110 58 Z" fill="#F4A259"/>
+          <path d="M79 64 L82 42 L98 57 Z" fill="#F7B9B0"/>
+          <path d="M170 76 C 176 54, 188 40, 196 48 C 190 54, 176 62, 140 58 Z" fill="#F4A259"/>
+          <path d="M168 68 C 174 58, 182 52, 188 52 C 182 60, 174 64, 156 62 Z" fill="#F7B9B0"/>
+          <!-- 頭 -->
+          <ellipse cx="120" cy="104" rx="58" ry="50" fill="#F4A259"/>
+          <path d="M108 62 v12 M120 60 v14 M132 62 v12" stroke="#D9822B" stroke-width="4.5" stroke-linecap="round"/>
+          <!-- 眼睛：白眼球＋會跟著游標轉的黑眼珠 -->
+          <g class="blink">
+            <circle cx="95" cy="102" r="19" fill="#fff" stroke="#3B2A1A" stroke-width="3"/>
+            <circle cx="145" cy="102" r="19" fill="#fff" stroke="#3B2A1A" stroke-width="3"/>
+          </g>
+          <g class="pupil" id="pL"><circle cx="95" cy="102" r="10" fill="#1A120B"/><circle cx="91" cy="97" r="3.6" fill="#fff"/></g>
+          <g class="pupil" id="pR"><circle cx="145" cy="102" r="10" fill="#1A120B"/><circle cx="141" cy="97" r="3.6" fill="#fff"/></g>
+          <!-- 腮紅、鼻子、嘴、吐舌頭、鬍鬚 -->
+          <ellipse cx="66" cy="124" rx="9" ry="5.5" fill="#F08A7A" opacity=".55"/>
+          <ellipse cx="174" cy="124" rx="9" ry="5.5" fill="#F08A7A" opacity=".55"/>
+          <path d="M114 120 h12 l-6 7 Z" fill="#E4747F"/>
+          <path d="M120 127 q-7 9 -15 2 M120 127 q7 9 15 2" fill="none" stroke="#3B2A1A" stroke-width="3" stroke-linecap="round"/>
+          <path d="M126 132 q5 12 12 6 q2 -7 -3 -9 Z" fill="#F08AA0" stroke="#3B2A1A" stroke-width="2"/>
+          <path d="M70 118 l-30 -6 M70 126 l-32 4 M170 118 l30 -6 M170 126 l32 4" stroke="#FFE3BD" stroke-width="2.6" stroke-linecap="round"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <h1 id="title">這一頁被貓咪搬走了</h1>
+  <p id="msg">網址可能打錯了，或是這一頁已經不在了。牠正盯著你看，趕快回去吧。</p>
+  <span class="path" id="path" hidden></span>
+
+  <div class="btns">
+    <a class="btn main" href="/">回到首頁</a>
+    <a class="btn" href="/launcher/">KitLab Dash</a>
+    <a class="btn" href="/launcher/store/">應用商店</a>
+  </div>
+  <div class="hint" id="hint">點一下貓咪試試看</div>
+</main>
+
+<script>
+(function () {
+  var stage = document.getElementById("stage"), pL = document.getElementById("pL"), pR = document.getElementById("pR"),
+      bubble = document.getElementById("bubble"), hint = document.getElementById("hint");
+
+  /* 顯示他打的網址：只在這個瀏覽器顯示，不會送出去 */
+  try {
+    var p = decodeURIComponent(location.pathname + location.search);
+    if (p && p !== "/" && p !== "/404.html" && p !== "/404") {
+      var el = document.getElementById("path");
+      el.textContent = p.length > 60 ? p.slice(0, 57) + "…" : p;
+      el.hidden = false;
+    }
+  } catch (e) {}
+
+  /* 眼珠跟著游標／手指跑，一直盯著你 */
+  function look(x, y) {
+    var r = stage.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height * .43;
+    var dx = x - cx, dy = y - cy, d = Math.sqrt(dx * dx + dy * dy) || 1, k = Math.min(1, d / 220) * 7;
+    var tx = (dx / d * k).toFixed(2), ty = (dy / d * k).toFixed(2);
+    var t = "translate(" + tx + "px," + ty + "px)";
+    pL.style.transform = t; pR.style.transform = t;
+  }
+  window.addEventListener("pointermove", function (e) { look(e.clientX, e.clientY); }, { passive: true });
+  window.addEventListener("touchmove", function (e) { var t = e.touches[0]; if (t) look(t.clientX, t.clientY); }, { passive: true });
+  look(innerWidth / 2, innerHeight);   /* 一開始直直盯著螢幕外的你 */
+
+  /* 彩蛋：點貓咪，牠會加速翻、說一句話 */
+  var quips = ["喵？", "沒有這一頁，只有我。", "你剛剛是不是打錯字？", "再翻一圈就想起來了。", "頭暈了…還是繼續。",
+               "別看了，回首頁吧。", "我把那一頁藏在沙發下面。", "翻跟斗不用門票。", "(認真盯著你)", "喵喵喵（意思是 404）"];
+  var n = 0, timer = 0, pop = 0;
+  stage.addEventListener("click", function () {
+    n++;
+    bubble.textContent = quips[Math.floor(Math.random() * quips.length)];
+    bubble.classList.add("on");
+    stage.classList.add("pop");
+    clearTimeout(timer); clearTimeout(pop);
+    timer = setTimeout(function () { bubble.classList.remove("on"); }, 2200);
+    pop = setTimeout(function () { stage.classList.remove("pop"); }, 4800);
+    if (n === 5) hint.textContent = "你戳牠 5 次了，牠記住你了。";
+    else if (n === 10) hint.textContent = "再戳牠要收門票了。";
+    else if (n === 1) hint.textContent = "";
+  });
+})();
+</script>
+</body>
+</html>

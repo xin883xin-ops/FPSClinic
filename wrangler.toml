@@ -10,6 +10,7 @@ routes = [{ pattern = "kitlab.store", custom_domain = true }, { pattern = "www.k
 [assets]
 directory = "."
 binding = "ASSETS"
+not_found_handling = "404-page"   # 找不到的網址：回 404 狀態並顯示 /404.html（翻跟斗的貓咪）
 run_worker_first = true   # 每個請求先經過 worker：/api 給後端，.html 網址原樣提供（不轉址）
 
 [triggers]
