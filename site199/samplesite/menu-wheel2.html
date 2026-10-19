@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>阿新快炒 手機點餐（範例頁）</title>
+<meta name="description" content="快炒店的手機點餐範例。滑動轉盤挑菜，看這一餐花了多少預算，再一鍵傳給店家。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0f1830; --panel:#16234a; --panel2:#1d2e5c; --line:#2e4377; --text:#f4efe4; --soft:#a9b6d6;
+  --chili:#ee4b2b; --lantern:#ffcf4a; --steam:#cfe0ff;
+  --h:100svh;
+  --head:"Chiron GoRound TC","Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --sans:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --row:68px;
+}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font:400 16px/1.6 var(--sans);color:var(--text);background:var(--night);overflow:hidden;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--lantern);outline-offset:2px}
+
+.shell{height:100svh;display:grid;place-items:center;
+  background:radial-gradient(60% 50% at 50% 0%,#24386f 0%,transparent 70%),var(--night)}
+.intro{display:none}
+
+/* ---------- app ---------- */
+.app{position:relative;width:100%;height:var(--h);max-width:460px;display:flex;flex-direction:column;overflow:hidden;background:var(--night)}
+.lights{height:14px;flex:none;background:
+  radial-gradient(circle at 10px 6px,var(--chili) 0 3.5px,transparent 4px) 0 0/40px 14px repeat-x,
+  radial-gradient(circle at 30px 6px,var(--lantern) 0 3.5px,transparent 4px) 0 0/40px 14px repeat-x;
+  opacity:.9}
+header{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px 6px}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand b{font:900 24px/1.2 var(--head);letter-spacing:.06em}
+.brand i{font-style:normal;font-size:12px;border:1px solid var(--lantern);color:var(--lantern);padding:0 8px;border-radius:99px;line-height:20px}
+.mode{display:flex;background:var(--panel);border-radius:99px;padding:3px}
+.mode button{padding:6px 16px;border-radius:99px;font-weight:500;font-size:15px;color:var(--soft);transition:background .2s,color .2s}
+.mode button[aria-pressed="true"]{background:var(--lantern);color:#2a1d00}
+
+/* stage */
+.hero{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;align-items:center;text-align:center;padding:4px 22px 6px}
+.stage{position:relative;flex:none;margin-top:auto;width:clamp(130px,calc(var(--h) - 520px),250px);aspect-ratio:1}
+.stage::before{content:"";position:absolute;inset:-14%;border-radius:50%;background:radial-gradient(circle,rgba(255,207,74,.28),transparent 66%)}
+.stage .art{position:absolute;inset:11%;width:78%;height:78%;transition:transform .35s cubic-bezier(.3,1.5,.5,1)}
+.stage.pop .art{transform:scale(1.07) rotate(-2deg)}
+.stage svg.ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.ring .tr{fill:none;stroke:var(--line);stroke-width:2.6}
+.ring .pg{fill:none;stroke:var(--lantern);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:289.03;stroke-dashoffset:289.03;transition:stroke-dashoffset .6s cubic-bezier(.3,.8,.3,1),stroke .3s}
+.ring.over .pg{stroke:var(--chili)}
+.ring.free .pg{stroke-dashoffset:289.03!important}
+.badge{position:absolute;right:2%;top:4%;min-width:30px;height:30px;border-radius:99px;background:var(--chili);color:#fff;font:700 15px/30px var(--sans);padding:0 9px;transform:scale(0);transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.badge.on{transform:scale(1)}
+.hero h1{margin-top:8px;font:900 clamp(24px,7vw,30px)/1.25 var(--head);letter-spacing:.06em}
+.hero .desc{font-size:14.5px;color:var(--soft);max-width:19em;margin-top:2px}
+.pricing{margin-top:6px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.pricing b{font:900 26px/1 var(--head);color:var(--lantern)}
+.pricing s{color:var(--soft);font-size:14px}
+.tag{font-size:12.5px;line-height:20px;padding:0 9px;border-radius:99px;background:var(--panel2);color:var(--steam)}
+.share{font-size:13.5px;color:var(--soft);margin-top:4px;min-height:1.4em}
+.share.over{color:#ff9a84}
+.add{margin-top:8px;margin-bottom:auto;flex:none;background:var(--chili);color:#fff;font:700 17px/1 var(--sans);padding:13px 30px;border-radius:99px;box-shadow:0 6px 18px rgba(238,75,43,.35);transition:transform .15s,filter .2s}
+.add:active{transform:scale(.96)}
+.add:hover{filter:brightness(1.08)}
+
+/* chips */
+.chips{flex:none;display:flex;gap:8px;padding:6px 18px;overflow-x:auto;scrollbar-width:none;min-height:46px}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;padding:6px 14px;border-radius:99px;border:1px solid var(--line);font-size:14.5px;color:var(--soft)}
+.chips button[aria-pressed="true"]{background:var(--steam);border-color:var(--steam);color:#10204a;font-weight:500}
+.chips[hidden]{display:none}
+
+/* wheel */
+.wheel-wrap{position:relative;flex:none;height:calc(var(--row)*3);margin:0 12px}
+.wheel-wrap::before{content:"";position:absolute;left:0;right:0;top:var(--row);height:var(--row);border-radius:16px;background:rgba(255,207,74,.09);border:1px solid rgba(255,207,74,.5);pointer-events:none}
+.wheel{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;padding-block:var(--row);scrollbar-width:none;outline-offset:-3px;border-radius:16px;
+  -webkit-mask-image:linear-gradient(transparent 0,#000 30%,#000 70%,transparent 100%);mask-image:linear-gradient(transparent 0,#000 30%,#000 70%,transparent 100%);overscroll-behavior:contain}
+.wheel::-webkit-scrollbar{display:none}
+.row{scroll-snap-align:center;display:grid;grid-template-columns:50px 1fr auto;gap:12px;align-items:center;width:100%;height:var(--row);padding:0 16px;text-align:left;
+  transform:scale(var(--s,1));opacity:var(--o,1);transform-origin:left center;will-change:transform,opacity}
+.row svg{width:50px;height:50px}
+.row .nm{font-weight:700;font-size:17px;line-height:1.3}
+.row .sb{font-size:12.5px;color:var(--soft);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .pr{font:900 20px/1 var(--head);color:var(--lantern)}
+.row .nm,.row .sb{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* cart bar */
+.cart{flex:none;display:flex;align-items:center;gap:14px;margin:8px 12px calc(10px + env(safe-area-inset-bottom));padding:10px 12px 10px 14px;border-radius:20px;background:var(--panel);border:1px solid var(--line)}
+.cart svg{width:44px;height:44px;flex:none;transform:rotate(-90deg)}
+.cart .tr{fill:none;stroke:var(--line);stroke-width:5}
+.cart .pg{fill:none;stroke:var(--lantern);stroke-width:5;stroke-linecap:round;stroke-dasharray:289.03;stroke-dashoffset:289.03;transition:stroke-dashoffset .6s,stroke .3s}
+.cart.over .pg{stroke:var(--chili)}
+.cart .sum{flex:1;min-width:0}
+.cart .sum b{display:block;font:900 24px/1.1 var(--head)}
+.cart .sum b.bump{animation:bump .3s}
+@keyframes bump{40%{transform:scale(1.12);color:var(--lantern)}}
+.cart .sum button{font-size:13.5px;color:var(--soft);display:inline-flex;align-items:center;gap:4px;padding:0}
+.cart .sum button u{text-underline-offset:3px}
+.go{background:var(--lantern);color:#2a1d00;font:700 16px/1 var(--sans);padding:14px 20px;border-radius:14px;white-space:nowrap}
+.go[disabled]{opacity:.4;cursor:not-allowed}
+
+/* budget sheet / order sheet */
+.scrim{position:absolute;inset:0;background:rgba(5,10,24,.65);opacity:0;pointer-events:none;transition:opacity .25s;z-index:5}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;max-height:88%;display:flex;flex-direction:column;background:var(--panel);border-radius:24px 24px 0 0;border-top:1px solid var(--line);transform:translateY(105%);transition:transform .32s cubic-bezier(.3,.8,.3,1),visibility 0s .32s;z-index:6;visibility:hidden}
+.sheet.on{transform:none;visibility:visible;transition:transform .32s cubic-bezier(.3,.8,.3,1),visibility 0s}
+.sheet .grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:10px auto 2px;flex:none}
+.sheet h2{font:900 22px/1.3 var(--head);letter-spacing:.05em;padding:6px 20px 8px;display:flex;justify-content:space-between;align-items:center}
+.sheet h2 button{font:500 14px var(--sans);color:var(--soft);padding:6px 4px}
+.sheet .body{overflow-y:auto;padding:0 20px 8px}
+.line{display:grid;grid-template-columns:1fr auto auto;gap:4px 12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.line .t{font-weight:700}
+.line .c{grid-column:1;font-size:13px;color:var(--soft)}
+.line .p{font:900 18px/1 var(--head);color:var(--lantern);text-align:right;min-width:3.4em;grid-row:1/3;grid-column:3}
+.step{display:flex;align-items:center;gap:2px;grid-row:1/3;grid-column:2;background:var(--panel2);border-radius:99px}
+.step button{width:34px;height:34px;font-size:20px;line-height:1}
+.step span{min-width:22px;text-align:center;font-weight:700}
+.empty{padding:26px 0;text-align:center;color:var(--soft)}
+.opts{display:grid;gap:12px;margin-top:14px}
+.seg{display:flex;background:var(--panel2);border-radius:12px;padding:3px}
+.seg button{flex:1;padding:9px;border-radius:10px;color:var(--soft);font-weight:500}
+.seg button[aria-pressed="true"]{background:var(--steam);color:#10204a}
+label{display:grid;gap:4px;font-size:13px;color:var(--soft)}
+input,textarea{font:400 16px/1.4 var(--sans);padding:11px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--night);color:var(--text);width:100%;min-width:0;resize:none}
+input:focus,textarea:focus{outline:none;border-color:var(--lantern)}
+.sheet .foot{padding:12px 20px calc(16px + env(safe-area-inset-bottom));border-top:1px solid var(--line);display:grid;gap:10px}
+.tot{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;color:var(--soft)}
+.tot b{font:900 26px/1 var(--head);color:var(--text)}
+.acts{display:flex;gap:10px}
+.acts .go{flex:1;padding:15px 12px}
+.acts .ghost{flex:none;background:none;border:1.5px solid var(--line);color:var(--text);font:500 16px var(--sans);padding:15px 18px;border-radius:14px}
+.note{font-size:13px;color:#ffe49b;background:rgba(255,207,74,.1);border:1px dashed rgba(255,207,74,.5);border-radius:10px;padding:10px 12px;white-space:pre-wrap;display:none}
+.note.on{display:block}
+.msg{font-size:13px;color:#9be0a8;min-height:1.2em}
+
+/* budget chips in sheet */
+.budget{display:flex;gap:8px;flex-wrap:wrap}
+.budget button{padding:7px 14px;border-radius:99px;border:1px solid var(--line);font-size:14.5px;color:var(--soft)}
+.budget button[aria-pressed="true"]{background:var(--lantern);border-color:var(--lantern);color:#2a1d00;font-weight:700}
+
+/* short phones */
+@media (max-height:720px){
+  :root{--row:58px}
+  .hero .desc{display:none}
+  .stage{width:clamp(104px,calc(var(--h) - 520px),200px)}
+  .hero h1{margin-top:6px;font-size:24px}
+  .add{padding:11px 26px;font-size:16px}
+  .chips{min-height:42px;padding-block:4px}
+  .cart{margin-top:4px}
+}
+
+/* desktop */
+@media (min-width:900px){
+  :root{--h:min(860px,100svh - 48px)}
+  .shell{grid-template-columns:minmax(0,420px) 460px;gap:64px;justify-content:center}
+  .intro{display:block}
+  .intro h1{font:900 54px/1.2 var(--head);letter-spacing:.08em}
+  .intro p{margin-top:16px;color:var(--soft);max-width:24em}
+  .intro ul{list-style:none;padding:0;margin-top:26px;display:grid;gap:10px;color:var(--steam)}
+  .intro li{padding-left:22px;position:relative}
+  .intro li::before{content:"";position:absolute;left:0;top:.7em;width:10px;height:10px;border-radius:50%;background:var(--lantern)}
+  .app{border-radius:36px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <aside class="intro">
+    <h1>阿新快炒</h1>
+    <p>台式快炒，手機點餐。這是範例頁，店名和菜單都是虛構的。</p>
+    <ul>
+      <li>往上下滑動轉盤，大圖和價格會跟著換。</li>
+      <li>圓環表示這一道占剩下預算的多少。</li>
+      <li>點好後，一鍵把訂單傳到店家的 LINE。</li>
+    </ul>
+  </aside>
+
+  <main class="app" id="app">
+    <div class="lights" aria-hidden="true"></div>
+    <header>
+      <div class="brand"><b>阿新快炒</b><i>範例</i></div>
+      <div class="mode" role="group" aria-label="點餐方式">
+        <button type="button" data-mode="single" aria-pressed="true">單點</button>
+        <button type="button" data-mode="combo" aria-pressed="false">組合</button>
+      </div>
+    </header>
+
+    <section class="hero" aria-live="off">
+      <div class="stage" id="stage">
+        <svg class="ring" id="ring" viewBox="0 0 100 100" aria-hidden="true"><circle class="tr" cx="50" cy="50" r="46"/><circle class="pg" id="ringPg" cx="50" cy="50" r="46"/></svg>
+        <svg class="art" id="art" viewBox="0 0 200 200" aria-hidden="true"></svg>
+        <span class="badge" id="badge">1</span>
+      </div>
+      <h1 id="hName"></h1>
+      <p class="desc" id="hDesc"></p>
+      <div class="pricing" id="hPrice"></div>
+      <p class="share" id="hShare"></p>
+      <button class="add" id="addBtn" type="button">加入</button>
+    </section>
+
+    <div class="chips" id="chips" role="group" aria-label="分類"></div>
+
+    <div class="wheel-wrap">
+      <div class="wheel" id="wheel" role="listbox" aria-label="菜單轉盤" tabindex="0"></div>
+    </div>
+
+    <div class="cart" id="cart">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><circle class="tr" cx="50" cy="50" r="46"/><circle class="pg" id="cartPg" cx="50" cy="50" r="46"/></svg>
+      <div class="sum">
+        <b id="total" aria-live="polite">$0</b>
+        <button type="button" id="budgetBtn" aria-haspopup="dialog"><span id="budgetTxt">預算 $500</span> <u>調整</u></button>
+      </div>
+      <button class="go" id="openCart" type="button" disabled>看訂單</button>
+    </div>
+
+    <div class="scrim" id="scrim"></div>
+
+    <!-- 預算 -->
+    <div class="sheet" id="budgetSheet" role="dialog" aria-modal="true" aria-label="這一餐的預算">
+      <div class="grab"></div>
+      <h2>這一餐預算 <button type="button" data-close>完成</button></h2>
+      <div class="body" style="padding-bottom:22px">
+        <p style="color:var(--soft);font-size:14.5px;margin-bottom:12px">設好預算，轉盤的圓環會告訴你，這一道會用掉剩下的多少。</p>
+        <div class="budget" id="budgetOpts"></div>
+      </div>
+    </div>
+
+    <!-- 訂單 -->
+    <div class="sheet" id="orderSheet" role="dialog" aria-modal="true" aria-label="我的訂單">
+      <div class="grab"></div>
+      <h2>我的訂單 <button type="button" data-close>繼續點</button></h2>
+      <div class="body">
+        <div id="lines"></div>
+        <div class="opts" id="opts">
+          <div class="seg" role="group" aria-label="用餐方式">
+            <button type="button" data-dine="內用" aria-pressed="true">內用</button>
+            <button type="button" data-dine="外帶" aria-pressed="false">外帶</button>
+          </div>
+          <label>桌號或姓名<input id="who" type="text" placeholder="例如 3 號桌，或王小姐" autocomplete="off"></label>
+          <label>備註<textarea id="remark" rows="2" placeholder="例如 不要香菜、飯少一點"></textarea></label>
+        </div>
+      </div>
+      <div class="foot">
+        <div class="tot"><span id="cnt">共 0 份</span><b id="sheetTotal">$0</b></div>
+        <div class="msg" id="msg" role="status"></div>
+        <div class="note" id="note"></div>
+        <div class="acts">
+          <button class="go" id="sendBtn" type="button">用 LINE 傳給店家</button>
+          <button class="ghost" id="copyBtn" type="button">複製</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ---- 換成真實資料就改這裡 ---- */
+const CFG = { shop:"阿新快炒", line:"@your-line-id" };
+
+const MENU = [
+  {id:"danfan",  cat:"主食", name:"蛋炒飯",     price:70,  desc:"粒粒分明，鍋氣很足。", tags:["現炒"]},
+  {id:"chaomian",cat:"主食", name:"肉絲炒麵",   price:80,  desc:"麵吸飽了湯汁，配高麗菜和肉絲。", tags:["現炒"]},
+  {id:"rice",    cat:"主食", name:"白飯",       price:10,  desc:"配熱炒吃的白飯。", tags:[]},
+  {id:"sanbei",  cat:"熱炒", name:"三杯雞",     price:220, desc:"麻油、薑和九層塔，一鍋都是香氣。", tags:["招牌"]},
+  {id:"beef",    cat:"熱炒", name:"蔥爆牛肉",   price:250, desc:"大火快炒，牛肉嫩，蔥很香。", tags:["現炒"]},
+  {id:"kongxin", cat:"熱炒", name:"蒜炒空心菜", price:120, desc:"脆脆的，蒜香很夠。", tags:["當季"]},
+  {id:"kugua",   cat:"熱炒", name:"鹹蛋苦瓜",   price:150, desc:"鹹蛋壓過苦味，很下飯。", tags:[]},
+  {id:"caipu",   cat:"熱炒", name:"菜脯蛋",     price:100, desc:"菜脯脆脆的，蛋煎得金黃。", tags:[]},
+  {id:"geli",    cat:"湯",   name:"蛤蠣湯",     price:100, desc:"薑絲和九層塔，湯頭很鮮。", tags:[]},
+  {id:"gongwan", cat:"湯",   name:"貢丸湯",     price:60,  desc:"貢丸加芹菜，簡單的湯。", tags:[]},
+  {id:"dong",    cat:"飲料", name:"冬瓜茶",     price:30,  desc:"自己熬的，不太甜。", tags:["冰"]},
+  {id:"hong",    cat:"飲料", name:"古早味紅茶", price:25,  desc:"紅茶濃，沒有奶。", tags:["冰"]}
+];
+const BY = Object.fromEntries(MENU.map(m=>[m.id,m]));
+const COMBOS = [
+  {id:"c1", name:"一個人吃飽", price:179, items:["danfan","caipu","dong"]},
+  {id:"c2", name:"兩人快炒",   price:379, items:["sanbei","kongxin","rice","rice","gongwan"]},
+  {id:"c3", name:"四人聚餐",   price:680, items:["sanbei","beef","kugua","geli","rice","rice","rice","rice"]}
+].map(c=>{ const raw=c.items.reduce((s,i)=>s+BY[i].price,0); c.raw=raw; c.save=raw-c.price;
+  const cnt={}; c.items.forEach(i=>cnt[i]=(cnt[i]||0)+1); c.names=Object.entries(cnt).map(([i,n])=>BY[i].name+(n>1?" ×"+n:"")); c.sub=c.names.join("、"); c.desc="含 "+c.names.join("、")+"，省 $"+c.save+"。"; return c; });
+
+/* ---------- 菜色插圖（簡單向量畫） ---------- */
+const bowl = inner => `<circle cx="100" cy="107" r="84" fill="#000" opacity=".28"/><circle cx="100" cy="100" r="84" fill="#f2e9d4"/><circle cx="100" cy="100" r="76" fill="none" stroke="#3b6db3" stroke-width="3"/>${inner}`;
+const plate = inner => `<circle cx="100" cy="107" r="84" fill="#000" opacity=".28"/><circle cx="100" cy="100" r="84" fill="#f6f3ec"/><circle cx="100" cy="100" r="70" fill="#e9e4d6"/><circle cx="100" cy="100" r="63" fill="#f6f3ec"/>${inner}`;
+const R = (x,y,w,h,rot,fill,stroke="none",rx) => `<rect x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" rx="${rx??h/2.6}" fill="${fill}" stroke="${stroke}" stroke-width="2" transform="translate(${x} ${y}) rotate(${rot})"/>`;
+const D = (arr,r,fill,op=1) => arr.map(([x,y,rr])=>`<circle cx="${x}" cy="${y}" r="${rr??r}" fill="${fill}" opacity="${op}"/>`).join("");
+const onions = a => a.map(([x,y,r])=>R(x,y,9,3.4,r,"#6fbe5e")).join("");
+const chord = y => Math.sqrt(Math.max(0,66*66-(y-100)**2));
+
+const rnd = n => { const x=Math.sin(n*127.1+311.7)*43758.5453; return x-Math.floor(x); };
+const scatter = (n,rad,seed,fn) => Array.from({length:n},(_,k)=>{ const a=rnd(seed+k*2)*6.2832, r=Math.sqrt(rnd(seed+k*2+1))*rad; return fn(100+Math.cos(a)*r,100+Math.sin(a)*r,Math.round(rnd(seed+k*5)*180-90),k); }).join("");
+const leaf = (x,y,r,f="#3f9a3b") => `<g transform="translate(${x} ${y}) rotate(${r})"><ellipse rx="13" ry="7" fill="${f}" stroke="#2c7430" stroke-width="1.4"/><path d="M-11 0H11" stroke="#a9d98f" stroke-width="1.3"/></g>`;
+const ART = {
+  danfan: () => plate(`<circle cx="100" cy="100" r="58" fill="#e6bd5b"/>`+
+    scatter(52,52,3,(x,y,r)=>`<ellipse cx="${x}" cy="${y}" rx="5.5" ry="2.4" fill="#f6df93" transform="rotate(${r} ${x} ${y})"/>`)+
+    scatter(16,50,91,(x,y,r)=>R(x,y,9,5,r,"#fff3b0"))+scatter(9,48,57,(x,y,r)=>R(x,y,6.5,6.5,r,"#9b5a2b",undefined,1.5))+
+    scatter(14,50,23,(x,y,r)=>R(x,y,8,3.2,r,"#6fbe5e"))),
+  chaomian: () => plate(`<circle cx="100" cy="100" r="60" fill="#f0d489"/>`+
+    [62,76,90,104,118,132,142].map((y,i)=>{const c=Math.sqrt(Math.max(0,58*58-(y-100)**2))-4;return `<path d="M${100-c} ${y} q ${c/2} ${i%2?-12:12} ${c} 0 t ${c} 0" fill="none" stroke="#dfae4f" stroke-width="6" stroke-linecap="round"/>`}).join("")+
+    scatter(9,46,11,(x,y,r)=>R(x,y,16,9,r,"#b9dc8a","#8fb963",3))+scatter(8,46,29,(x,y,r)=>R(x,y,18,3.6,r,"#8b4b22"))+scatter(7,46,41,(x,y,r)=>R(x,y,14,3.4,r,"#e8873a"))),
+  rice: () => bowl(`<circle cx="100" cy="100" r="66" fill="#fbf8f0"/><circle cx="100" cy="98" r="50" fill="#fff"/>`+
+    scatter(40,48,5,(x,y,r)=>`<ellipse cx="${x}" cy="${y}" rx="6" ry="2.6" fill="#efe9d8" transform="rotate(${r} ${x} ${y})"/>`)),
+  sanbei: () => bowl(`<circle cx="100" cy="100" r="66" fill="#7a3f1a"/>`+
+    [[78,78,-20],[118,80,24],[132,108,-10],[104,126,16],[72,112,34],[96,100,-40]].map(([x,y,r])=>R(x,y,34,24,r,"#a85b22","#6e3412",9)+R(x-4,y-4,14,7,r,"#c9803a",undefined,3)).join("")+
+    [[88,92,20],[114,98,-30],[100,70,70],[124,124,10],[76,126,-50],[134,84,40],[96,134,60]].map(([x,y,r])=>leaf(x,y,r)).join("")+
+    D([[90,116,6],[116,114,6],[78,94,5]],0,"#f1e6c4")+`<circle cx="130" cy="136" r="10" fill="#e8d28a" stroke="#c4aa56" stroke-width="2"/><circle cx="72" cy="140" r="9" fill="#e8d28a" stroke="#c4aa56" stroke-width="2"/>`+
+    R(106,88,16,5,30,"#d83a24")+R(84,134,16,5,-40,"#d83a24")+R(122,100,14,5,70,"#d83a24")),
+  beef: () => plate(
+    scatter(22,52,17,(x,y,r)=>R(x,y,22,7,r,"#e5efb5","#9bc46a",3))+
+    [[84,86,-25],[118,92,30],[92,118,10],[122,120,-30],[102,100,50],[74,108,-60]].map(([x,y,r])=>R(x,y,36,17,r,"#7b3b1d","#4e2410",8)+R(x-5,y-3,14,5,r,"#a35a30",undefined,2)).join("")+
+    [[110,76,0],[76,126,0],[128,104,0]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="13" fill="none" stroke="#e8c46a" stroke-width="3.4"/>`).join("")+
+    scatter(14,50,63,(x,y,r)=>R(x,y,12,4,r,"#58a84a"))),
+  kongxin: () => ART.qing(),
+  kugua: () => plate(
+    [[78,82],[110,76],[130,104],[104,118],[74,114],[96,96]].map(([x,y],k)=>`<circle cx="${x}" cy="${y}" r="17" fill="#a3c57d" stroke="#6f9a4d" stroke-width="2"/><circle cx="${x}" cy="${y}" r="9" fill="#dcedc0"/><circle cx="${x}" cy="${y}" r="4" fill="#bcd99c"/>`).join("")+
+    scatter(26,52,7,(x,y)=>`<circle cx="${x}" cy="${y}" r="3.4" fill="#f2b632"/>`)+scatter(10,50,19,(x,y)=>`<circle cx="${x}" cy="${y}" r="2.6" fill="#fff4cc"/>`)),
+  caipu: () => plate(`<path d="M42 104 C42 70 78 56 112 58 C148 60 160 84 156 108 C152 134 118 146 86 142 C56 138 42 124 42 104Z" fill="#f3c344" stroke="#d09a1e" stroke-width="3"/><path d="M60 110 C84 90 120 90 146 106" fill="none" stroke="#dba52a" stroke-width="3" stroke-linecap="round"/>`+
+    scatter(18,40,3,(x,y,r)=>R(x,y+2,8,4.4,r,"#8b5a2b","#6a4219",1.6))+scatter(10,40,77,(x,y,r)=>R(x,y+2,8,3,r,"#6fbe5e"))+`<ellipse cx="94" cy="76" rx="22" ry="7" fill="#fbe08a" opacity=".8"/>`),
+  geli: () => bowl(`<circle cx="100" cy="100" r="66" fill="#e6d5a2"/><circle cx="100" cy="100" r="48" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2"/>`+
+    [[80,84,-20],[120,90,30],[96,118,5],[132,122,-35],[70,116,50]].map(([x,y,r])=>`<g transform="translate(${x} ${y}) rotate(${r})"><ellipse rx="17" ry="12" fill="#eadfc4" stroke="#b59d6a" stroke-width="2"/><path d="M-10 -2 Q0 -9 10 -2 M-12 3 Q0 -6 12 3" fill="none" stroke="#c9b27e" stroke-width="1.8"/></g>`).join("")+
+    leaf(104,78,15)+leaf(90,132,-40)+`<circle cx="124" cy="102" r="9" fill="#efe0a3" stroke="#c4aa56" stroke-width="2"/>`),
+  gongwan: () => bowl(`<circle cx="100" cy="100" r="66" fill="#e6d5a2"/><circle cx="100" cy="100" r="48" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2"/>`+
+    [[82,90],[120,98],[98,126]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="17" fill="#a8744a" stroke="#7c4f2c" stroke-width="2"/>${D([[x-6,y-4],[x+5,y+5],[x+2,y-8],[x-7,y+7]],1.8,"#7c4f2c")}<ellipse cx="${x-6}" cy="${y-8}" rx="5" ry="2.8" fill="#d8b08a" opacity=".8"/>`).join("")+
+    scatter(14,50,31,(x,y,r)=>R(x,y,7,3.2,r,"#8b5a2b"))+onions([[104,84,30],[70,112,-20],[132,126,60],[100,108,-60]])),
+  dong: () => cup("#b4742f"),
+  hong: () => cup("#9e2f1c")
+};
+ART.qing = () => plate([[78,100,-30,"#4f9a46"],[98,84,10,"#66b257"],[120,100,40,"#3e8a3b"],[90,120,-60,"#66b257"],[112,124,20,"#4f9a46"],[100,102,70,"#3e8a3b"],[70,116,10,"#4f9a46"],[128,120,-20,"#66b257"]].map(([x,y,r,f])=>
+      `<ellipse cx="${x}" cy="${y}" rx="26" ry="11" fill="${f}" stroke="#2f7030" stroke-width="1.5" transform="rotate(${r} ${x} ${y})"/><path d="M${x-20} ${y} L${x+20} ${y}" stroke="#b9e0a6" stroke-width="1.5" transform="rotate(${r} ${x} ${y})"/>`).join("")+
+    D([[88,96],[104,112],[118,92],[96,126],[80,110],[112,128],[126,108]],2.8,"#efdc9a"));
+function cup(color){
+  return `<ellipse cx="100" cy="177" rx="42" ry="7" fill="#000" opacity=".3"/>`+
+    `<path d="M64 84 L136 84 L126 166 Q100 174 74 166 Z" fill="${color}" opacity=".95"/>`+
+    R(88,110,18,18,20,"#fff",undefined,4).replace('fill="#fff"','fill="#fff" opacity=".35"')+R(112,126,18,18,-15,"#fff",undefined,4).replace('fill="#fff"','fill="#fff" opacity=".35"')+R(96,148,18,18,8,"#fff",undefined,4).replace('fill="#fff"','fill="#fff" opacity=".35"')+
+    `<path d="M60 56 L140 56 L128 168 Q100 176 72 168 Z" fill="#fff" fill-opacity=".1" stroke="#fff" stroke-opacity=".55" stroke-width="3"/><ellipse cx="100" cy="56" rx="40" ry="6" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="3"/>`+
+    `<line x1="114" y1="26" x2="104" y2="150" stroke="#ee4b2b" stroke-width="7" stroke-linecap="round"/>`;
+}
+function comboArt(ids){
+  const u=[...new Set(ids)].slice(0,3), pos=u.length===3?[[100,58],[56,138],[144,138]]:u.length===2?[[68,100],[134,100]]:[[100,100]];
+  return u.map((id,i)=>`<g transform="translate(${pos[i][0]} ${pos[i][1]}) scale(${u.length===3?.5:.6}) translate(-100 -100)">${ART[id]()}</g>`).join("");
+}
+const artOf = it => it.items ? comboArt(it.items) : ART[it.id]();
+
+/* ---------- 狀態 ---------- */
+const $ = id => document.getElementById(id);
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const ROW = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--row")) || 68;
+const state = { mode:"single", cat:"全部", sel:0, budget:500, cart:new Map(), shown:0, dine:"內用" };
+const CATS = ["全部","主食","熱炒","湯","飲料"];
+const BUDGETS = [300,500,800,0];
+const money = n => "$"+n.toLocaleString("en-US");
+const listNow = () => state.mode==="combo" ? COMBOS : (state.cat==="全部" ? MENU : MENU.filter(m=>m.cat===state.cat));
+const keyOf = it => (it.items?"c:":"m:")+it.id;
+const total = () => [...state.cart].reduce((s,[k,q])=>{const it=k[0]==="c"?COMBOS.find(c=>c.id===k.slice(2)):BY[k.slice(2)];return s+it.price*q},0);
+const count = () => [...state.cart.values()].reduce((a,b)=>a+b,0);
+
+/* ---------- 轉盤 ---------- */
+const wheel=$("wheel");
+function renderWheel(){
+  const L=listNow();
+  wheel.innerHTML = L.map((it,i)=>`<button class="row" type="button" role="option" data-i="${i}" aria-selected="false">
+    <svg viewBox="0 0 200 200" aria-hidden="true">${artOf(it)}</svg>
+    <span style="min-width:0"><span class="nm" style="display:block">${it.name}</span><span class="sb" style="display:block">${it.items?it.sub:it.cat}</span></span>
+    <span class="pr">${money(it.price)}</span></button>`).join("");
+  state.sel=Math.min(state.sel,L.length-1);
+  wheel.scrollTop=state.sel*ROW();
+  paintRows(); showHero(false);
+}
+function paintRows(){
+  const r=ROW(), pos=wheel.scrollTop/r;
+  [...wheel.children].forEach((el,i)=>{
+    const d=Math.abs(i-pos);
+    el.style.setProperty("--s",(1-Math.min(.16,d*.08)).toFixed(3));
+    el.style.setProperty("--o",(1-Math.min(.62,d*.3)).toFixed(3));
+    el.setAttribute("aria-selected",i===state.sel);
+  });
+}
+let raf=0;
+wheel.addEventListener("scroll",()=>{
+  if(raf) return;
+  raf=requestAnimationFrame(()=>{
+    raf=0;
+    const L=listNow(), i=Math.max(0,Math.min(L.length-1,Math.round(wheel.scrollTop/ROW())));
+    if(i!==state.sel){ state.sel=i; showHero(true); }
+    paintRows();
+  });
+},{passive:true});
+function goTo(i){
+  const L=listNow(); i=Math.max(0,Math.min(L.length-1,i));
+  wheel.scrollTo({top:i*ROW(),behavior:REDUCE?"auto":"smooth"});
+}
+wheel.addEventListener("click",e=>{ const b=e.target.closest(".row"); if(b) goTo(+b.dataset.i); });
+wheel.addEventListener("keydown",e=>{
+  if(e.key==="ArrowDown"){e.preventDefault();goTo(state.sel+1)}
+  else if(e.key==="ArrowUp"){e.preventDefault();goTo(state.sel-1)}
+  else if(e.key==="Enter"||e.key===" "){e.preventDefault();addCurrent()}
+});
+
+/* ---------- 大圖與圓環 ---------- */
+const stage=$("stage"), ring=$("ring"), ringPg=$("ringPg"), CIRC=289.03;
+function showHero(animate){
+  const it=listNow()[state.sel]; if(!it) return;
+  $("art").innerHTML=artOf(it);
+  $("hName").textContent=it.name;
+  $("hDesc").textContent=it.desc;
+  $("hPrice").innerHTML=`<b>${money(it.price)}</b>`+(it.items?`<s>${money(it.raw)}</s>`:"")+(it.tags||[]).map(t=>`<span class="tag">${t}</span>`).join("");
+  $("addBtn").textContent="加入 "+it.name;
+  if(animate && !REDUCE){ stage.classList.remove("pop"); void stage.offsetWidth; stage.classList.add("pop"); setTimeout(()=>stage.classList.remove("pop"),260); }
+  updateRing();
+}
+function updateRing(){
+  const it=listNow()[state.sel]; if(!it) return;
+  const q=state.cart.get(keyOf(it))||0, b=$("badge");
+  b.textContent=q; b.classList.toggle("on",q>0);
+  const share=$("hShare"); ring.classList.remove("over","free"); share.classList.remove("over");
+  if(!state.budget){ ring.classList.add("free"); share.textContent="沒有設預算"; return; }
+  const remain=state.budget-total();
+  if(remain===0){ ringPg.style.strokeDashoffset=0; share.textContent="預算剛好用完"; return; }
+  if(remain<0){ ringPg.style.strokeDashoffset=0; ring.classList.add("over"); share.classList.add("over"); share.textContent="已經超出預算 "+money(-remain); return; }
+  if(it.price>remain){ ringPg.style.strokeDashoffset=0; ring.classList.add("over"); share.classList.add("over"); share.textContent="再加就超出預算 "+money(it.price-remain); return; }
+  const f=it.price/remain; ringPg.style.strokeDashoffset=CIRC*(1-f);
+  share.textContent="這一道占剩下預算的 "+Math.round(f*100)+"%";
+}
+
+/* ---------- 購物車 ---------- */
+let shown=0, tween=0;
+function setTotal(v){
+  const el=$("total"); cancelAnimationFrame(tween);
+  const from=shown, t0=performance.now(), dur=REDUCE?0:380;
+  const step=now=>{ const k=dur?Math.min(1,(now-t0)/dur):1, e=1-Math.pow(1-k,3); shown=Math.round(from+(v-from)*e); el.textContent=money(shown); if(k<1) tween=requestAnimationFrame(step); };
+  tween=requestAnimationFrame(step);
+  if(!REDUCE){ el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
+}
+function refresh(bump=true){
+  const t=total(), n=count();
+  if(bump) setTotal(t); else { shown=t; $("total").textContent=money(t); }
+  const cp=$("cartPg"), cart=$("cart");
+  if(state.budget){ const f=Math.min(1,t/state.budget); cp.style.strokeDashoffset=CIRC*(1-f); cart.classList.toggle("over",t>state.budget); } else { cp.style.strokeDashoffset=CIRC; cart.classList.remove("over"); }
+  $("budgetTxt").textContent=state.budget?("預算 "+money(state.budget)):"沒有設預算";
+  $("openCart").disabled=n===0; $("openCart").textContent=n?`看訂單（${n}）`:"看訂單";
+  updateRing();
+}
+function addCurrent(){
+  const it=listNow()[state.sel]; if(!it) return;
+  const k=keyOf(it); state.cart.set(k,(state.cart.get(k)||0)+1);
+  refresh();
+  if(!REDUCE){ stage.classList.remove("pop"); void stage.offsetWidth; stage.classList.add("pop"); setTimeout(()=>stage.classList.remove("pop"),260); }
+  if(navigator.vibrate) try{navigator.vibrate(12)}catch(_){}
+}
+$("addBtn").addEventListener("click",addCurrent);
+
+/* ---------- 單點 / 組合、分類 ---------- */
+document.querySelectorAll(".mode button").forEach(b=>b.addEventListener("click",()=>{
+  state.mode=b.dataset.mode; state.sel=0;
+  document.querySelectorAll(".mode button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  $("chips").hidden=state.mode==="combo"; renderWheel();
+}));
+const chips=$("chips");
+chips.innerHTML=CATS.map(c=>`<button type="button" aria-pressed="${c==="全部"}">${c}</button>`).join("");
+chips.addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return;
+  state.cat=b.textContent; state.sel=0; [...chips.children].forEach(x=>x.setAttribute("aria-pressed",x===b)); renderWheel(); });
+
+/* ---------- 彈出面板 ---------- */
+const scrim=$("scrim"); let openSheet=null, lastFocus=null;
+function open(sheet){ lastFocus=document.activeElement; openSheet=sheet; scrim.classList.add("on"); sheet.classList.add("on"); (sheet.querySelector("button:not([data-close]),input")||sheet.querySelector("button")).focus({preventScroll:true}); }
+function close(){ if(!openSheet) return; openSheet.classList.remove("on"); scrim.classList.remove("on"); openSheet=null; lastFocus&&lastFocus.focus&&lastFocus.focus({preventScroll:true}); }
+scrim.addEventListener("click",close);
+document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",close));
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") close(); });
+
+$("budgetOpts").innerHTML=BUDGETS.map(v=>`<button type="button" data-v="${v}" aria-pressed="${v===state.budget}">${v?money(v):"不設預算"}</button>`).join("");
+$("budgetOpts").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return;
+  state.budget=+b.dataset.v; [...$("budgetOpts").children].forEach(x=>x.setAttribute("aria-pressed",x===b)); refresh(false); });
+$("budgetBtn").addEventListener("click",()=>open($("budgetSheet")));
+
+/* ---------- 訂單 ---------- */
+function renderLines(){
+  const rows=[...state.cart].map(([k,q])=>{ const it=k[0]==="c"?COMBOS.find(c=>c.id===k.slice(2)):BY[k.slice(2)]; return {k,q,it}; });
+  $("lines").innerHTML = rows.length ? rows.map(({k,q,it})=>`<div class="line">
+      <span class="t">${it.name}</span>
+      <div class="step"><button type="button" data-k="${k}" data-d="-1" aria-label="減少 ${it.name}">−</button><span>${q}</span><button type="button" data-k="${k}" data-d="1" aria-label="增加 ${it.name}">+</button></div>
+      <span class="p">${money(it.price*q)}</span>
+      <span class="c">${it.items?it.sub:money(it.price)+" × "+q}</span></div>`).join("")
+    : `<p class="empty">還沒有點東西，回去滑滑看。</p>`;
+  $("opts").style.display=rows.length?"":"none";
+  $("sheetTotal").textContent=money(total()); $("cnt").textContent="共 "+count()+" 份";
+  $("sendBtn").disabled=$("copyBtn").disabled=!rows.length;
+}
+$("lines").addEventListener("click",e=>{ const b=e.target.closest("button[data-k]"); if(!b) return;
+  const k=b.dataset.k, q=(state.cart.get(k)||0)+(+b.dataset.d);
+  q<=0?state.cart.delete(k):state.cart.set(k,q); renderLines(); refresh(false);
+  if(!state.cart.size){ setTimeout(()=>{ close(); },150); } });
+$("openCart").addEventListener("click",()=>{ $("msg").textContent=""; $("note").classList.remove("on"); renderLines(); open($("orderSheet")); });
+document.querySelectorAll("[data-dine]").forEach(b=>b.addEventListener("click",()=>{ state.dine=b.dataset.dine;
+  document.querySelectorAll("[data-dine]").forEach(x=>x.setAttribute("aria-pressed",x===b)); }));
+
+function buildMsg(){
+  const lines=[...state.cart].map(([k,q])=>{ const it=k[0]==="c"?COMBOS.find(c=>c.id===k.slice(2)):BY[k.slice(2)];
+    return `・${it.name} ×${q}　${money(it.price*q)}`+(it.items?`\n　（${it.sub}）`:""); });
+  const who=$("who").value.trim(), rm=$("remark").value.trim();
+  return `您好，我想點餐「${CFG.shop}」：\n方式：${state.dine}${who?"\n桌號／姓名："+who:""}\n${lines.join("\n")}\n合計：${money(total())}${rm?"\n備註："+rm:""}\n麻煩確認，謝謝。`;
+}
+$("sendBtn").addEventListener("click",()=>{
+  const msg=buildMsg(), demo=CFG.line==="@your-line-id", note=$("note");
+  note.textContent=(demo?"範例頁：正式版會帶著下面這段訂單打開店家的 LINE\n\n":"已為你打開 LINE，下面是帶入的訂單\n\n")+msg; note.classList.add("on");
+  if(!demo) window.open("https://line.me/R/oaMessage/"+encodeURIComponent(CFG.line)+"/?"+encodeURIComponent(msg),"_blank","noopener");
+});
+$("copyBtn").addEventListener("click",async()=>{
+  const msg=buildMsg(), m=$("msg");
+  try{ await navigator.clipboard.writeText(msg); m.style.color=""; m.textContent="已複製，可以貼到任何訊息軟體。"; }
+  catch(_){ m.style.color="#ffb4a2"; m.textContent="這個瀏覽器不能自動複製，請從下方訊息手動選取。"; const n=$("note"); n.textContent=msg; n.classList.add("on"); }
+});
+
+/* ---------- 開始 ---------- */
+renderWheel(); refresh(false);
+addEventListener("resize",()=>{ wheel.scrollTop=state.sel*ROW(); paintRows(); });
+</script>
+</body>
+</html>

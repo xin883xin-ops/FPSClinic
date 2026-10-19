@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>禾埕 員山三合院民宿（範例頁）</title>
+<meta name="description" content="員山稻田裡的老三合院，四間房、一個大埕。可以訂單間，也可以整棟包下來。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Iansui&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --plaster:#e4e1d7; --wall:#f1eee5; --brick:#9a3a24; --win:#3c6a57; --tile:#2f5c8a; --ink:#2a2825; --soft:#66625a; --line:#c9c4b6;
+  --hand:"Iansui","Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --sans:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --tiles:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23f1eee4'/%3E%3Cg fill='%232f5c8a'%3E%3Cpath d='M0 0h20a20 20 0 0 1-20 20z'/%3E%3Cpath d='M80 0v20a20 20 0 0 1-20-20z'/%3E%3Cpath d='M0 80v-20a20 20 0 0 1 20 20z'/%3E%3Cpath d='M80 80h-20a20 20 0 0 1 20-20z'/%3E%3C/g%3E%3Cpath d='M40 15L65 40L40 65L15 40Z' fill='none' stroke='%232f5c8a' stroke-width='3'/%3E%3Ccircle cx='40' cy='40' r='7' fill='%239a3a24'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font:400 17px/1.9 var(--sans);color:var(--ink);background:var(--plaster);-webkit-text-size-adjust:100%}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--tile);outline-offset:3px}
+.wrap{width:min(1120px,100% - 32px);margin-inline:auto}
+
+.top{display:flex;justify-content:space-between;align-items:center;padding:20px 0}
+.top b{font:400 30px/1 var(--hand);letter-spacing:.12em}
+.top a{font-weight:500;text-decoration:none;border-bottom:2px solid var(--brick);padding-bottom:2px}
+
+/* roof ridge */
+.roof{display:block;width:100%;height:46px;margin-bottom:-2px}
+
+/* 三合院 grid */
+.house{display:grid;grid-template-columns:1fr minmax(320px,1.15fr) 1fr;grid-template-areas:"main main main" "left yard right";gap:0}
+.main{grid-area:main;background:var(--brick);color:#fbf3ea;padding:clamp(34px,6vw,72px) clamp(24px,5vw,64px) clamp(34px,5vw,56px);position:relative}
+.main h1{font:400 clamp(38px,6.6vw,76px)/1.2 var(--hand);letter-spacing:.06em;max-width:9em;text-wrap:balance}
+.main .story{margin-top:22px;max-width:34em;color:#f3dfd1}
+.facts{margin-top:30px;display:flex;gap:clamp(18px,4vw,48px);flex-wrap:wrap;font-size:15px}
+.facts div{border-top:2px solid #e7b9a2;padding-top:8px}
+.facts b{display:block;font:400 28px/1.3 var(--hand);color:#fff}
+.doorline{margin-top:34px}
+.btn{display:inline-block;background:#fbf3ea;color:var(--brick);font:500 17px/1 var(--sans);letter-spacing:.06em;padding:16px 26px;border:0;text-decoration:none;cursor:pointer;transition:background .2s}
+.btn:hover{background:#fff}
+
+.wing{background:var(--wall);padding:24px 18px;display:grid;gap:18px;align-content:start}
+.wing.left{grid-area:left;border-right:3px solid var(--line)}
+.wing.right{grid-area:right;border-left:3px solid var(--line)}
+.wing h2{font:400 22px/1.4 var(--hand);letter-spacing:.1em;color:var(--soft)}
+.room{position:relative;background:#fff;border:2px solid var(--ink);padding:18px 18px 18px 22px;box-shadow:5px 5px 0 var(--accent)}
+.room.r1{--accent:var(--brick)}.room.r2{--accent:var(--tile)}.room.r3{--accent:var(--win)}.room.r4{--accent:#b48a2c}
+.room h3{font:400 26px/1.3 var(--hand);letter-spacing:.08em}
+.room h3 small{font:500 14px/1 var(--sans);letter-spacing:.04em;color:var(--soft);margin-left:8px}
+.room p{font-size:15.5px;line-height:1.8;margin-top:6px;color:#4d4a43}
+.room .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;font-size:14.5px;color:var(--soft)}
+.room .row b{font:400 24px/1 var(--hand);color:var(--ink)}
+
+.yard{grid-area:yard;background:var(--tiles) 0 0/80px 80px;padding:clamp(18px,3vw,34px);display:flex;align-items:center;border-inline:0}
+.card{background:var(--wall);border:2px solid var(--ink);padding:clamp(22px,3vw,34px);width:100%}
+.card h2{font:400 clamp(26px,3.2vw,34px)/1.35 var(--hand);letter-spacing:.06em;text-wrap:balance}
+.card .hint{font-size:15px;color:var(--soft);margin-top:6px}
+form{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:20px}
+@media (min-width:521px) and (max-width:900px){form{grid-template-columns:repeat(2,minmax(0,1fr))}}
+label{display:grid;gap:5px;font-size:14px;color:var(--soft)}
+label.full{grid-column:1/-1}
+input,select{font:400 16.5px/1.4 var(--sans);padding:12px 12px;border:2px solid var(--ink);background:#fff;color:var(--ink);width:100%;min-width:0;border-radius:0}
+input:focus,select:focus{outline:3px solid var(--tile);outline-offset:0}
+.actions{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.go{font:500 16.5px/1 var(--sans);padding:15px 22px;border:2px solid var(--ink);background:var(--win);color:#fff;cursor:pointer}
+.go:hover{background:#31574a}
+.go.ghost{background:#fff;color:var(--ink)}
+.go.ghost:hover{background:#f0ede4}
+.err{grid-column:1/-1;font-size:14px;color:#a3321c;min-height:1.3em}
+.preview{grid-column:1/-1;display:none;background:#fff;border:2px dashed var(--soft);padding:14px 16px;font-size:14.5px;white-space:pre-wrap}
+.preview.on{display:block}
+.preview em{display:block;font-style:normal;color:var(--brick);font-size:13px;margin-bottom:4px}
+
+.gate{background:var(--ink);color:#e9e5da;padding:28px clamp(20px,4vw,48px);display:grid;grid-template-columns:1.2fr 1fr;gap:28px 48px}
+.gate h2{font:400 24px/1.4 var(--hand);letter-spacing:.1em;margin-bottom:6px}
+.gate ul{list-style:none;padding:0;display:grid;gap:0}
+.gate li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #4c4942;font-size:15.5px}
+.gate li span{color:#b9b4a5;white-space:nowrap}
+.gate p{font-size:15.5px;line-height:1.9;color:#cfcabb}
+.gate a{color:#fff}
+.small{padding:16px 0 28px;font-size:14px;color:var(--soft);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .house{grid-template-columns:1fr;grid-template-areas:"main" "left" "right" "yard"}
+  .wing.left,.wing.right{border:0;border-bottom:3px solid var(--line)}
+  .gate{grid-template-columns:1fr}
+  body{font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><b>禾埕</b><a href="#yard">問空房</a></div>
+
+  <svg class="roof" viewBox="0 0 1200 46" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 40 C60 40 70 10 120 4 L1080 4 C1130 10 1140 40 1200 40 L1200 46 L0 46Z" fill="#9a3a24"/>
+  </svg>
+
+  <main class="house">
+    <section class="main" id="main">
+      <h1><span style="white-space:nowrap">回到三合院，</span><wbr><span style="white-space:nowrap">慢慢吃一頓早餐</span></h1>
+      <p class="story">員山的稻田中間，有一棟住了三代人的老三合院。現在留下四間房給來住的人，中間那塊埕，早上是餐桌，傍晚是乘涼的地方。</p>
+      <div class="facts">
+        <div><b>4 間房</b>最多住 11 位</div>
+        <div><b>1 個埕</b>早餐在這裡吃</div>
+        <div><b>整棟可包</b>家族聚會剛好</div>
+      </div>
+      <div class="doorline"><a class="btn" href="#yard">問空房</a></div>
+    </section>
+
+    <aside class="wing left" aria-label="左護龍的房間">
+      <h2>左護龍</h2>
+      <article class="room r1">
+        <h3>紅磚房<small>雙人</small></h3>
+        <p>老紅磚牆保留原樣，夏天進房就涼。木窗打開，看得到稻田。</p>
+        <div class="row"><span>8 坪　2 位</span><b>NT$3,200 <small style="font:400 13px var(--sans)">起</small></b></div>
+      </article>
+      <article class="room r2">
+        <h3>花磚房<small>雙人</small></h3>
+        <p>地板鋪的是老花磚，藍白相間。床邊有一張小書桌。</p>
+        <div class="row"><span>8 坪　2 位</span><b>NT$3,200 <small style="font:400 13px var(--sans)">起</small></b></div>
+      </article>
+    </aside>
+
+    <section class="yard" id="yard" aria-label="詢問空房">
+      <div class="card">
+        <h2>在埕裡，問問空房</h2>
+        <p class="hint">選好日期和房型，按一下就會帶著這段訊息打開 LINE。不用先付款。</p>
+        <form id="askForm" novalidate>
+          <label>入住<input type="date" name="in" required></label>
+          <label>退房<input type="date" name="out" required></label>
+          <label>人數
+            <select name="n"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select>
+          </label>
+          <label>想訂
+            <select name="room"><option>都可以，幫我看</option><option>紅磚房（雙人）</option><option>花磚房（雙人）</option><option>木窗房（三人）</option><option>古井房（四人）</option><option>整棟包下來</option></select>
+          </label>
+          <p class="err" id="err" role="alert"></p>
+          <div class="actions">
+            <button class="go" type="submit">用 LINE 問空房</button>
+            <button class="go ghost" type="button" id="copyBtn">複製訊息</button>
+          </div>
+          <div class="preview" id="preview" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <aside class="wing right" aria-label="右護龍的房間">
+      <h2>右護龍</h2>
+      <article class="room r3">
+        <h3>木窗房<small>三人</small></h3>
+        <p>窗框是綠色的老鐵窗，一張雙人床加一張單人床，適合帶小孩。</p>
+        <div class="row"><span>10 坪　3 位</span><b>NT$4,500 <small style="font:400 13px var(--sans)">起</small></b></div>
+      </article>
+      <article class="room r4">
+        <h3>古井房<small>四人</small></h3>
+        <p>最靠近院子裡那口老井。兩張雙人床，是四個人住最舒服的一間。</p>
+        <div class="row"><span>12 坪　4 位</span><b>NT$5,800 <small style="font:400 13px var(--sans)">起</small></b></div>
+      </article>
+    </aside>
+  </main>
+
+  <footer>
+    <div class="gate">
+      <div>
+        <h2>走出大門可以去哪</h2>
+        <ul>
+          <li>稻田小路散步 <span>門口出發</span></li>
+          <li>員山公園 <span>車程約 10 分鐘</span></li>
+          <li>宜蘭市區 <span>車程約 20 分鐘</span></li>
+          <li>羅東夜市 <span>車程約 30 分鐘</span></li>
+        </ul>
+      </div>
+      <div>
+        <h2>來之前</h2>
+        <p>電話：<a href="tel:0900000000">0900-000-000</a><br>宜蘭縣員山鄉稻田路 00 號<br>整棟包下來的價格，傳訊息問我們。</p>
+      </div>
+    </div>
+    <div class="small"><span>禾埕 員山三合院民宿</span><span>這是範例頁，店名、地址和價格都是虛構的。</span></div>
+  </footer>
+</div>
+
+<script>
+/* ---- 換成真實資料就改這裡 ---- */
+const CFG = { shop:"禾埕", line:"@your-line-id" };
+
+const f = document.getElementById("askForm"), err = document.getElementById("err"), pv = document.getElementById("preview");
+const today = new Date(); today.setMinutes(today.getMinutes()-today.getTimezoneOffset());
+f.in.min = f.out.min = today.toISOString().slice(0,10);
+f.in.addEventListener("change",()=>{ f.out.min = f.in.value || f.in.min; if(f.out.value && f.out.value<=f.in.value) f.out.value=""; });
+
+function build(){
+  err.style.color=""; err.textContent = "";
+  if(!f.in.value || !f.out.value){ err.textContent = "請先選好入住和退房日期。"; return null; }
+  if(f.out.value <= f.in.value){ err.textContent = "退房日期要晚於入住日期。"; return null; }
+  const nights = Math.round((new Date(f.out.value)-new Date(f.in.value))/864e5);
+  return `您好，我想詢問「${CFG.shop}」的空房：\n入住：${f.in.value}\n退房：${f.out.value}（共 ${nights} 晚）\n人數：${f.n.value} 位\n想訂：${f.room.value}\n麻煩回覆有沒有空房，謝謝。`;
+}
+f.addEventListener("submit",e=>{
+  e.preventDefault();
+  const msg = build(); if(!msg) return;
+  const demo = CFG.line === "@your-line-id";
+  pv.innerHTML = "<em>"+(demo?"範例頁：正式版會帶著下面這段訊息打開店家的 LINE":"已為你打開 LINE，下面是帶入的訊息")+"</em>"+msg.replace(/</g,"&lt;");
+  pv.classList.add("on");
+  if(!demo) window.open("https://line.me/R/oaMessage/"+encodeURIComponent(CFG.line)+"/?"+encodeURIComponent(msg),"_blank","noopener");
+});
+document.getElementById("copyBtn").addEventListener("click",async()=>{
+  const msg = build(); if(!msg) return;
+  try{ await navigator.clipboard.writeText(msg); err.style.color="#2c6b3f"; err.textContent="已複製，可以貼到任何訊息軟體。"; }
+  catch(_){ err.textContent="這個瀏覽器不能自動複製，請直接選取下方訊息。"; pv.innerHTML="<em>請手動複製</em>"+msg.replace(/</g,"&lt;"); pv.classList.add("on"); }
+});
+</script>
+</body>
+</html>

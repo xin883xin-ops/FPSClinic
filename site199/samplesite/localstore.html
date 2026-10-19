@@ -1,0 +1,228 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>灶咖仔</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 版面：牌子式單頁——印章招牌 + 菜單牌卡 + 營業燈號 + 地點與聯絡，左右對齊走報紙式骨架，不置中 */
+:root{
+  --bg:#EFEAE1; --panel:#E3DBC9; --panel2:#F7F3EA; --fg:#2B2824; --muted:#6B6358;
+  --blue:#2E5C8A; --red:#A8402E; --green:#5B7A52; --line:#C9BFA9;
+  --display:"Noto Serif TC",serif; --body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#221C16; --panel:#2E261D; --panel2:#362C21; --fg:#F1E7D8; --muted:#B8A98F;
+    --blue:#6FA3D8; --red:#E08468; --green:#8FAE80; --line:#4A4030; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#221C16; --panel:#2E261D; --panel2:#362C21; --fg:#F1E7D8; --muted:#B8A98F;
+  --blue:#6FA3D8; --red:#E08468; --green:#8FAE80; --line:#4A4030; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:720px;margin-inline:auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+
+/* 頂列 */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb, var(--bg) 92%, transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .in{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;max-width:720px}
+.brand{font-family:var(--display);font-weight:900;font-size:1.15rem;letter-spacing:.02em}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;padding:5px 11px;border-radius:999px;border:1px solid var(--line)}
+.status .dot{width:7px;height:7px;border-radius:50%}
+.status.open{color:var(--green)}
+.status.open .dot{background:var(--green)}
+.status.closed{color:var(--muted)}
+.status.closed .dot{background:var(--muted)}
+
+/* Hero */
+.hero{padding-block:40px 28px;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center}
+.stamp{flex:none}
+.hero h2{font-family:var(--display);font-weight:900;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.2}
+.hero .sub{color:var(--muted);margin-top:10px;max-width:30em;font-size:.98rem}
+.hero .line2{font-family:var(--display);font-size:1rem;color:var(--red);font-weight:700;margin-top:14px}
+@media (max-width:480px){.hero{grid-template-columns:1fr;text-align:left}.stamp{width:84px}}
+
+/* 區塊標題 */
+.sec{padding-block:30px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:16px;border-bottom:2px solid var(--fg);padding-bottom:8px}
+.sec-h h3{font-family:var(--display);font-weight:900;font-size:1.3rem}
+.sec-h .note{font-size:.78rem;color:var(--muted)}
+
+/* 菜單 */
+.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media (max-width:480px){.menu{grid-template-columns:1fr}}
+.dish{background:var(--panel2);border:1px solid var(--line);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0;position:relative}
+.dish .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.dish .name{font-weight:700;font-size:1.02rem}
+.dish .price{font-variant-numeric:tabular-nums;font-weight:700;color:var(--blue);white-space:nowrap}
+.dish .desc{color:var(--muted);font-size:.86rem}
+.dish.special{border-color:var(--red)}
+.dish.special::before{content:"今日限定";position:absolute;top:-9px;left:14px;background:var(--red);color:var(--panel2);font-size:.68rem;font-weight:700;padding:2px 8px;letter-spacing:.04em}
+
+/* 時間表 */
+.hours{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:.92rem}
+.hours .d{color:var(--muted)}
+.hours .d.today{color:var(--fg);font-weight:700}
+.hours .t{font-variant-numeric:tabular-nums}
+
+/* 地點 */
+.addr-card{background:var(--panel2);border:1px solid var(--line);padding:16px}
+.addr-card .label{font-size:.78rem;color:var(--muted);margin-bottom:4px}
+.addr-card .val{font-weight:700;font-size:1.02rem}
+.addr-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border:1.5px solid var(--fg);font-weight:700;font-size:.88rem;text-decoration:none}
+.btn.solid{background:var(--fg);color:var(--bg)}
+.btn.ghost{background:transparent}
+.copybtn{font-size:.78rem;border:1px solid var(--line);padding:4px 10px;border-radius:999px}
+.copybtn[data-ok="1"]{border-color:var(--green);color:var(--green)}
+
+/* 評價：空狀態 */
+.review-empty{border:1.5px dashed var(--line);padding:26px 18px;text-align:center;color:var(--muted);font-size:.9rem}
+.review-empty b{display:block;color:var(--fg);font-family:var(--display);font-weight:900;font-size:1.05rem;margin-bottom:6px}
+
+/* 聯絡 */
+.contact{background:var(--panel);border:1px solid var(--line);padding:22px 18px;display:grid;gap:14px}
+.contact h3{font-family:var(--display);font-weight:900;font-size:1.2rem}
+.contact .row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--panel2);border:1px solid var(--line);padding:10px 14px}
+.contact .row .k{font-size:.76rem;color:var(--muted)}
+.contact .row .v{font-weight:700;font-variant-numeric:tabular-nums}
+
+footer{border-top:1px solid var(--line);padding-block:20px max(20px,env(safe-area-inset-bottom,0px))}
+footer p{font-size:.75rem;color:var(--muted)}
+</style>
+
+<header class="top"><div class="wrap in">
+  <div class="brand">灶咖仔</div>
+  <div class="status" id="status"><span class="dot"></span><span id="statusText">—</span></div>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <svg class="stamp" width="96" height="96" viewBox="0 0 96 96" aria-hidden="true">
+      <circle cx="48" cy="48" r="44" fill="none" stroke="var(--red)" stroke-width="3"/>
+      <circle cx="48" cy="48" r="36" fill="none" stroke="var(--red)" stroke-width="1.5"/>
+      <text x="48" y="40" text-anchor="middle" font-family="Noto Serif TC" font-weight="900" font-size="20" fill="var(--red)">灶</text>
+      <text x="48" y="64" text-anchor="middle" font-family="Noto Serif TC" font-weight="700" font-size="12" fill="var(--red)">咖仔</text>
+    </svg>
+    <div>
+      <h2>宜蘭人的灶咖，天天現煮</h2>
+      <p class="sub">沒有菜單上的花俏名字，就是家裡飯桌會出現的那幾道——西魯肉、糕渣、卜肉，老闆娘每天早上現做。</p>
+      <p class="line2">宜蘭市中山路三段 · 內用／外帶</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><h3>今日菜色</h3><span class="note">依市場現貨每日微調</span></div>
+    <div class="menu">
+      <div class="dish special"><div class="row"><span class="name">西魯肉</span><span class="price">NT$120</span></div><p class="desc">大白菜、豬肉絲、金針木耳勾芡，宜蘭辦桌起家菜</p></div>
+      <div class="dish"><div class="row"><span class="name">糕渣</span><span class="price">NT$90</span></div><p class="desc">外酥內燙的雞湯凍，小心燙口</p></div>
+      <div class="dish"><div class="row"><span class="name">卜肉</span><span class="price">NT$100</span></div><p class="desc">裹粉油炸豬肉片，沾胡椒鹽</p></div>
+      <div class="dish"><div class="row"><span class="name">蔥油餅</span><span class="price">NT$45</span></div><p class="desc">手擀現煎，蔥花量給得實在</p></div>
+      <div class="dish"><div class="row"><span class="name">魚丸米粉湯</span><span class="price">NT$70</span></div><p class="desc">鯊魚漿手打魚丸，湯頭用大骨慢熬</p></div>
+      <div class="dish"><div class="row"><span class="name">燙青菜</span><span class="price">NT$50</span></div><p class="desc">當天市場有什麼就燙什麼</p></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><h3>營業時間</h3></div>
+    <div class="hours" id="hours"></div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><h3>位置</h3></div>
+    <div class="addr-card">
+      <div class="label">地址</div>
+      <div class="val" id="addrText">宜蘭縣宜蘭市中山路三段 88 號</div>
+      <div class="addr-row">
+        <a class="btn solid" href="https://www.google.com/maps/search/?api=1&query=%E5%AE%9C%E8%98%AD%E7%B8%A3%E5%AE%9C%E8%98%AD%E5%B8%82%E4%B8%AD%E5%B1%B1%E8%B7%AF%E4%B8%89%E6%AE%B5%2088%E8%99%9F" target="_blank" rel="noopener">在 Google 地圖開啟</a>
+        <button class="copybtn" id="copyAddr" type="button">複製地址</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><h3>顧客迴響</h3></div>
+    <div class="review-empty">
+      <b>開幕後這裡會放真實評論</b>
+      不放假評價、不找人寫業配，有客人留言我們才放上來。
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="contact">
+      <h3>想先問今天有什麼菜？</h3>
+      <div class="row"><span class="k">LINE</span><span class="v" id="lineId">@zaokaa88</span><button class="copybtn" id="copyLine" type="button">複製</button></div>
+      <div class="row"><span class="k">電話</span><span class="v" id="phoneNum">03-932XXXX</span><button class="copybtn" id="copyPhone" type="button">複製</button></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><p>展示用虛構範例頁面，店名、地址、電話皆為假設內容。</p></div></footer>
+
+<script>
+(function(){
+"use strict";
+var HOURS=[
+  {d:"週一",open:null,close:null,label:"公休"},
+  {d:"週二",open:11*60,close:20*60,label:null},
+  {d:"週三",open:11*60,close:20*60,label:null},
+  {d:"週四",open:11*60,close:20*60,label:null},
+  {d:"週五",open:11*60,close:20*60,label:null},
+  {d:"週六",open:11*60,close:20*60,label:null},
+  {d:"週日",open:11*60,close:20*60,label:null}
+];
+function fmt(m){var h=Math.floor(m/60),mm=m%60;return (h<10?"0":"")+h+":"+(mm<10?"0":"")+mm}
+function render(){
+  var now=new Date();
+  var jsDay=now.getDay(); // 0=Sun..6=Sat
+  var idx=jsDay===0?6:jsDay-1; // align to Mon-first array
+  var mins=now.getHours()*60+now.getMinutes();
+  var list=document.getElementById("hours");
+  list.innerHTML="";
+  HOURS.forEach(function(h,i){
+    var dEl=document.createElement("span");
+    dEl.className="d"+(i===idx?" today":"");
+    dEl.textContent=h.d;
+    var tEl=document.createElement("span");
+    tEl.className="t";
+    tEl.textContent=h.open===null?"公休":fmt(h.open)+"–"+fmt(h.close);
+    list.appendChild(dEl);list.appendChild(tEl);
+  });
+  var today=HOURS[idx];
+  var open=today.open!==null&&mins>=today.open&&mins<today.close;
+  var statusEl=document.getElementById("status");
+  var textEl=document.getElementById("statusText");
+  if(open){statusEl.className="status open";textEl.textContent="營業中 · "+fmt(today.close)+" 休息"}
+  else{statusEl.className="status closed";textEl.textContent=today.open===null?"今日公休":"已打烊"}
+}
+render();
+function wireCopy(btnId,textId){
+  var btn=document.getElementById(btnId),src=document.getElementById(textId);
+  if(!btn||!src)return;
+  btn.addEventListener("click",function(){
+    var val=src.textContent.trim();
+    function ok(){btn.textContent="已複製";btn.dataset.ok="1";setTimeout(function(){btn.textContent="複製"+(btnId==="copyAddr"?"地址":btnId==="copyLine"?"":"");btn.removeAttribute("data-ok")},1600)}
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(val).then(ok).catch(function(){fallback(src)});
+    } else { fallback(src) }
+    function fallback(el){
+      var r=document.createRange();r.selectNodeContents(el);
+      var sel=window.getSelection();sel.removeAllRanges();sel.addRange(r);
+    }
+  });
+}
+wireCopy("copyAddr","addrText");
+wireCopy("copyLine","lineId");
+wireCopy("copyPhone","phoneNum");
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>浪間 外澳海景民宿（範例頁）</title>
+<meta name="description" content="頭城外澳，走路 3 分鐘到沙灘。三間房，窗外都是海。直接傳訊息問空房。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Huninn&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0f2c3a; --glass:#eef5f4; --foam:#ffffff; --deep:#0b2230; --line:#c9dcdb; --sun:#f2a541;
+  --soft:#4c6b78;
+  --display:"Huninn","Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --body:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font:400 17px/1.8 var(--body);color:var(--ink);background:var(--glass);-webkit-text-size-adjust:100%}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.wrap{width:min(1080px,100% - 40px);margin-inline:auto}
+
+/* ---------- hero ---------- */
+.hero{
+  --s1:#33426e; --s2:#f1a56c; --sea:#2a4860; --sunY:-6px; --sunc:#ffe0a8; --fg:#fff; --glow:.9;
+  position:relative; min-height:100svh; color:var(--fg); overflow:hidden; background:var(--s1);
+  display:flex; flex-direction:column;
+}
+.hero[data-t="noon"]{--s1:#5aa9d6; --s2:#dff2f0; --sea:#1d6e8e; --sunY:-310px; --sunc:#fffbe0; --fg:#0c2a39; --glow:.5}
+.hero[data-t="dusk"]{--s1:#473a69; --s2:#ef8a5c; --sea:#2f4059; --sunY:-14px; --sunc:#ffc07a; --fg:#fff; --glow:.9}
+.hero svg.scene{position:absolute;inset:0;width:100%;height:100%}
+.hero stop{transition:stop-color 1.2s ease}
+.hero .skytop{stop-color:var(--s1)} .hero .skybot{stop-color:var(--s2)}
+.hero .sea{fill:var(--sea);transition:fill 1.2s ease}
+#sun{transform:translateY(var(--sunY));transition:transform 1.4s cubic-bezier(.3,.7,.2,1);fill:var(--sunc)}
+#sunglow{opacity:var(--glow);transform:translateY(var(--sunY));transition:transform 1.4s cubic-bezier(.3,.7,.2,1),opacity 1.2s}
+.island{fill:#16273a;opacity:.82}
+.wave{animation:drift 26s linear infinite}
+.wave.w2{animation-duration:38s;animation-direction:reverse}
+.wave.w3{animation-duration:30s}
+@keyframes drift{to{transform:translateX(-1200px)}}
+.w1 path{fill:#fff;opacity:.10}.w2 path{fill:#fff;opacity:.13}.w3 path{fill:#06151f;opacity:.28}
+
+.bar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:22px 0}
+.logo{font:400 30px/1 var(--display);letter-spacing:.08em;text-decoration:none}
+.logo small{font:500 13px/1 var(--body);letter-spacing:.12em;margin-left:12px;opacity:.85}
+.pill{display:inline-block;padding:10px 20px;border:1.5px solid currentColor;border-radius:99px;text-decoration:none;font-weight:500;font-size:15px;transition:background .2s,color .2s}
+.pill:hover{background:var(--fg);color:var(--s1)}
+.hero-body{position:relative;z-index:2;margin-block:auto;padding-bottom:18vh}
+h1{font:400 clamp(40px,8.4vw,92px)/1.12 var(--display);letter-spacing:.04em;text-wrap:balance;max-width:11em}
+.lede{margin-top:22px;max-width:26em;text-wrap:balance;font-size:clamp(17px,2vw,20px)}
+.times{margin-top:34px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.times>span{font-size:14px;opacity:.85}
+.seg{display:inline-flex;border:1.5px solid currentColor;border-radius:99px;padding:3px}
+.seg button{font:500 15px/1 var(--body);color:inherit;background:none;border:0;padding:10px 18px;border-radius:99px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--s1)}
+.hero[data-t="noon"] .seg button[aria-pressed="true"]{color:#dff2f0}
+
+/* ---------- sections ---------- */
+section{padding:clamp(64px,10vw,120px) 0}
+h2{font:400 clamp(30px,5vw,46px)/1.25 var(--display);letter-spacing:.04em;margin-bottom:12px;text-wrap:balance}
+.sub{color:var(--soft);max-width:34em}
+
+.rooms{margin-top:44px;border-top:1.5px solid var(--ink)}
+.room{display:grid;grid-template-columns:200px 1fr auto;gap:28px;align-items:center;padding:30px 0;border-bottom:1px solid var(--line)}
+.room svg{width:200px;height:132px;border-radius:6px;display:block}
+.room h3{font:400 28px/1.3 var(--display);letter-spacing:.06em}
+.room p{color:var(--soft);margin-top:6px;font-size:16px}
+.room .facts{margin-top:10px;font-size:15px;font-weight:500}
+.room .price{text-align:right;white-space:nowrap}
+.room .price b{display:block;font:400 30px/1.2 var(--display)}
+.room .price span{font-size:14px;color:var(--soft)}
+
+.day{background:var(--foam)}
+.tl{margin-top:44px;list-style:none;padding:0;position:relative;max-width:640px}
+.tl::before{content:"";position:absolute;left:78px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.tl li{display:grid;grid-template-columns:64px 1fr;gap:30px;padding:14px 0;position:relative}
+.tl li::after{content:"";position:absolute;left:73px;top:28px;width:12px;height:12px;border-radius:50%;background:var(--glass);border:2px solid var(--ink)}
+.tl li.hl::after{background:var(--sun);border-color:var(--sun)}
+.tl time{font:400 20px/1.6 var(--display);text-align:right}
+.tl strong{display:block;font-weight:700}
+.tl span{color:var(--soft);font-size:16px}
+
+.near{margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0 40px}
+.near div{display:flex;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.near b{font-weight:500}.near span{color:var(--soft);white-space:nowrap}
+
+.ask{background:var(--deep);color:#e8f2f1}
+.ask .sub{color:#9fbac2}
+.ask-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(32px,6vw,80px);align-items:start}
+form{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:grid;gap:6px;font-size:14px;color:#b8d0d5}
+label.full,.actions{grid-column:1/-1}
+input,select{font:400 17px/1.4 var(--body);padding:13px 14px;border-radius:8px;border:1.5px solid #34505e;background:#10303f;color:#fff;width:100%;min-width:0;color-scheme:dark}
+input:focus,select:focus{border-color:var(--sun);outline:none}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.btn{font:500 17px/1 var(--body);padding:16px 26px;border-radius:99px;border:0;cursor:pointer;background:var(--sun);color:#2a1a00;text-decoration:none;display:inline-block}
+.btn.ghost{background:none;color:#e8f2f1;border:1.5px solid #5f7f8c}
+.preview{grid-column:1/-1;background:#0e2a37;border:1px dashed #4b6c7a;border-radius:10px;padding:16px 18px;font-size:15px;white-space:pre-wrap;display:none}
+.preview.on{display:block}
+.preview em{display:block;font-style:normal;color:var(--sun);margin-bottom:6px;font-size:13px}
+.err{grid-column:1/-1;color:#ffb4a2;font-size:14px;min-height:1.4em}
+.contact{margin-top:28px;font-size:16px;color:#c3d8dc}
+.contact a{color:#fff}
+
+footer{background:#071722;color:#8fa9b2;font-size:14px;padding:26px 0}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+@media (max-width:760px){
+  body{font-size:16px}
+  .room{grid-template-columns:1fr;gap:16px;padding:26px 0}
+  .room svg{width:100%;height:auto;aspect-ratio:200/110}
+  .room .price{text-align:left}
+  .room .price b{display:inline;margin-right:8px}
+  .ask-grid{grid-template-columns:1fr}
+  form{grid-template-columns:1fr}
+  .logo small{display:none}
+  .hero-body{padding-bottom:12vh}
+  .tl::before{left:64px}.tl li{grid-template-columns:52px 1fr;gap:26px}.tl li::after{left:59px}
+}
+@media (prefers-reduced-motion:reduce){.wave{animation:none}#sun,#sunglow,.hero stop,.hero .sea{transition:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="hero" id="top" data-t="dawn">
+  <svg class="scene" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop class="skytop" offset="0"/><stop class="skybot" offset="1"/>
+      </linearGradient>
+      <radialGradient id="gl"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="1200" height="760" fill="url(#sky)"/>
+    <g id="sunglow"><circle cx="650" cy="470" r="210" fill="url(#gl)"/></g>
+    <circle id="sun" cx="650" cy="470" r="54"/>
+    <path class="island" d="M690 470 C735 436 778 428 808 432 C838 414 880 418 910 446 C932 456 952 464 975 470 Z"/>
+    <rect class="sea" y="470" width="1200" height="290"/>
+    <g class="wave w1" transform="translate(0 0)"><g transform="translate(0 492)"><path d="M0 0 Q100 -12 200 0 T400 0 T600 0 T800 0 T1000 0 T1200 0 T1400 0 T1600 0 T1800 0 T2000 0 T2200 0 T2400 0 V300 H0Z"/></g></g>
+    <g class="wave w2"><g transform="translate(0 546)"><path d="M0 0 Q100 -16 200 0 T400 0 T600 0 T800 0 T1000 0 T1200 0 T1400 0 T1600 0 T1800 0 T2000 0 T2200 0 T2400 0 V300 H0Z"/></g></g>
+    <g class="wave w3"><g transform="translate(0 620)"><path d="M0 0 Q100 -20 200 0 T400 0 T600 0 T800 0 T1000 0 T1200 0 T1400 0 T1600 0 T1800 0 T2000 0 T2200 0 T2400 0 V300 H0Z"/></g></g>
+  </svg>
+
+  <div class="wrap bar">
+    <a class="logo" href="#top">浪間<small>外澳海景民宿</small></a>
+    <a class="pill" href="#ask">問空房</a>
+  </div>
+
+  <div class="wrap hero-body">
+    <h1>睜開眼，海就在窗外</h1>
+    <p class="lede">頭城外澳，走路 3 分鐘到沙灘。三間房，每一間都看得到海。</p>
+    <div class="times" role="group" aria-label="切換看海的時間">
+      <span>你想看哪個時間的海？</span>
+      <div class="seg">
+        <button type="button" data-t="dawn" aria-pressed="true">日出前</button>
+        <button type="button" data-t="noon" aria-pressed="false">中午</button>
+        <button type="button" data-t="dusk" aria-pressed="false">日落</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="rooms">
+  <div class="wrap">
+    <h2>三間房，窗都朝東</h2>
+    <p class="sub">不放一堆家具。床、桌、窗，還有一張可以坐著發呆的椅子。</p>
+
+    <div class="rooms">
+      <article class="room">
+        <svg viewBox="0 0 200 132" role="img" aria-label="浪房窗外的海景">
+          <rect width="200" height="132" fill="#cfe3e6"/><rect x="0" y="0" width="200" height="70" fill="#f4c99a"/>
+          <circle cx="132" cy="62" r="14" fill="#fff0c8"/><rect y="70" width="200" height="62" fill="#3a6a86"/>
+          <path d="M0 84 Q25 80 50 84 T100 84 T150 84 T200 84" stroke="#fff" stroke-opacity=".4" fill="none"/>
+          <rect x="6" y="6" width="188" height="120" rx="4" fill="none" stroke="#fff" stroke-width="10"/><path d="M100 6V126" stroke="#fff" stroke-width="6"/>
+        </svg>
+        <div>
+          <h3>浪</h3>
+          <p>二樓雙人房，有一座小陽台，早上的光會直接照到床尾。</p>
+          <p class="facts">1 張雙人床　2 位　8 坪</p>
+        </div>
+        <div class="price"><b>NT$3,600</b><span>平日起</span></div>
+      </article>
+
+      <article class="room">
+        <svg viewBox="0 0 200 132" role="img" aria-label="潮房窗外的海景">
+          <rect width="200" height="132" fill="#cfe3e6"/><rect width="200" height="58" fill="#bfe0ef"/>
+          <path d="M120 58 C140 46 160 44 172 48 C184 42 196 46 200 52 V58Z" fill="#40596b"/>
+          <rect y="58" width="200" height="74" fill="#2a7a97"/>
+          <path d="M0 76 Q25 71 50 76 T100 76 T150 76 T200 76 M0 96 Q25 90 50 96 T100 96 T150 96 T200 96" stroke="#fff" stroke-opacity=".45" fill="none"/>
+          <rect x="6" y="6" width="188" height="120" rx="4" fill="none" stroke="#fff" stroke-width="10"/><path d="M70 6V126M130 6V126" stroke="#fff" stroke-width="6"/>
+        </svg>
+        <div>
+          <h3>潮</h3>
+          <p>三樓四人房，兩面窗。整排落地玻璃，下雨天也好看。</p>
+          <p class="facts">2 張雙人床　4 位　12 坪</p>
+        </div>
+        <div class="price"><b>NT$5,400</b><span>平日起</span></div>
+      </article>
+
+      <article class="room">
+        <svg viewBox="0 0 200 132" role="img" aria-label="汐房窗外的海景">
+          <rect width="200" height="132" fill="#3b3a5e"/><rect width="200" height="74" fill="#e98b62"/>
+          <circle cx="70" cy="68" r="16" fill="#ffc98a"/><rect y="74" width="200" height="58" fill="#34445e"/>
+          <path d="M0 90 Q25 85 50 90 T100 90 T150 90 T200 90" stroke="#ffc98a" stroke-opacity=".5" fill="none"/>
+          <rect x="6" y="6" width="188" height="120" rx="4" fill="none" stroke="#fff" stroke-width="10"/><path d="M100 6V126" stroke="#fff" stroke-width="6"/>
+        </svg>
+        <div>
+          <h3>汐</h3>
+          <p>頂樓閣樓。傍晚坐在窗邊，看天色一路換到橘紅。</p>
+          <p class="facts">1 張雙人床加 2 張單人床　4 位　10 坪</p>
+        </div>
+        <div class="price"><b>NT$4,800</b><span>平日起</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="day" id="day">
+  <div class="wrap">
+    <h2>住一晚的時間表</h2>
+    <p class="sub">沒有行程要趕。想早起看日出，我們會在門外敲一下。</p>
+    <ol class="tl">
+      <li><time>15:00</time><div><strong>入住</strong><span>先喝杯冰茶，再回房間放行李。</span></div></li>
+      <li class="hl"><time>17:30</time><div><strong>看日落</strong><span>陽台和頂樓窗邊的位置最好，不用搶。</span></div></li>
+      <li><time>05:30</time><div><strong>日出前叫醒</strong><span>前一晚跟我們說一聲就好，不想起床也沒關係。</span></div></li>
+      <li><time>08:00</time><div><strong>早餐</strong><span>烤吐司、蛋、水果和熱飲，在一樓靠窗的位子吃。</span></div></li>
+      <li><time>11:00</time><div><strong>退房</strong><span>行李可以先放著，再去沙灘走一圈。</span></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="near">
+  <div class="wrap">
+    <h2>出門可以去哪</h2>
+    <p class="sub">都在頭城，騎車或開車都很近。</p>
+    <div class="near">
+      <div><b>外澳沙灘</b><span>步行 3 分鐘</span></div>
+      <div><b>烏石港</b><span>車程約 10 分鐘</span></div>
+      <div><b>頭城老街</b><span>車程約 10 分鐘</span></div>
+      <div><b>蘭陽博物館</b><span>車程約 10 分鐘</span></div>
+      <div><b>礁溪溫泉</b><span>車程約 20 分鐘</span></div>
+      <div><b>宜蘭火車站</b><span>車程約 30 分鐘</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="ask" id="ask">
+  <div class="wrap ask-grid">
+    <div>
+      <h2>想住哪天？先問問看</h2>
+      <p class="sub">選好日期和房型，按一下就會帶著這段訊息打開 LINE。不用先付款，我們看到後會回你有沒有空房。</p>
+      <p class="contact">想直接聊：<a href="tel:0900000000">0900-000-000</a><br>宜蘭縣頭城鎮外澳路 00 號</p>
+    </div>
+
+    <form id="askForm" novalidate>
+      <label>入住日期<input type="date" name="in" required></label>
+      <label>退房日期<input type="date" name="out" required></label>
+      <label>人數
+        <select name="n"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+      </label>
+      <label>房型
+        <select name="room"><option>都可以，幫我看</option><option>浪（雙人）</option><option>潮（四人）</option><option>汐（頂樓四人）</option></select>
+      </label>
+      <p class="err" id="err" role="alert"></p>
+      <div class="actions">
+        <button class="btn" type="submit">用 LINE 問空房</button>
+        <button class="btn ghost" type="button" id="copyBtn">複製訊息</button>
+      </div>
+      <div class="preview" id="preview" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>浪間 外澳海景民宿</span>
+    <span>這是範例頁，店名、地址和價格都是虛構的。</span>
+  </div>
+</footer>
+
+<script>
+/* ---- 換成真實資料就改這裡 ---- */
+const CFG = { shop:"浪間", line:"@your-line-id" };
+
+/* 看海時間 */
+const hero = document.getElementById("top");
+document.querySelectorAll(".seg button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    hero.dataset.t = b.dataset.t;
+    document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed", x===b));
+  });
+});
+
+/* 問空房 */
+const f = document.getElementById("askForm"), err = document.getElementById("err"), pv = document.getElementById("preview");
+const today = new Date(); today.setMinutes(today.getMinutes()-today.getTimezoneOffset());
+f.in.min = f.out.min = today.toISOString().slice(0,10);
+f.in.addEventListener("change",()=>{ f.out.min = f.in.value || f.in.min; if(f.out.value && f.out.value<=f.in.value) f.out.value=""; });
+
+function build(){
+  err.textContent = "";
+  if(!f.in.value || !f.out.value){ err.textContent = "請先選好入住和退房日期。"; return null; }
+  if(f.out.value <= f.in.value){ err.textContent = "退房日期要晚於入住日期。"; return null; }
+  const nights = Math.round((new Date(f.out.value)-new Date(f.in.value))/864e5);
+  return `您好，我想詢問「${CFG.shop}」的空房：\n入住：${f.in.value}\n退房：${f.out.value}（共 ${nights} 晚）\n人數：${f.n.value} 位\n房型：${f.room.value}\n麻煩回覆有沒有空房，謝謝。`;
+}
+f.addEventListener("submit",e=>{
+  e.preventDefault();
+  const msg = build(); if(!msg) return;
+  const demo = CFG.line === "@your-line-id";
+  pv.innerHTML = "<em>"+(demo?"範例頁：正式版會帶著下面這段訊息打開店家的 LINE":"已為你打開 LINE，下面是帶入的訊息")+"</em>"+msg.replace(/</g,"&lt;");
+  pv.classList.add("on");
+  if(!demo) window.open("https://line.me/R/oaMessage/"+encodeURIComponent(CFG.line)+"/?"+encodeURIComponent(msg),"_blank","noopener");
+});
+document.getElementById("copyBtn").addEventListener("click",async()=>{
+  const msg = build(); if(!msg) return;
+  try{ await navigator.clipboard.writeText(msg); err.style.color="#a8e6b5"; err.textContent="已複製，可以貼到任何訊息軟體。"; }
+  catch(_){ err.style.color=""; err.textContent="這個瀏覽器不能自動複製，請直接選取下方訊息。"; pv.innerHTML="<em>請手動複製</em>"+msg; pv.classList.add("on"); }
+  setTimeout(()=>{err.style.color="";},2500);
+});
+</script>
+</body>
+</html>
