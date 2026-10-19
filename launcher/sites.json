@@ -6,12 +6,17 @@
     "next": "11 月 2 日",
     "featured": "vscode",
     "fix": "新增 VS Code（vscode.dev）與 ShiftEdit 兩個網頁寫程式的工具，VS Code 當本期精選。首頁多了「官方群組」資料夾（Google、Microsoft），「我的捷徑」可以拖曳合成資料夾，上限提高到 90 個。另外新增免登入的開源網頁版 Office：CryptPad、EtherCalc、Univer，並收錄桌面版的 LibreOffice、ONLYOFFICE、Apache OpenOffice（官方下載頁）。",
-    "removed": []
+    "removed": [
+      {
+        "name": "Photopea",
+        "reason": "網站滿版廣告太重，影響使用體驗；空出來的位置之後放 KitLab 自己做的小組件"
+      }
+    ]
   },
   "defaultDock": [
     "squoosh",
     "excalidraw",
-    "photopea",
+    "vscode",
     "xbox",
     "gfn"
   ],
@@ -549,22 +554,6 @@
         "白板",
         "協作",
         "開源"
-      ]
-    },
-    {
-      "id": "photopea",
-      "name": "Photopea",
-      "dev": "Ivan Kutskir",
-      "kind": "PWA",
-      "icon": "icons/photopea.svg",
-      "color": "#18a497",
-      "url": "https://www.photopea.com",
-      "short": "網頁修圖",
-      "why": "一個人開發的網頁版修圖軟體，介面接近 Photoshop，能直接開 PSD、XCF、Sketch 檔。獨立開發者的傳奇作品。",
-      "tags": [
-        "修圖",
-        "PSD",
-        "獨立開發"
       ]
     },
     {
