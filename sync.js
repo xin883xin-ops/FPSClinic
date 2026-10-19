@@ -14,7 +14,7 @@
   "use strict";
   if (window.KitLabSync) return;
   var API = "/api";
-  var KEYS = ["sd_state_v3", "sd_look_v1", "kitlab-launcher-dock", "kitlab-dash-installed", "kitlab-dash-links", "kitlab-dash-links-col"];
+  var KEYS = ["sd_state_v3", "sd_look_v1", "kitlab-launcher-dock", "kitlab-dash-installed", "kitlab-dash-links", "kitlab-dash-links-col", "kitlab-dash-groups-col"];
   var CFG_KEY = "kitlab-sync";
   var A32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"; // Crockford Base32，不含 I L O U，抄寫不易出錯
   var te = new TextEncoder(), td = new TextDecoder();

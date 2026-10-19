@@ -102,14 +102,14 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
 .tagline{font-size:16px;color:var(--soft);padding:0 10px}
 
 .side{display:grid;grid-template-rows:auto auto minmax(0,1fr);gap:16px;min-height:0}
-.clockc{border-radius:30px;padding:22px 32px}
-.clock{font-family:var(--disp);font-weight:300;font-size:104px;line-height:.9;letter-spacing:-.04em;font-variant-numeric:tabular-nums;white-space:nowrap}
-.date{font-size:19px;color:var(--soft);margin-top:12px}
-.upd{border-radius:30px;padding:18px 30px;text-align:left;display:flex;flex-direction:column;gap:8px;min-height:0;transition:background .2s}
+.clockc{border-radius:30px;padding:16px 32px 18px}
+.clock{font-family:var(--disp);font-weight:300;font-size:84px;line-height:.9;letter-spacing:-.04em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.date{font-size:18px;color:var(--soft);margin-top:8px}
+.upd{border-radius:30px;padding:14px 30px;text-align:left;display:flex;flex-direction:column;gap:8px;min-height:0;transition:background .2s}
 .upd:hover,.upd:focus-visible{background:var(--glass2)}
 .upd .k{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--soft);letter-spacing:.06em}
 .upd .k b{width:8px;height:8px;border-radius:50%;background:var(--new);box-shadow:0 0 12px var(--new)}
-.upd h3{margin:0;font-family:var(--disp);font-weight:700;font-size:28px;letter-spacing:-.02em}
+.upd h3{margin:0;font-family:var(--disp);font-weight:700;font-size:26px;letter-spacing:-.02em}
 .upd .stack{display:flex;align-items:center;gap:8px}
 .upd .stack .ic,.upd .stack .mono{width:36px!important;height:36px!important;font-size:14px!important}
 .upd .stack .more{margin-left:8px;font-size:15px;color:var(--soft)}
@@ -224,6 +224,47 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
 .mlb .mladd{border:1.5px dashed var(--stroke)}
 .mlb .mladd i{width:44px;height:44px;border-radius:23%;display:grid;place-items:center;font-style:normal;font-size:24px;color:var(--soft);border:1.5px dashed var(--mute)}
 
+/* 官方群組：Android 式資料夾。方塊固定 2×2 預覽前四個，點開看全部（超過四個可捲動） */
+.lower{display:flex;flex-direction:column;gap:16px;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;touch-action:pan-y;margin:-4px;padding:4px}
+.lower::-webkit-scrollbar{display:none}
+.lower>section{flex:none}
+.mylinks{align-self:auto}
+.mlb{max-height:300px}
+.groups{border-radius:30px;padding:12px 22px 12px;display:flex;flex-direction:column}
+.groups.col .gb{display:none}
+.groups.col .arr{transform:rotate(-90deg)}
+.gb{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 8px;margin-top:10px}
+.fd{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:12px;color:var(--soft);min-width:0;border-radius:18px;padding:2px 0 4px}
+.fd .tile{width:64px;height:64px;border-radius:20px;background:var(--glass2);border:1px solid var(--stroke);padding:8px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:5px;transition:transform .15s,background .2s}
+.fd .tile>*{width:100%!important;height:100%!important;min-width:0;border-radius:23%;font-size:11px!important}
+.fd .tile .ic{object-fit:cover}
+.fd:hover .tile,.fd:focus-visible .tile{background:rgba(255,255,255,.16);transform:scale(1.05)}
+.fd .n{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fold{width:560px;max-height:620px;padding:28px 32px 30px}
+.fold .fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px 10px;overflow-y:auto;min-height:0;max-height:330px;padding:6px 4px 4px;scrollbar-width:thin;touch-action:pan-y}
+.fold .fi{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:14px;color:var(--soft);border-radius:18px;padding:8px 2px;min-width:0}
+.fold .fi:hover,.fold .fi:focus-visible{background:var(--glass);color:var(--fg)}
+.fold .fi span.n{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fold .fcnt{font-size:13px;color:var(--mute)}
+
+/* 我的捷徑的使用者資料夾與拖曳 */
+.mlb .ml{touch-action:none}
+.mlb .mf .tile{width:44px;height:44px;border-radius:15px;background:var(--glass2);border:1px solid var(--stroke);padding:5px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px}
+.mlb .mf .tile>*{width:100%!important;height:100%!important;border-radius:23%;font-size:8px!important}
+.ml.lifting{opacity:.25}
+.ml.mg{background:var(--glass2);box-shadow:0 0 0 2px var(--new) inset;transform:scale(1.1)}
+.ml.il{box-shadow:-5px 0 0 -1px var(--new)}.ml.ir{box-shadow:5px 0 0 -1px var(--new)}
+.ml{transition:transform .15s,background .15s}
+.dghost{position:absolute;z-index:30;pointer-events:none;transform:translate(-50%,-50%) scale(1.18);filter:drop-shadow(0 12px 22px rgba(0,0,0,.55));background:none!important;animation:none!important}
+.dghost .x{display:none!important}
+.fname{font:inherit;font-family:var(--disp);font-weight:700;font-size:28px;letter-spacing:-.02em;color:var(--fg);background:transparent;border:0;border-bottom:1.5px dashed var(--mute);outline:0;padding:0 0 2px;width:300px;max-width:100%}
+.fname:focus{border-bottom-color:var(--fg)}
+.fold .mb{font-size:14px;color:var(--soft);padding:8px 16px;border-radius:999px;background:var(--glass2);align-self:center}
+.fold .fi{position:relative}
+.fold .fgrid.edit .fi .x{display:block}
+.fold .fi .x{display:none;position:absolute;top:2px;right:8px;font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--fg);color:var(--ink)}
+.fold .fgrid.edit .fi{animation:wig .32s ease-in-out infinite alternate}
+
 .home>*,.dockw{animation:rise .6s cubic-bezier(.2,.8,.2,1) backwards}
 .side{animation-delay:.08s}.dockw{animation-delay:.16s}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -252,6 +293,13 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
           <div class="date" id="date"></div>
         </section>
         <button class="upd glass" id="updCard" data-nav></button>
+        <div class="lower" id="lower">
+        <section class="groups glass" id="groups" aria-label="官方群組" hidden>
+          <div class="mlh">
+            <button class="tt" id="gTog" data-nav aria-expanded="true"><svg class="arr" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>官方群組<small id="gCnt"></small></button>
+          </div>
+          <div class="gb" id="gb"></div>
+        </section>
         <section class="mylinks glass" id="mylinks" aria-label="我的捷徑">
           <div class="mlh">
             <button class="tt" id="mlTog" data-nav aria-expanded="true"><svg class="arr" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>我的捷徑<small id="mlCnt"></small></button>
@@ -260,6 +308,7 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
           </div>
           <div class="mlb" id="mlb"></div>
         </section>
+        </div>
       </div>
     </main>
 
@@ -334,6 +383,16 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
         <input id="fWeb" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
         <div class="sendrow"><button class="btn" type="submit" id="fSend" data-nav>送出</button><span>也可以直接 LINE 我們：<b id="lineId"></b></span></div>
       </form>
+    </div>
+
+    <div class="scrim" id="fold" hidden>
+      <div class="sheet fold glass" role="dialog" aria-modal="true" aria-labelledby="foldT">
+        <header>
+          <div><h2 id="foldT"></h2><input id="foldName" class="fname" maxlength="16" autocomplete="off" aria-label="資料夾名稱" hidden data-nav><div class="fcnt" id="foldSub"></div></div>
+          <span class="sp"></span><button class="mb" id="foldEdit" data-nav hidden>整理</button><button class="xbtn" data-back data-nav aria-label="關閉">×</button>
+        </header>
+        <div class="fgrid" id="fgrid"></div>
+      </div>
     </div>
 
     <div class="scrim" id="lnk" hidden>
@@ -457,33 +516,43 @@ $("#doneEdit").onclick = function () { setEdit(false); };
 renderDock();
 
 /* 我的捷徑：使用者自己加的網站（獨立存放，不連工具箱），可折疊，會跟著加密雲端同步 */
-var LINK_KEY = "kitlab-dash-links", LINK_COL = "kitlab-dash-links-col", links = (store.get(LINK_KEY) || []).filter(function (l) { return l && l.id && l.url && l.name; }), linkEdit = false;
+var LINK_KEY = "kitlab-dash-links", LINK_COL = "kitlab-dash-links-col", links = (store.get(LINK_KEY) || []).map(function (l) {
+    if (l && Array.isArray(l.items)) l.items = l.items.filter(function (x) { return x && x.id && x.url && x.name; });
+    return l;
+  }).filter(function (l) { return l && l.id && l.name && (l.url || (Array.isArray(l.items) && l.items.length)); }), linkEdit = false;
+function isF(l) { return !!(l && l.items); }
+function leaves() { var o = []; links.forEach(function (l) { o = isF(l) ? o.concat(l.items) : o.concat([l]); }); return o; }
+function topIdx(id) { for (var i = 0; i < links.length; i++) if (links[i].id === id) return i; return -1; }
 function saveLinks() { store.set(LINK_KEY, links); pushSync(); }
 function linkSite(l) {
   var h = ""; try { h = new URL(l.url).hostname; } catch (e) {}
   return { id: l.id, name: l.name, url: l.url, fav: 1, color: "#5FD3BC", icon: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + encodeURIComponent("https://" + h) + "&size=128" };
 }
 function renderLinks() {
-  var box = $("#mylinks"), col = !!store.get(LINK_COL);
+  var box = $("#mylinks"), col = !!store.get(LINK_COL), n = leaves().length;
   box.classList.toggle("col", col); box.classList.toggle("edit", linkEdit && !col);
   $("#mlTog").setAttribute("aria-expanded", String(!col));
-  $("#mlCnt").textContent = links.length ? links.length + " 個" : "";
+  $("#mlCnt").textContent = n ? n + " 個" : "";
   $("#mlEdit").hidden = col || !links.length; $("#mlEdit").textContent = linkEdit ? "完成" : "整理";
   $("#mlAdd").hidden = col;
   $("#mlb").innerHTML = (links.length ? links.map(function (l) {
+    if (isF(l)) return '<button class="ml mf" data-nav data-id="' + esc(l.id) + '" aria-label="' + esc(l.name) + '，資料夾，共 ' + l.items.length + ' 個"><span class="tile">' +
+      l.items.slice(0, 4).map(function (x) { return icon(linkSite(x), 18); }).join("") + '</span><span class="n">' + esc(l.name) + '</span></button>';
     return '<button class="ml" data-nav data-id="' + esc(l.id) + '" title="' + esc(l.url) + '">' + icon(linkSite(l), 44) + '<span class="n">' + esc(l.name) + '</span><span class="x" aria-hidden="true">−</span></button>';
-  }).join("") : '<div class="mlempty">還沒有捷徑。按「＋ 新增」把常用網站放在這裡。</div>');
+  }).join("") : '<div class="mlempty">還沒有捷徑。按「＋ 新增」把常用網站放在這裡；把一個圖示拖到另一個上面，就會合成資料夾。</div>');
   Array.prototype.forEach.call($("#mlb").querySelectorAll(".ml"), function (b) {
     b.onclick = function () {
-      if (linkEdit) { links = links.filter(function (x) { return x.id !== b.dataset.id; }); saveLinks(); if (!links.length) linkEdit = false; renderLinks(); }
-      else { var l = links.filter(function (x) { return x.id === b.dataset.id; })[0]; if (l) window.open(l.url, "_blank", "noopener"); }
+      var i = topIdx(b.dataset.id), l = links[i]; if (!l) return;
+      if (isF(l)) openUserFolder(l.id);
+      else if (linkEdit) { links.splice(i, 1); saveLinks(); if (!links.length) linkEdit = false; renderLinks(); }
+      else window.open(l.url, "_blank", "noopener");
     };
   });
 }
 $("#mlTog").onclick = function () { store.set(LINK_COL, !store.get(LINK_COL)); linkEdit = false; renderLinks(); };
 $("#mlEdit").onclick = function () { linkEdit = !linkEdit; renderLinks(); };
 $("#mlAdd").onclick = function () {
-  if (links.length >= 60) { toast("最多 60 個捷徑，先整理掉不用的吧"); return; }
+  if (leaves().length >= 90) { toast("最多 90 個捷徑，先整理掉不用的吧"); return; }
   $("#lUrl").value = ""; $("#lName").value = ""; $("#lErr").textContent = ""; show("lnk");
   setTimeout(function () { $("#lUrl").focus({ preventScroll: true }); }, 30);
 };
@@ -494,12 +563,133 @@ $("#lnkForm").addEventListener("submit", function (e) {
   if (!/^[a-z][a-z0-9+.-]*:/i.test(raw)) raw = "https://" + raw;
   try { u = new URL(raw); } catch (x) { $("#lErr").textContent = "網址看起來不對"; return; }
   if (u.protocol !== "https:" && u.protocol !== "http:") { $("#lErr").textContent = "只能加入 http 或 https 網址"; return; }
-  if (links.some(function (l) { return l.url === u.href; })) { $("#lErr").textContent = "這個網址已經在捷徑裡了"; return; }
+  if (leaves().some(function (l) { return l.url === u.href; })) { $("#lErr").textContent = "這個網址已經在捷徑裡了"; return; }
   var nm = $("#lName").value.trim() || u.hostname.replace(/^www\./, "");
   links.push({ id: "u" + Date.now().toString(36), name: nm.slice(0, 24), url: u.href, at: Date.now() });
   saveLinks(); back(); renderLinks(); toast("已加入「" + nm.slice(0, 24) + "」");
 });
 renderLinks();
+
+/* 拖曳整理（像 Android）：長按（或在「整理」模式直接）拖起圖示；疊在另一個圖示中央＝合成資料夾，放在兩側＝換位置 */
+var drag = null, ghost = null;
+function dropInfo(x, y) {
+  var el = document.elementFromPoint(x, y), t = el && el.closest ? el.closest("#mlb .ml") : null;
+  if (!t || t.dataset.id === drag.id) return null;
+  var r = t.getBoundingClientRect(), rx = (x - r.left) / r.width, dragF = isF(links[topIdx(drag.id)]);
+  var mode = (!dragF && rx > .22 && rx < .78) ? "merge" : (rx < .5 ? "before" : "after");
+  return { t: t, id: t.dataset.id, mode: mode };
+}
+function clearMarks() { Array.prototype.forEach.call($("#mlb").querySelectorAll(".mg,.il,.ir"), function (e) { e.classList.remove("mg", "il", "ir"); }); }
+function startDrag() {
+  drag.active = true; swiped = true; clearTimeout(drag.t);
+  var b = drag.b, r = b.getBoundingClientRect(), sc = scale();
+  ghost = b.cloneNode(true); ghost.className = "ml dghost" + (b.classList.contains("mf") ? " mf" : "");
+  ghost.style.width = (r.width / sc) + "px"; stage.appendChild(ghost); b.classList.add("lifting");
+  moveGhost(drag.x, drag.y);
+}
+function moveGhost(x, y) {
+  var sr = stage.getBoundingClientRect(), sc = scale();
+  ghost.style.left = ((x - sr.left) / sc) + "px"; ghost.style.top = ((y - sr.top) / sc) + "px";
+}
+function endDrag(commit, x, y) {
+  var d = drag, info = d && d.active && commit ? dropInfo(x, y) : null;
+  drag = null; if (d) clearTimeout(d.t);
+  if (ghost) { ghost.remove(); ghost = null; }
+  clearMarks();
+  if (!d || !d.active) return;
+  d.b.classList.remove("lifting");
+  if (!info) return;
+  var from = topIdx(d.id), item = links[from], to = topIdx(info.id), tgt = links[to];
+  if (!item || !tgt) return;
+  if (info.mode === "merge") {
+    links.splice(from, 1); to = topIdx(info.id);
+    if (isF(tgt)) tgt.items.push(item);
+    else links[to] = { id: "f" + Date.now().toString(36), name: "資料夾", items: [tgt, item], at: Date.now() };
+    saveLinks(); renderLinks();
+    if (!isF(tgt)) toast("已合成資料夾，點開可以改名", null);
+  } else {
+    links.splice(from, 1); to = topIdx(info.id); links.splice(info.mode === "after" ? to + 1 : to, 0, item);
+    saveLinks(); renderLinks();
+  }
+}
+$("#mlb").addEventListener("pointerdown", function (e) {
+  var b = e.target.closest(".ml"); if (!b || (e.button && e.button > 0)) return;
+  e.stopPropagation(); swiped = false;
+  drag = { id: b.dataset.id, b: b, x: e.clientX, y: e.clientY, active: false };
+  if (!linkEdit) drag.t = setTimeout(function () { if (drag && !drag.active) startDrag(); }, 450);
+});
+addEventListener("pointermove", function (e) {
+  if (!drag) return;
+  if (!drag.active) {
+    var d = Math.hypot(e.clientX - drag.x, e.clientY - drag.y);
+    if (linkEdit && d > 8) startDrag(); else if (!linkEdit && d > 12) { clearTimeout(drag.t); drag = null; }
+    if (!drag || !drag.active) return;
+  }
+  e.preventDefault(); moveGhost(e.clientX, e.clientY); clearMarks();
+  var info = dropInfo(e.clientX, e.clientY);
+  if (info) info.t.classList.add(info.mode === "merge" ? "mg" : (info.mode === "before" ? "il" : "ir"));
+});
+addEventListener("pointerup", function (e) { if (drag) endDrag(true, e.clientX, e.clientY); });
+addEventListener("pointercancel", function () { if (drag) endDrag(false); });
+
+/* 使用者資料夾：點開看全部、可改名；「整理」可把項目移出，只剩一個時資料夾自動解散 */
+var curF = null, foldEdit = false;
+function openUserFolder(id) { curF = id; foldEdit = false; fillUserFolder(); show("fold"); }
+function fillUserFolder() {
+  var i = topIdx(curF), f = links[i];
+  if (!f || !isF(f)) { if (topLayer() === "fold") back(); return; }
+  $("#foldT").hidden = true; $("#foldName").hidden = false; $("#foldName").value = f.name; $("#foldEdit").hidden = false; $("#foldEdit").textContent = foldEdit ? "完成" : "整理";
+  $("#foldSub").textContent = "共 " + f.items.length + " 個" + (f.items.length > 8 ? "，往下滑看更多" : "");
+  $("#fgrid").classList.toggle("edit", foldEdit);
+  $("#fgrid").innerHTML = f.items.map(function (it, j) {
+    return '<button class="fi" data-nav data-j="' + j + '" title="' + esc(it.url) + '">' + icon(linkSite(it), 64) + '<span class="n">' + esc(it.name) + '</span><span class="x" aria-hidden="true">移出</span></button>';
+  }).join("");
+  Array.prototype.forEach.call($("#fgrid").querySelectorAll(".fi"), function (b) {
+    b.onclick = function () {
+      var k = topIdx(curF), ff = links[k], it = ff && ff.items[+b.dataset.j]; if (!it) return;
+      if (!foldEdit) { window.open(it.url, "_blank", "noopener"); return; }
+      ff.items.splice(+b.dataset.j, 1); links.splice(k + 1, 0, it);
+      if (ff.items.length <= 1) { var rest = ff.items.slice(); links.splice(k, 1); Array.prototype.splice.apply(links, [k, 0].concat(rest)); saveLinks(); renderLinks(); back(); toast("資料夾只剩一個，已解散", null); return; }
+      saveLinks(); renderLinks(); fillUserFolder();
+    };
+  });
+}
+$("#foldEdit").onclick = function () { foldEdit = !foldEdit; fillUserFolder(); };
+$("#foldName").addEventListener("input", function () { var f = links[topIdx(curF)]; if (f) f.name = $("#foldName").value.slice(0, 16); });
+$("#foldName").addEventListener("change", function () { var f = links[topIdx(curF)]; if (f) { f.name = $("#foldName").value.trim().slice(0, 16) || "資料夾"; $("#foldName").value = f.name; saveLinks(); renderLinks(); } });
+
+/* 官方群組（資料在 sites.json 的 groups）：方塊預覽前四個，點開看全部；整區可折疊，狀態跟著同步 */
+var GROUPS = DATA.groups || [], GCOL = "kitlab-dash-groups-col";
+function gSite(g, it) {
+  var h = ""; try { h = new URL(it.url).hostname; } catch (e) {}
+  return { id: g.id + "-" + it.name, name: it.name, url: it.url, fav: 1, color: it.color || g.color || "#5FD3BC",
+    icon: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + encodeURIComponent(it.url) + "&size=128" };
+}
+function renderGroups() {
+  var box = $("#groups"); if (!GROUPS.length) { box.hidden = true; return; }
+  box.hidden = false;
+  var col = !!store.get(GCOL);
+  box.classList.toggle("col", col); $("#gTog").setAttribute("aria-expanded", String(!col));
+  $("#gCnt").textContent = GROUPS.length + " 個資料夾";
+  $("#gb").innerHTML = GROUPS.map(function (g, i) {
+    return '<button class="fd" data-nav data-i="' + i + '" aria-label="' + esc(g.name) + '，共 ' + g.items.length + ' 個"><span class="tile">' +
+      g.items.slice(0, 4).map(function (it) { return icon(gSite(g, it), 26); }).join("") + '</span><span class="n">' + esc(g.name) + '</span></button>';
+  }).join("");
+  Array.prototype.forEach.call($("#gb").querySelectorAll(".fd"), function (b) { b.onclick = function () { openFolder(+b.dataset.i); }; });
+}
+function openFolder(i) {
+  var g = GROUPS[i]; if (!g) return;
+  $("#foldT").hidden = false; $("#foldName").hidden = true; $("#foldEdit").hidden = true; $("#fgrid").classList.remove("edit");
+  $("#foldT").textContent = g.name; $("#foldSub").textContent = "共 " + g.items.length + " 個" + (g.items.length > 8 ? "，往下滑看更多" : "");
+  $("#fgrid").innerHTML = g.items.map(function (it, j) {
+    return '<button class="fi" data-nav data-j="' + j + '" title="' + esc(it.url) + '">' + icon(gSite(g, it), 64) + '<span class="n">' + esc(it.name) + '</span></button>';
+  }).join("");
+  Array.prototype.forEach.call($("#fgrid").querySelectorAll(".fi"), function (b) { b.onclick = function () { window.open(g.items[+b.dataset.j].url, "_blank", "noopener"); }; });
+  show("fold");
+  setTimeout(function () { var a = $("#fgrid .fi"); if (a) a.focus({ preventScroll: true }); }, 30);
+}
+$("#gTog").onclick = function () { store.set(GCOL, !store.get(GCOL)); renderGroups(); pushSync(); };
+renderGroups();
 
 /* 站點格：GNOME 式分頁 */
 var page = 0, pageCount = 1;

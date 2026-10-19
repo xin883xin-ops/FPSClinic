@@ -9,6 +9,142 @@
     "removed": []
   },
   "defaultDock": ["squoosh", "excalidraw", "photopea", "xbox", "gfn"],
+  "groups": [
+    {
+      "id": "google",
+      "name": "Google",
+      "color": "#4285F4",
+      "items": [
+        {
+          "name": "Gmail",
+          "url": "https://mail.google.com",
+          "color": "#EA4335"
+        },
+        {
+          "name": "雲端硬碟",
+          "url": "https://drive.google.com",
+          "color": "#1FA463"
+        },
+        {
+          "name": "文件",
+          "url": "https://docs.google.com/document/",
+          "color": "#4285F4"
+        },
+        {
+          "name": "試算表",
+          "url": "https://docs.google.com/spreadsheets/",
+          "color": "#0F9D58"
+        },
+        {
+          "name": "簡報",
+          "url": "https://docs.google.com/presentation/",
+          "color": "#F4B400"
+        },
+        {
+          "name": "日曆",
+          "url": "https://calendar.google.com",
+          "color": "#4285F4"
+        },
+        {
+          "name": "相簿",
+          "url": "https://photos.google.com",
+          "color": "#EA4335"
+        },
+        {
+          "name": "地圖",
+          "url": "https://maps.google.com",
+          "color": "#34A853"
+        },
+        {
+          "name": "YouTube",
+          "url": "https://www.youtube.com",
+          "color": "#FF0000"
+        },
+        {
+          "name": "Gemini",
+          "url": "https://gemini.google.com",
+          "color": "#7B6CF6"
+        },
+        {
+          "name": "Meet",
+          "url": "https://meet.google.com",
+          "color": "#00897B"
+        },
+        {
+          "name": "Keep",
+          "url": "https://keep.google.com",
+          "color": "#F4B400"
+        },
+        {
+          "name": "翻譯",
+          "url": "https://translate.google.com",
+          "color": "#4285F4"
+        }
+      ]
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft",
+      "color": "#0078D4",
+      "items": [
+        {
+          "name": "Outlook",
+          "url": "https://outlook.live.com",
+          "color": "#0078D4"
+        },
+        {
+          "name": "OneDrive",
+          "url": "https://onedrive.live.com",
+          "color": "#0A64AD"
+        },
+        {
+          "name": "Word",
+          "url": "https://www.office.com/launch/word",
+          "color": "#185ABD"
+        },
+        {
+          "name": "Excel",
+          "url": "https://www.office.com/launch/excel",
+          "color": "#107C41"
+        },
+        {
+          "name": "PowerPoint",
+          "url": "https://www.office.com/launch/powerpoint",
+          "color": "#C43E1C"
+        },
+        {
+          "name": "Teams",
+          "url": "https://teams.microsoft.com",
+          "color": "#5B5FC7"
+        },
+        {
+          "name": "OneNote",
+          "url": "https://www.onenote.com",
+          "color": "#7719AA"
+        },
+        {
+          "name": "Copilot",
+          "url": "https://copilot.microsoft.com",
+          "color": "#2B88D8"
+        },
+        {
+          "name": "To Do",
+          "url": "https://to-do.live.com",
+          "color": "#2564CF"
+        },
+        {
+          "name": "Bing",
+          "url": "https://www.bing.com",
+          "color": "#008373"
+        },
+        {
+          "name": "Microsoft 365",
+          "url": "https://www.office.com",
+          "color": "#D83B01"
+        }
+      ]
+    }
+  ],
   "sites": [
     { "id": "squoosh", "name": "Squoosh", "dev": "Google Chrome 團隊", "kind": "PWA", "icon": "icons/squoosh.png", "mask": true, "color": "#f78a3c",
       "url": "https://squoosh.app", "short": "圖片壓縮",
