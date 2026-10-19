@@ -60,6 +60,7 @@ a{color:inherit;text-decoration:none}
 .glass{background:var(--glass);border:1px solid var(--stroke);backdrop-filter:blur(30px) saturate(140%);-webkit-backdrop-filter:blur(30px) saturate(140%)}
 
 .ic{flex:none;display:block;object-fit:contain}
+.ic.rd{border-radius:23%}
 .ic.mask{border-radius:23%;object-fit:cover}
 .ic.fav{border-radius:23%;background:#fff;padding:13%;object-fit:contain}
 .mono{flex:none;display:grid;place-items:center;font-family:var(--disp);font-weight:700;color:var(--ink);border-radius:23%}
@@ -112,7 +113,7 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
 .upd h3{margin:0;font-family:var(--disp);font-weight:700;font-size:26px;letter-spacing:-.02em}
 .upd .stack{display:flex;align-items:center;gap:8px}
 .upd .stack .ic,.upd .stack .mono{width:36px!important;height:36px!important;font-size:14px!important}
-.upd .stack .more{margin-left:8px;font-size:15px;color:var(--soft)}
+.upd .stack .more{margin-left:8px;font-size:15px;color:var(--soft);white-space:nowrap;flex:none}
 .upd .rule{display:none}
 
 .dockw{display:flex;flex-direction:column;align-items:center;gap:8px;padding-bottom:20px}
@@ -233,7 +234,7 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
 .groups{border-radius:30px;padding:12px 22px 12px;display:flex;flex-direction:column}
 .groups.col .gb{display:none}
 .groups.col .arr{transform:rotate(-90deg)}
-.gb{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 8px;margin-top:10px}
+.gb{display:grid;grid-template-columns:repeat(6,1fr);gap:12px 4px;margin-top:10px}
 .fd{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:12px;color:var(--soft);min-width:0;border-radius:18px;padding:2px 0 4px}
 .fd .tile{width:64px;height:64px;border-radius:20px;background:var(--glass2);border:1px solid var(--stroke);padding:8px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:5px;transition:transform .15s,background .2s}
 .fd .tile>*{width:100%!important;height:100%!important;min-width:0;border-radius:23%;font-size:11px!important}
@@ -466,7 +467,7 @@ function icon(s, px, badge) {
     return badge ? '<span class="icw">' + fm + '<span class="mine">已安裝</span></span>' : fm;
   }
   var im = s.icon
-    ? '<img class="ic' + (s.mask ? " mask" : "") + '" src="' + esc(s.icon) + '" width="' + px + '" height="' + px + '" alt="" draggable="false">'
+    ? '<img class="ic' + (s.mask ? " mask" : "") + (/^icons\/brand\//.test(s.icon) ? " rd" : "") + '" src="' + esc(s.icon) + '" width="' + px + '" height="' + px + '" alt="" draggable="false">'
     : '<span class="mono" style="width:' + px + 'px;height:' + px + 'px;font-size:' + (px * .38) + 'px;background:' + esc(s.color) + '">' + esc(monoTxt(s)) + '</span>';
   return badge && s.isNew ? '<span class="icw">' + im + '<span class="badge">NEW</span></span>' : im;
 }
@@ -485,7 +486,7 @@ var added = OFFICIAL.filter(function (s) { return s.isNew; });
 $("#chipTxt").textContent = "第 " + R.no + " 期 · 已是最新";
 $("#updCard").innerHTML = '<div class="k"><b></b>官方更新 · ' + esc(R.date) + '</div>' +
   '<h3>第 ' + R.no + ' 期上架了</h3>' +
-  '<div class="stack">' + added.map(function (s) { return icon(s, 52); }).join("") + '<span class="more">' + (added.length ? "新增 " + added.length + " 個站點" : "本期以維護為主") + '</span></div>' +
+  '<div class="stack">' + added.slice(0, 5).map(function (s) { return icon(s, 52); }).join("") + '<span class="more">' + (added.length ? "新增 " + added.length + " 個站點" : "本期以維護為主") + '</span></div>' +
   '<div class="rule">共收錄 ' + OFFICIAL.length + ' 個站點，下一期預計 ' + esc(R.next) + '。點開看這期改了什麼。</div>';
 $("#updCard").onclick = $("#chipUpd").onclick = function () { openOta(); };
 
@@ -662,6 +663,7 @@ $("#foldName").addEventListener("change", function () { var f = links[topIdx(cur
 var GROUPS = DATA.groups || [], GCOL = "kitlab-dash-groups-col";
 function gSite(g, it) {
   var h = ""; try { h = new URL(it.url).hostname; } catch (e) {}
+  if (it.i) return { id: g.id + "-" + it.name, name: it.name, url: it.url, color: it.color || g.color || "#5FD3BC", icon: "icons/brand/" + it.i + ".svg" };
   return { id: g.id + "-" + it.name, name: it.name, url: it.url, fav: 1, color: it.color || g.color || "#5FD3BC",
     icon: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + encodeURIComponent(it.url) + "&size=128" };
 }

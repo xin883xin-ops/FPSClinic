@@ -29,67 +29,80 @@
         {
           "name": "Gmail",
           "url": "https://mail.google.com",
-          "color": "#EA4335"
+          "color": "#EA4335",
+          "i": "gmail"
         },
         {
           "name": "雲端硬碟",
           "url": "https://drive.google.com",
-          "color": "#1FA463"
+          "color": "#1FA463",
+          "i": "googledrive"
         },
         {
           "name": "文件",
           "url": "https://docs.google.com/document/",
-          "color": "#4285F4"
+          "color": "#4285F4",
+          "i": "googledocs"
         },
         {
           "name": "試算表",
           "url": "https://docs.google.com/spreadsheets/",
-          "color": "#0F9D58"
+          "color": "#0F9D58",
+          "i": "googlesheets"
         },
         {
           "name": "簡報",
           "url": "https://docs.google.com/presentation/",
-          "color": "#F4B400"
+          "color": "#F4B400",
+          "i": "googleslides"
         },
         {
           "name": "日曆",
           "url": "https://calendar.google.com",
-          "color": "#4285F4"
+          "color": "#4285F4",
+          "i": "googlecalendar"
         },
         {
           "name": "相簿",
           "url": "https://photos.google.com",
-          "color": "#EA4335"
+          "color": "#EA4335",
+          "i": "googlephotos"
         },
         {
           "name": "地圖",
           "url": "https://maps.google.com",
-          "color": "#34A853"
+          "color": "#34A853",
+          "i": "googlemaps"
         },
         {
           "name": "YouTube",
           "url": "https://www.youtube.com",
-          "color": "#FF0000"
+          "color": "#FF0000",
+          "i": "youtube"
         },
         {
           "name": "Gemini",
           "url": "https://gemini.google.com",
-          "color": "#7B6CF6"
+          "color": "#7B6CF6",
+          "i": "gemini"
         },
         {
           "name": "Meet",
           "url": "https://meet.google.com",
-          "color": "#00897B"
+          "color": "#00897B",
+          "i": "googlemeet"
         },
         {
           "name": "Keep",
           "url": "https://keep.google.com",
-          "color": "#F4B400"
+          "color": "#F4B400",
+          "i": "googlekeep"
         },
         {
           "name": "翻譯",
           "url": "https://translate.google.com",
-          "color": "#4285F4"
+          "color": "#4285F4",
+          "i": "googletranslate"
         }
       ]
     },
@@ -101,57 +114,68 @@
         {
           "name": "Outlook",
           "url": "https://outlook.live.com",
-          "color": "#0078D4"
+          "color": "#0078D4",
+          "i": "outlook"
         },
         {
           "name": "OneDrive",
           "url": "https://onedrive.live.com",
-          "color": "#0A64AD"
+          "color": "#0A64AD",
+          "i": "onedrive"
         },
         {
           "name": "Word",
           "url": "https://www.office.com/launch/word",
-          "color": "#185ABD"
+          "color": "#185ABD",
+          "i": "word"
         },
         {
           "name": "Excel",
           "url": "https://www.office.com/launch/excel",
-          "color": "#107C41"
+          "color": "#107C41",
+          "i": "excel"
         },
         {
           "name": "PowerPoint",
           "url": "https://www.office.com/launch/powerpoint",
-          "color": "#C43E1C"
+          "color": "#C43E1C",
+          "i": "powerpoint"
         },
         {
           "name": "Teams",
           "url": "https://teams.microsoft.com",
-          "color": "#5B5FC7"
+          "color": "#5B5FC7",
+          "i": "teams"
         },
         {
           "name": "OneNote",
           "url": "https://www.onenote.com",
-          "color": "#7719AA"
+          "color": "#7719AA",
+          "i": "onenote"
         },
         {
           "name": "Copilot",
           "url": "https://copilot.microsoft.com",
-          "color": "#2B88D8"
+          "color": "#2B88D8",
+          "i": "copilot"
         },
         {
           "name": "To Do",
           "url": "https://to-do.live.com",
-          "color": "#2564CF"
+          "color": "#2564CF",
+          "i": "todo"
         },
         {
           "name": "Bing",
           "url": "https://www.bing.com",
-          "color": "#008373"
+          "color": "#008373",
+          "i": "bing"
         },
         {
           "name": "Microsoft 365",
           "url": "https://www.office.com",
-          "color": "#D83B01"
+          "color": "#D83B01",
+          "i": "m365"
         }
       ]
     },
@@ -163,57 +187,68 @@
         {
           "name": "Facebook",
           "url": "https://www.facebook.com",
-          "color": "#1877F2"
+          "color": "#1877F2",
+          "i": "facebook"
         },
         {
           "name": "Instagram",
           "url": "https://www.instagram.com",
-          "color": "#E4405F"
+          "color": "#E4405F",
+          "i": "instagram"
         },
         {
           "name": "Threads",
           "url": "https://www.threads.com",
-          "color": "#101010"
+          "color": "#101010",
+          "i": "threads"
         },
         {
           "name": "X",
           "url": "https://x.com",
-          "color": "#101010"
+          "color": "#101010",
+          "i": "x"
         },
         {
           "name": "Discord",
           "url": "https://discord.com/app",
-          "color": "#5865F2"
+          "color": "#5865F2",
+          "i": "discord"
         },
         {
           "name": "Reddit",
           "url": "https://www.reddit.com",
-          "color": "#FF4500"
+          "color": "#FF4500",
+          "i": "reddit"
         },
         {
           "name": "Telegram",
           "url": "https://web.telegram.org",
-          "color": "#26A5E4"
+          "color": "#26A5E4",
+          "i": "telegram"
         },
         {
           "name": "WhatsApp",
           "url": "https://web.whatsapp.com",
-          "color": "#25D366"
+          "color": "#25D366",
+          "i": "whatsapp"
         },
         {
           "name": "LinkedIn",
           "url": "https://www.linkedin.com",
-          "color": "#0A66C2"
+          "color": "#0A66C2",
+          "i": "linkedin"
         },
         {
           "name": "Pinterest",
           "url": "https://www.pinterest.com",
-          "color": "#E60023"
+          "color": "#E60023",
+          "i": "pinterest"
         },
         {
           "name": "PTT 網頁版",
           "url": "https://term.ptt.cc",
-          "color": "#2d2d2d"
+          "color": "#2d2d2d",
+          "i": "ptt"
         }
       ]
     },
@@ -225,42 +260,50 @@
         {
           "name": "YouTube Music",
           "url": "https://music.youtube.com",
-          "color": "#FF0000"
+          "color": "#FF0000",
+          "i": "youtubemusic"
         },
         {
           "name": "Spotify",
           "url": "https://open.spotify.com",
-          "color": "#1DB954"
+          "color": "#1DB954",
+          "i": "spotify"
         },
         {
           "name": "KKBOX",
           "url": "https://play.kkbox.com",
-          "color": "#06C3FF"
+          "color": "#06C3FF",
+          "i": "kkbox"
         },
         {
           "name": "Apple Music",
           "url": "https://music.apple.com",
-          "color": "#FA243C"
+          "color": "#FA243C",
+          "i": "applemusic"
         },
         {
           "name": "SoundCloud",
           "url": "https://soundcloud.com",
-          "color": "#FF5500"
+          "color": "#FF5500",
+          "i": "soundcloud"
         },
         {
           "name": "Bandcamp",
           "url": "https://bandcamp.com",
-          "color": "#1DA0C3"
+          "color": "#1DA0C3",
+          "i": "bandcamp"
         },
         {
           "name": "Tidal",
           "url": "https://listen.tidal.com",
-          "color": "#101010"
+          "color": "#101010",
+          "i": "tidal"
         },
         {
           "name": "Deezer",
           "url": "https://www.deezer.com",
-          "color": "#A238FF"
+          "color": "#A238FF",
+          "i": "deezer"
         }
       ]
     },
@@ -272,62 +315,74 @@
         {
           "name": "YouTube",
           "url": "https://www.youtube.com",
-          "color": "#FF0000"
+          "color": "#FF0000",
+          "i": "youtube"
         },
         {
           "name": "Netflix",
           "url": "https://www.netflix.com",
-          "color": "#E50914"
+          "color": "#E50914",
+          "i": "netflix"
         },
         {
           "name": "Disney+",
           "url": "https://www.disneyplus.com",
-          "color": "#113CCF"
+          "color": "#113CCF",
+          "i": "disneyplus"
         },
         {
           "name": "Prime Video",
           "url": "https://www.primevideo.com",
-          "color": "#00A8E1"
+          "color": "#00A8E1",
+          "i": "primevideo"
         },
         {
           "name": "Twitch",
           "url": "https://www.twitch.tv",
-          "color": "#9146FF"
+          "color": "#9146FF",
+          "i": "twitch"
         },
         {
           "name": "bilibili",
           "url": "https://www.bilibili.com",
-          "color": "#00A1D6"
+          "color": "#00A1D6",
+          "i": "bilibili"
         },
         {
           "name": "巴哈姆特動畫瘋",
           "url": "https://ani.gamer.com.tw",
-          "color": "#00B4D8"
+          "color": "#00B4D8",
+          "i": "anigamer"
         },
         {
           "name": "愛奇藝",
           "url": "https://www.iq.com",
-          "color": "#00CC36"
+          "color": "#00CC36",
+          "i": "iqiyi"
         },
         {
           "name": "Max",
           "url": "https://www.max.com",
-          "color": "#002BE7"
+          "color": "#002BE7",
+          "i": "max"
         },
         {
           "name": "Apple TV+",
           "url": "https://tv.apple.com",
-          "color": "#101010"
+          "color": "#101010",
+          "i": "appletv"
         },
         {
           "name": "MyVideo",
           "url": "https://www.myvideo.net.tw",
-          "color": "#FF6B00"
+          "color": "#FF6B00",
+          "i": "myvideo"
         },
         {
           "name": "LINE TV",
           "url": "https://www.linetv.tw",
-          "color": "#06C755"
+          "color": "#06C755",
+          "i": "linetv"
         }
       ]
     },
@@ -339,42 +394,50 @@
         {
           "name": "ChatGPT",
           "url": "https://chatgpt.com",
-          "color": "#10A37F"
+          "color": "#10A37F",
+          "i": "chatgpt"
         },
         {
           "name": "Claude",
           "url": "https://claude.ai",
-          "color": "#D97757"
+          "color": "#D97757",
+          "i": "claude"
         },
         {
           "name": "Gemini",
           "url": "https://gemini.google.com",
-          "color": "#7B6CF6"
+          "color": "#7B6CF6",
+          "i": "gemini"
         },
         {
           "name": "Copilot",
           "url": "https://copilot.microsoft.com",
-          "color": "#0078D4"
+          "color": "#0078D4",
+          "i": "copilot"
         },
         {
           "name": "Perplexity",
           "url": "https://www.perplexity.ai",
-          "color": "#20808D"
+          "color": "#20808D",
+          "i": "perplexity"
         },
         {
           "name": "DeepSeek",
           "url": "https://chat.deepseek.com",
-          "color": "#4D6BFE"
+          "color": "#4D6BFE",
+          "i": "deepseek"
         },
         {
           "name": "Grok",
           "url": "https://grok.com",
-          "color": "#101010"
+          "color": "#101010",
+          "i": "grok"
         },
         {
           "name": "NotebookLM",
           "url": "https://notebooklm.google.com",
-          "color": "#4285F4"
+          "color": "#4285F4",
+          "i": "notebooklm"
         }
       ]
     }
@@ -394,7 +457,8 @@
         "程式編輯",
         "GitHub",
         "免安裝"
-      ]
+      ],
+      "icon": "icons/brand/vscode.svg"
     },
     {
       "id": "shiftedit",
@@ -410,7 +474,8 @@
         "網頁開發",
         "FTP",
         "終端機"
-      ]
+      ],
+      "icon": "icons/brand/shiftedit.svg"
     },
     {
       "id": "cryptpad",
@@ -429,7 +494,8 @@
         "簡報",
         "免登入",
         "開源"
-      ]
+      ],
+      "icon": "icons/brand/cryptpad.svg"
     },
     {
       "id": "ethercalc",
@@ -446,7 +512,8 @@
         "免登入",
         "開源",
         "多人協作"
-      ]
+      ],
+      "icon": "icons/brand/ethercalc.svg"
     },
     {
       "id": "univer",
@@ -464,7 +531,8 @@
         "文件",
         "簡報",
         "開源"
-      ]
+      ],
+      "icon": "icons/brand/univer.svg"
     },
     {
       "id": "libreoffice",
@@ -484,7 +552,8 @@
         "免費",
         "開源",
         "下載"
-      ]
+      ],
+      "icon": "icons/brand/libreoffice.svg"
     },
     {
       "id": "onlyoffice",
@@ -503,7 +572,8 @@
         "簡報",
         "開源",
         "下載"
-      ]
+      ],
+      "icon": "icons/brand/onlyoffice.svg"
     },
     {
       "id": "openoffice",
@@ -520,7 +590,8 @@
         "免費",
         "開源",
         "下載"
-      ]
+      ],
+      "icon": "icons/brand/openoffice.svg"
     },
     {
       "id": "squoosh",
