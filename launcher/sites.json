@@ -5,7 +5,7 @@
     "date": "10 月 19 日",
     "next": "11 月 2 日",
     "featured": "vscode",
-    "fix": "新增 VS Code（vscode.dev）與 ShiftEdit 兩個網頁寫程式的工具，VS Code 當本期精選。首頁多了「官方群組」資料夾（Google、Microsoft），「我的捷徑」可以拖曳合成資料夾，上限提高到 90 個。另外新增免登入的開源網頁版 Office：CryptPad、EtherCalc、Univer。",
+    "fix": "新增 VS Code（vscode.dev）與 ShiftEdit 兩個網頁寫程式的工具，VS Code 當本期精選。首頁多了「官方群組」資料夾（Google、Microsoft），「我的捷徑」可以拖曳合成資料夾，上限提高到 90 個。另外新增免登入的開源網頁版 Office：CryptPad、EtherCalc、Univer，並收錄桌面版的 LibreOffice、ONLYOFFICE、Apache OpenOffice（官方下載頁）。",
     "removed": []
   },
   "defaultDock": [
@@ -236,6 +236,62 @@
         "文件",
         "簡報",
         "開源"
+      ]
+    },
+    {
+      "id": "libreoffice",
+      "name": "LibreOffice",
+      "dev": "The Document Foundation",
+      "kind": "桌面軟體",
+      "color": "#18a303",
+      "isNew": true,
+      "url": "https://www.libreoffice.org/",
+      "short": "免費開源的完整 Office",
+      "why": "免費、開源的完整辦公套件：Writer（文書）、Calc（試算表）、Impress（簡報）、Draw、Base。能開關 Word、Excel、PowerPoint 檔，支援繁體中文。這是安裝在電腦上的軟體，到官網下載即可，不用登入。",
+      "tags": [
+        "Office",
+        "文書",
+        "試算表",
+        "簡報",
+        "免費",
+        "開源",
+        "下載"
+      ]
+    },
+    {
+      "id": "onlyoffice",
+      "name": "ONLYOFFICE",
+      "dev": "Ascensio System SIA",
+      "kind": "桌面軟體",
+      "color": "#ff6f3d",
+      "isNew": true,
+      "url": "https://www.onlyoffice.com/desktop",
+      "short": "介面最像 Microsoft Office",
+      "why": "桌面版免費、開源，介面最接近 Microsoft Office，開 docx、xlsx、pptx 的排版相容度高。官網另有網頁版編輯器，但網頁版要註冊帳號，免登入請用桌面版。",
+      "tags": [
+        "Office",
+        "文書",
+        "試算表",
+        "簡報",
+        "開源",
+        "下載"
+      ]
+    },
+    {
+      "id": "openoffice",
+      "name": "Apache OpenOffice",
+      "dev": "Apache Software Foundation",
+      "kind": "桌面軟體",
+      "color": "#0e85cd",
+      "isNew": true,
+      "url": "https://www.openoffice.org/",
+      "short": "老牌免費 Office",
+      "why": "歷史最久的免費開源辦公套件，包含文書、試算表、簡報。更新比 LibreOffice 慢，只想要基本功能的老電腦可以考慮，新電腦建議直接用 LibreOffice。",
+      "tags": [
+        "Office",
+        "免費",
+        "開源",
+        "下載"
       ]
     },
     {
