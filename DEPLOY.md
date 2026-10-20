@@ -71,3 +71,15 @@ curl -X DELETE -H "Authorization: Bearer $T" $API/v1/admin/apps/506          # �
 ## 重新匯入整份目錄
 
 `worker/schema.sql` 會重建 `categories`、`apps`、`hero`、`meta`，但不會動 `feedback`（回報）和 `vaults`（同步資料）。執行 `npm run db:init` 即可。
+
+## 點餐收銀機（/pos/）
+
+離線優先的網頁 App：客人自助點餐、櫃檯接單收款、報表與備份。資料都存在店家那台裝置的瀏覽器裡，伺服器只負責提供檔案，沒有資料庫。
+
+- 網址：`https://kitlab.store/pos/`（頁面目前加了 `noindex`，等有銷售頁再開放搜尋）。
+- 改了 `pos/` 裡任何檔案後，把 `pos/sw.js` 的 `VERSION` 加 1，店家的裝置下次有網路時就會更新。
+- 啟用碼用橢圓曲線簽章，App 裡只放公鑰，離線就能驗證。發碼：`node tools/pos-license.mjs "店名"`。私鑰在 `~/.kitlab/pos-private.jwk`，**不要放進 git，也要另外備份**；弄丟了就沒辦法再發碼（`--init` 可以重做一對，但舊的碼全部失效）。
+- 發出去的連結 `https://kitlab.store/pos/#key=KL1.…`，店家點開就自動啟用。
+- 試用版：功能完整，每天最多 20 筆訂單（`pos/core.js` 的 `DEMO_LIMIT`）。
+- 不開立發票。這點已寫在第一次設定畫面和「設定 → 關於」。
+- 同一台裝置開兩個視窗（一個客人畫面、一個 `…/pos/#staff` 收銀畫面）會即時同步；兩台不同的裝置還不能同步，是下一版的工作。
