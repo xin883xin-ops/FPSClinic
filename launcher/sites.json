@@ -5,7 +5,7 @@
     "date": "10 月 19 日",
     "next": "11 月 2 日",
     "featured": "vscode",
-    "fix": "新增 VS Code（vscode.dev）與 ShiftEdit 兩個網頁寫程式的工具，VS Code 當本期精選。首頁多了「官方群組」資料夾（Google、Microsoft），「我的捷徑」可以拖曳合成資料夾，上限提高到 90 個。另外新增免登入的開源網頁版 Office：CryptPad、EtherCalc、Univer，並收錄桌面版的 LibreOffice、ONLYOFFICE、Apache OpenOffice（官方下載頁）。",
+    "fix": "新增 VS Code（vscode.dev）與 ShiftEdit 兩個網頁寫程式的工具，VS Code 當本期精選。首頁多了「官方群組」資料夾（Google、Microsoft），「我的捷徑」可以拖曳合成資料夾，上限提高到 90 個。另外新增免登入的開源網頁版 Office：CryptPad、EtherCalc、Univer，並收錄桌面版的 LibreOffice、ONLYOFFICE、Apache OpenOffice（官方下載頁）。 另外加入 KitLab 自己做的「點餐收銀機」（離線可用的小店點餐與收銀系統，可免費試用）。",
     "removed": [
       {
         "name": "Photopea",
@@ -755,6 +755,25 @@
         "API",
         "開發",
         "開源"
+      ]
+    },
+    {
+      "id": "kitlab-pos",
+      "name": "KitLab 點餐收銀機",
+      "dev": "KitLab 官方",
+      "kind": "PWA",
+      "icon": "icons/kitlab-pos.png",
+      "mask": true,
+      "color": "#F2B632",
+      "isNew": true,
+      "url": "https://kitlab.store/pos/",
+      "short": "小店點餐收銀，離線可用",
+      "why": "給小店用的點餐機：客人在平板上滑動轉盤自己點餐，店員在收銀畫面接單、收款、叫號，一天結束看報表。第一次連網打開後，沒有網路也能用，菜單和訂單只存在自己的裝置。試用版每天 20 筆訂單，正式營業請聯繫 KitLab 購買。",
+      "tags": [
+        "小店",
+        "離線可用",
+        "點餐",
+        "收銀"
       ]
     }
   ]

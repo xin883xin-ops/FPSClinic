@@ -1,6 +1,6 @@
 /* KitLab 商店 service worker：離線可看已載入過的頁面。
    改了頁面或樣式後，把下面的版本號加 1，使用者下次開啟就會更新。 */
-const VERSION = "v17";
+const VERSION = "v18";
 const CACHE = "skillstore-" + VERSION;
 const CORE = [
   "./", "index.html", "terms.html", "store.css", "style.css", "main.js", "side.html", "fpsclinic.html", "images/lol-demo.jpg", "manifest.webmanifest",
@@ -11,7 +11,7 @@ const CORE = [
   "launcher/icons/app-192.png", "launcher/icons/app-512.png", "launcher/icons/app-apple-touch.png",
   "launcher/icons/squoosh.png", "launcher/icons/excalidraw.png", "launcher/icons/photopea.svg", "launcher/icons/tldraw.png",
   "launcher/icons/pairdrop.png", "launcher/icons/svgomg.png", "launcher/icons/xbox.svg", "launcher/icons/nvidia.svg",
-  "launcher/icons/drawio.png", "launcher/icons/hoppscotch.png"
+  "launcher/icons/drawio.png", "launcher/icons/hoppscotch.png", "launcher/icons/kitlab-pos.png"
 ];
 
 self.addEventListener("install", (e) => {
