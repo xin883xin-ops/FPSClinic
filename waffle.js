@@ -9,7 +9,6 @@
     { n: "KitLab 商店", u: "", ic: "icons/icon-192.png" },
     { n: "Dash 啟動台", u: "launcher/", ic: "launcher/icons/app-192.png" },
     { n: "點餐收銀機", u: "pos/about.html", ic: "pos/icons/icon-192.png" },
-    { n: "一頁式網頁", u: "site199/", data: G("#12957F", '<g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="24" width="56" height="48" rx="6"/><path d="M20 38h56M32 52h32M32 61h20"/></g>') },
     { n: "驅動檢查備份", u: "drivers/", data: G("#1B3A44", '<g fill="none" stroke="#5FD3BC" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><rect x="18" y="26" width="60" height="30" rx="6"/><path d="M48 56v14M34 72h28M30 41h8M46 41h20"/></g>') },
     { n: "遊戲效能優化", u: "fpsclinic.html", data: G("#14323A", '<path d="M14 50h18l9-24 12 46 9-22h20" fill="none" stroke="#5FD3BC" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>') }
   ];

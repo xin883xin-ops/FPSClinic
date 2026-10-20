@@ -33,6 +33,12 @@
           "icon": "icons/kitlab-pos.png"
         },
         {
+          "name": "驅動檢查備份",
+          "url": "https://kitlab.store/drivers/",
+          "color": "#5FD3BC",
+          "icon": "icons/kitlab-drivers.svg"
+        },
+        {
           "name": "KitLab 商店",
           "url": "https://kitlab.store/",
           "color": "#5FD3BC",
