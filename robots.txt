@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /side.html
+
+Sitemap: https://kitlab.store/sitemap.xml
