@@ -95,7 +95,8 @@ if (chan) chan.onmessage = e => listeners.forEach(f => { try { f(e.data.type, e.
 /* ---------- 設定與菜單 ---------- */
 P.defaults = () => ({
   setupDone: false, shop: "我的小店", accent: "#ffcf4a", pinHash: "", pinSalt: "",
-  idleSec: 90, lastBackup: 0, created: Date.now()
+  idleSec: 90, lastBackup: 0, created: Date.now(),
+  autoFullscreen: true, keepAwake: true, boots: 0, firstBoot: 0
 });
 P.settings = P.defaults();
 P.menu = { cats: [], items: [] };
@@ -240,6 +241,24 @@ P.download = (name, text, type = "application/json") => {
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
 };
 
+/* ---------- 營業模式：全螢幕、螢幕恆亮 ---------- */
+P.isFullscreen = () => !!document.fullscreenElement || matchMedia("(display-mode: fullscreen)").matches;
+P.goFullscreen = () => {
+  const el = document.documentElement;
+  if (document.fullscreenElement || !el.requestFullscreen) return;
+  try { const r = el.requestFullscreen({ navigationUI: "hide" }); if (r && r.catch) r.catch(() => {}); } catch (_) {}
+};
+P.exitFullscreen = () => { try { if (document.fullscreenElement) document.exitFullscreen(); } catch (_) {} };
+let _wake = null;
+P.keepAwake = async () => {
+  try {
+    if (!P.settings.keepAwake || !navigator.wakeLock || document.visibilityState !== "visible") return;
+    if (_wake && !_wake.released) return;
+    _wake = await navigator.wakeLock.request("screen");
+  } catch (_) {}
+};
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") P.keepAwake(); });
+
 /* ---------- 啟動 ---------- */
 P.init = async () => {
   _db = await openDB();
@@ -249,6 +268,10 @@ P.init = async () => {
   if (m && Array.isArray(m.items)) P.menu = m;
   const lic = await P.kvGet("license");
   if (lic && lic.code) P.license = await P.verifyCode(lic.code);
+  // 累計啟動次數：如果營業模式每天重開後這個數字又從 1 開始，代表瀏覽器沒有保留資料
+  P.settings.boots = (P.settings.boots || 0) + 1;
+  if (!P.settings.firstBoot) P.settings.firstBoot = Date.now();
+  try { await P.saveSettings(); } catch (_) {}
   P.applyAccent();
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (_) {}
 };

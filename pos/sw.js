@@ -1,6 +1,6 @@
 /* KitLab 點餐收銀機 service worker：把整個 App 存在裝置裡，沒有網路也能開。
    改了任何檔案後，把 VERSION 加 1，裝置下次有網路時就會自動更新。 */
-const VERSION = "pos-v1";
+const VERSION = "pos-v2";
 const CORE = [
   "./", "index.html", "pos.css", "art.js", "core.js", "ui.js", "kiosk.js", "staff.js", "app.js",
   "manifest.webmanifest", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-180.png", "icons/icon-maskable-512.png"

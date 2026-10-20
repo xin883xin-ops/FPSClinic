@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>點餐收銀機・離線也能用｜KitLab 商店</title>
+<meta name="description" content="客人自助點餐、櫃檯接單收款、當日報表，裝在店裡的平板或電腦上，沒有網路也能用。買斷不收月費，資料只存在你的裝置。">
+<meta property="og:title" content="點餐收銀機・離線也能用｜KitLab 商店">
+<meta property="og:description" content="客人自己點，沒網路也能用。買斷不收月費，菜單和訂單只存在你自己的裝置。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="preview.jpg">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<meta name="theme-color" content="#0B141A">
+<!--
+  點餐收銀機的商品頁（KitLab 商店裡的技能包）。
+  App 本體在 /pos/，這頁只是介紹。
+-->
+<style>
+  .s-hero .shot { margin-top: 56px; border-radius: 22px; overflow: hidden; box-shadow: 0 40px 80px -30px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.08); }
+  .s-hero .shot img { width: 100%; height: auto; }
+  .s-hero .acts { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .s-hero .free { display: inline-flex; align-items: center; gap: 8px; font-size: .95rem; color: #C3D2DA; }
+  .s-hero .free b { width: 8px; height: 8px; border-radius: 50%; background: #FFCF4A; box-shadow: 0 0 10px #FFCF4A; }
+  .facts { margin-top: -48px; }
+  .how-list { margin: 0; padding-left: 1.2em; }
+  .how-list li { margin-bottom: 6px; }
+  .warn-box { margin-top: 18px; padding: 16px 20px; border: 1px dashed #D9A441; border-radius: var(--radius); background: #FFF8E6; color: #5B4310; font-size: .96rem; }
+  .warn-box b { color: #3E2D07; }
+</style>
+<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="KitLab 商店 首頁">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0B1620"/><rect x="6" y="6" width="9" height="9" rx="2.5" fill="#5FD3BC"/><rect x="17" y="6" width="9" height="9" rx="2.5" fill="#fff"/><rect x="6" y="17" width="9" height="9" rx="2.5" fill="#fff"/><rect x="17" y="17" width="9" height="9" rx="2.5" fill="#fff" fill-opacity=".4"/></svg>
+      <b>KitLab 商店</b>
+    </a>
+    <a class="btn small" href="./" style="margin-left:auto">試用</a>
+  </div>
+</header>
+
+<main>
+
+<section class="s-hero">
+  <div class="wrap">
+    <p class="crumb"><a href="../">KitLab 商店</a> › 小店工具 › 點餐收銀機</p>
+    <h1>客人自己點，<br><em>沒網路也能用。</em></h1>
+    <p class="sub"><b style="color:#fff">KitLab 點餐收銀機</b>把「客人自助點餐」和「櫃檯接單收款」放在同一個網頁 App 裡。第一次連網打開，之後沒有網路也能開；菜單和訂單只存在你自己的平板或電腦裡，不會傳到我們的伺服器。</p>
+    <div class="price-big"><b>試用免費</b><span>買斷不收月費・價格待公布</span></div>
+    <div class="acts">
+      <a class="btn light" href="./">馬上試用</a>
+      <a class="btn outline-light line-link" href="#ask">加 LINE 詢問</a>
+      <span class="free"><b></b><span>試用版功能完整，每天 20 筆訂單</span></span>
+    </div>
+    <p class="by">提供者 KitLab 官方
+      <span class="tick" title="已通過審核"><svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5l2.5 2.5L10 3.5"/></svg></span>
+      官方技能包
+    </p>
+    <a class="shot" href="./" aria-label="試用點餐收銀機" style="display:block"><img src="preview.jpg" width="1600" height="800" alt="點餐畫面：左邊是大張的菜色圖，右邊是可以滑動的菜單轉盤，下方是購物車和送出鈕"></a>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="facts">
+    <div class="fact"><b>不用網路</b><span>第一次連網打開後，離線也能用</span></div>
+    <div class="fact"><b>買斷</b><span>不收月費，價格待公布</span></div>
+    <div class="fact"><b>0 筆上傳</b><span>菜單與訂單只存在你的裝置</span></div>
+    <div class="fact"><b>20 筆／天</b><span>試用版上限，供評估使用</span></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="head rv"><div><h2>怎麼用</h2><p>一台平板或電腦就夠。小店用起來不需要學。</p></div></div>
+    <ol class="flow">
+      <li class="rv"><h3>設定店名和密碼</h3><p>用瀏覽器打開，輸入店名、設一組店員密碼，先載入示範菜單或從空白開始。</p></li>
+      <li class="rv"><h3>建立你的菜單</h3><p>加上餐點、價格、分類和照片。賣完的按一下就標示「售完」，客人畫面會自動變灰。</p></li>
+      <li class="rv"><h3>放在櫃檯，客人自己點</h3><p>客人選內用或外帶，滑動轉盤挑餐點，點完拿到一個大號碼。閒置一段時間會自動回到開始畫面。</p></li>
+      <li class="rv"><h3>店員接單、收款、看報表</h3><p>在收銀畫面看新訂單、收款算找零、叫號出餐，一天結束看營收和最熱門的餐點，匯出 Excel。</p></li>
+    </ol>
+    <p class="rv" style="margin-top:18px;color:var(--muted);font-size:.92rem">也能由店員代客點餐：收銀畫面按「代客點餐」就用同一套轉盤介面。</p>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="wrap">
+    <div class="rv">
+      <h2>網路不穩的地方，<br>生意不用停。</h2>
+    </div>
+    <div class="rv">
+      <p>夜市攤位、山上的店、地下室、展覽會場，訊號常常時有時無。多數雲端點餐系統一斷線就卡住。這個 App 把整套介面存在你的裝置裡，斷線時照常點餐、收款。</p>
+      <p style="color:var(--muted);font-size:.95rem;margin:0">資料不經過我們的伺服器，所以也沒有每月的伺服器費要你分攤。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head rv"><div><h2>變成店裡的專用機</h2><p>開機就自動進入點餐畫面、全螢幕、不休眠，客人不會不小心關掉。完整步驟在 App 的「設定 → 營業模式」，這裡先講重點。</p></div></div>
+    <div class="terms">
+      <div class="term rv"><h3>Windows 電腦（家用版也行）</h3>
+        <ol class="how-list">
+          <li>用 Chrome 建一個捷徑，加上 <code>--kiosk</code> 和專用資料夾的參數，打開就是全螢幕。</li>
+          <li>把捷徑放進 <code>shell:startup</code>，開機自動啟動。</li>
+          <li>設定自動登入、螢幕和睡眠都選「永不」。</li>
+        </ol>
+      </div>
+      <div class="term rv"><h3>Windows 鎖定成單一畫面</h3>
+        <ul>
+          <li>Windows 專業版、企業版、教育版可以用「資訊站（Kiosk）」模式，只能開指定的程式，被關掉會自動重開。</li>
+          <li>家用版沒有這個功能。</li>
+        </ul>
+      </div>
+      <div class="term rv"><h3>Android 平板</h3>
+        <ul>
+          <li>用 Chrome 加到主畫面，從圖示開，就是全螢幕。</li>
+          <li>用系統的「螢幕固定」把它鎖在這個 App。</li>
+        </ul>
+      </div>
+      <div class="term rv"><h3>iPad</h3>
+        <ul>
+          <li>用 Safari 加入主畫面，從圖示開。</li>
+          <li>用「引導使用模式」鎖在這個 App，自動鎖定設成「永不」。</li>
+        </ul>
+      </div>
+    </div>
+    <p class="warn-box rv"><b>先測資料會不會保留。</b>Microsoft Edge 的營業模式是以無痕（InPrivate）方式執行，官方文件沒有說明關掉後資料會不會留下。因為菜單和訂單都存在瀏覽器裡，請先做測試：點一張單，重開機，看單還在不在。App 的「設定 → 營業模式」有「啟動次數」可以檢查。</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head rv"><div><h2>運作方式，寫清楚</h2><p>誰負責什麼，先講明白。</p></div></div>
+    <div class="terms">
+      <div class="term rv"><h3>它可以做到</h3>
+        <ul>
+          <li>客人自助點餐：內用、外帶、備註、號碼單。</li>
+          <li>櫃檯接單、收現金算找零、叫號、取消與還原。</li>
+          <li>菜單管理：照片、分類、售完標示。</li>
+          <li>今日與區間報表，匯出 Excel 明細，下載備份檔。</li>
+          <li>沒有網路時照常使用。</li>
+        </ul>
+      </div>
+      <div class="term rv"><h3>目前沒有</h3>
+        <ul>
+          <li>不開立發票，也不接信用卡或行動支付，收款是現金。</li>
+          <li>客人機和收銀機兩台不同的裝置，還不能互相同步。</li>
+          <li>熱感應出單機：目前用系統列印。</li>
+          <li>會員、庫存、多分店。</li>
+        </ul>
+      </div>
+      <div class="term rv"><h3>你要自己做的</h3>
+        <ul>
+          <li>是否需要開立發票、怎麼開，請依法自行處理。</li>
+          <li>每週下載一次備份檔，存到別的地方。資料只在你的裝置上，裝置壞了或清掉瀏覽器資料就沒了。</li>
+          <li>準備一個備案（例如紙本單），機器壞掉時生意不要停。</li>
+        </ul>
+      </div>
+      <div class="term rv"><h3>試用版</h3>
+        <ul>
+          <li>功能完整，每天最多 20 筆訂單，供評估使用。</li>
+          <li>單號小條與報表會印上「試用版」。</li>
+          <li>正式營業請購買啟用，購買後會拿到啟用碼或啟用連結。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap" style="max-width:860px">
+    <div class="head rv"><div><h2>常見問題</h2></div></div>
+    <details><summary>需要一直連網路嗎？</summary><p>不用。第一次要連網打開網址，把 App 存進裝置。之後沒有網路也能開和使用。有網路時，App 會在背景檢查有沒有新版本。</p></details>
+    <details><summary>我的菜單和訂單存在哪裡？</summary><p>存在你正在使用的那台裝置的瀏覽器裡，不會傳到我們的伺服器。好處是隱私和不用付伺服器費；代價是裝置壞掉資料就沒了，所以請定期下載備份檔。</p></details>
+    <details><summary>可以兩台裝置一起用嗎？</summary><p>同一台裝置開兩個視窗（一個客人畫面、一個收銀畫面）可以即時同步。兩台不同的裝置還不能同步，這是之後要做的。目前小店可以用一台平板：客人下單時會響一聲，店員點右下角的「店員」輸入密碼進入收銀畫面。</p></details>
+    <details><summary>可以在試用版就開始營業嗎？</summary><p>試用版是給你評估用的，功能完整但每天最多 20 筆訂單，也會印上「試用版」。要正式營業，請購買啟用。</p></details>
+    <details><summary>能開發票或刷卡嗎？</summary><p>目前不行。本系統不開立發票，是否需要開立、如何開立，請店家依法自行處理。收款只支援現金，也就是記錄收了多少、找多少。</p></details>
+    <details><summary>支援哪些裝置？</summary><p>有現代瀏覽器的平板、電腦、手機都可以：Chrome（Windows、Android）、Edge、Safari（iPad）。建議用 10 吋左右的平板當客人點餐機。</p></details>
+    <details><summary>怎麼購買？</summary><p>目前請加 LINE 告訴我們你的店。確認需求後會給你啟用碼，也可以幫你把菜單建好。</p></details>
+  </div>
+</section>
+
+<section class="cta" id="ask">
+  <div class="wrap">
+    <div>
+      <h2>先試試看</h2>
+      <p style="margin:8px 0 0;color:#33545B">想買斷、想請我們幫你建好菜單，或有想要的功能，加 LINE 告訴我們。</p>
+      <p class="lineid">LINE ID：<span class="line-id">xin883xin</span></p>
+    </div>
+    <a class="btn" href="./">馬上試用</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="copy" style="border:0;margin:0;padding:0">
+      <span><a href="../">← 回 KitLab 商店</a>　<a href="../terms.html">條款與隱私</a></span>
+      <span>© 2026 KitLab 商店</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../main.js"></script>
+</body>
+</html>

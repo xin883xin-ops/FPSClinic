@@ -57,6 +57,11 @@
 .snote{margin-top:30px;padding:18px 22px;border:1px dashed var(--line);border-radius:var(--radius);color:var(--muted);font-size:.95rem;background:rgba(255,255,255,.6)}
 .snote b{color:var(--ink)}
 .s-hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.scard.wide{flex-direction:row}
+.scard.wide .shot{flex:0 0 clamp(190px,24%,280px);aspect-ratio:3/4;align-self:flex-start}
+.scard.wide .body{padding:26px 30px;gap:10px;justify-content:center}
+.scard.wide h4{font-size:1.4rem}
+.scard.wide p{font-size:1rem}
 @media (max-width:900px){.sgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.grp2{grid-template-columns:minmax(0,1fr)}.sgrid.one{grid-template-columns:repeat(2,minmax(0,1fr))}.sgrid.one .scard{grid-column:1/2}}
 @media (max-width:620px){
   .sgrid,.sgrid.two,.sgrid.one{grid-template-columns:minmax(0,1fr);gap:14px}
@@ -66,6 +71,10 @@
   .scard .body{padding:14px 14px 16px;gap:7px;min-width:0}
   .scard h4{font-size:1.02rem;line-height:1.35}
   .scard p{font-size:.88rem;line-height:1.6}
+  .scard.wide .shot{flex:0 0 46%}
+  .scard.wide .body{padding:14px 14px 16px;gap:7px}
+  .scard.wide h4{font-size:1.02rem}
+  .scard.wide p{font-size:.88rem}
 }
 @media (prefers-reduced-motion:reduce){.scard,.scard .shot img,.scard .go i{transition:none}}
 </style>
@@ -153,6 +162,16 @@
         </a>
       </div>
     </div>
+    </div>
+
+    <div class="grp">
+      <div class="grp-h"><h3>點餐收銀機</h3><span>不只是網頁：客人自助點餐、櫃檯收款，沒網路也能用</span></div>
+      <div class="sgrid one">
+        <a class="scard wide rv" href="../pos/about.html">
+          <div class="shot"><img src="samplesite/thumbs/pos.jpg" width="780" height="1040" loading="lazy" alt="點餐收銀機的開始畫面：三道菜色，下方是內用與外帶兩個大按鈕"></div>
+          <div class="body"><h4>KitLab 點餐收銀機 · 小店專用</h4><div class="tags"><span>餐飲</span><span>離線可用</span><span>買斷</span></div><p>把上面那種滾輪點餐，做成店裡真正在用的系統：客人在平板上自己點，拿到號碼；店員在收銀畫面接單、收款、叫號，一天結束看報表。第一次連網設定，之後沒有網路也能用，資料只存在你自己的裝置，不收月費。</p><p style="color:var(--muted);font-size:.9rem">目前可以試用；想買斷或請我們幫你建好菜單，加 LINE 詢問。</p><span class="go">看介紹 <i aria-hidden="true">↗</i></span></div>
+        </a>
+      </div>
     </div>
 
     <p class="snote rv"><b>這些是樣品，不是現成樣板。</b>裡面的店名、菜色和房型都是示範，LINE 按鈕也是示範狀態。想做成這個樣子，或想要更多互動，加 LINE 告訴我們你的店，我們看你的需求再回你。</p>

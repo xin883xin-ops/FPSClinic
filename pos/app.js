@@ -120,6 +120,15 @@
     if (mode === "staff") P.staff.onEvent(type, data);
   });
   document.addEventListener("pointerdown", () => P.primeAudio(), { once: true, capture: true });
+  // 設定完成後，第一次碰螢幕就進入全螢幕、保持螢幕不休眠（瀏覽器規定要有人點一下才准）。只自動做一次，店員按 Esc 離開後不會再被拉回去。
+  let fsTried = false;
+  document.addEventListener("pointerdown", () => {
+    if (mode === "setup") return;
+    P.keepAwake();
+    if (fsTried) return;
+    fsTried = true;
+    if (P.settings.autoFullscreen) P.goFullscreen();
+  }, true);
   window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); P.installPrompt = e; });
 
   /* 離線快取（只在 https 或 localhost 才有效） */

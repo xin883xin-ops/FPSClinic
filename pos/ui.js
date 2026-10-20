@@ -116,7 +116,7 @@
     s.innerHTML = `<div class="s-shop">${esc(P.settings.shop)}</div><div class="s-no">${P.pad(o.no, 3)}</div>
       <div class="s-meta">${esc(o.dine)}${o.label ? "　" + esc(o.label) : ""}　${o.day} ${P.timeOf(o.ts)}</div>
       <hr>${o.items.map(i => `<div class="s-line"><span>${esc(i.name)} × ${i.qty}</span><span>${P.money(i.price * i.qty)}</span></div>`).join("")}
-      <hr><div class="s-line s-total"><span>合計</span><span>${P.money(o.total)}</span></div>${o.note ? `<div class="s-note">備註：${esc(o.note)}</div>` : ""}`;
+      <hr><div class="s-line s-total"><span>合計</span><span>${P.money(o.total)}</span></div>${o.note ? `<div class="s-note">備註：${esc(o.note)}</div>` : ""}${P.license ? "" : `<div class="s-trial">試用版</div>`}`;
     document.body.classList.add("printing");
     setTimeout(() => { window.print(); setTimeout(() => document.body.classList.remove("printing"), 400); }, 60);
   };

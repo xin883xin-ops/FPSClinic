@@ -25,6 +25,7 @@
               <button type="button" role="tab" data-t="settings">設定</button>
             </nav>
             <div class="st-actions">
+              <button type="button" class="btn" id="stFs">全螢幕</button>
               <button type="button" class="btn" id="stAssist">代客點餐</button>
               <button type="button" class="btn primary" id="stKiosk">客人畫面</button>
             </div>
@@ -32,13 +33,16 @@
           <div class="st-body" id="stBody"></div>
         </section>`;
       $("stTabs").addEventListener("click", e => { const b = e.target.closest("button[data-t]"); if (b) setTab(b.dataset.t); });
+      const fsLabel = () => { const b = $("stFs"); if (b) b.textContent = document.fullscreenElement ? "離開全螢幕" : "全螢幕"; };
+      fsLabel(); T.fsHandler = fsLabel; document.addEventListener("fullscreenchange", fsLabel);
+      $("stFs").addEventListener("click", () => { if (document.fullscreenElement) P.exitFullscreen(); else P.goFullscreen(); });
       $("stAssist").addEventListener("click", () => actions.assist());
       $("stKiosk").addEventListener("click", () => actions.kiosk());
       setTab("orders");
       clearInterval(tick); tick = setInterval(() => { if (T && T.tab === "orders") renderOrders(); }, 30000);
       backupNag();
     },
-    unmount() { clearInterval(tick); root = null; T = null; },
+    unmount() { clearInterval(tick); if (T && T.fsHandler) document.removeEventListener("fullscreenchange", T.fsHandler); root = null; T = null; },
     onEvent(type, data) {
       if (!root || !T) return;
       if (type === "orders") {
@@ -331,7 +335,7 @@
         <div class="rp-acts"><button type="button" class="btn" id="rpCsv">匯出明細（Excel）</button><button type="button" class="btn" id="rpPrint">列印</button></div>
       </div>
       <div class="rp-print" id="rpPrintArea">
-      <h3 class="rp-title">${esc(P.settings.shop)}　${from === to ? from : from + " ～ " + to}</h3>
+      <h3 class="rp-title">${esc(P.settings.shop)}　${from === to ? from : from + " ～ " + to}${P.license ? "" : "　（試用版）"}</h3>
       <div class="rp-cards">
         <div class="rc big"><span>營收（已收款）</span><b>${money(rev)}</b></div>
         <div class="rc"><span>訂單數</span><b>${ok.length}</b></div>
@@ -382,6 +386,69 @@
           <button type="button" class="btn" id="sPin">更改店員密碼</button>
         </section>
 
+
+        <section class="set wide" id="sMode"><h3>營業模式：把它變成店裡的專用機</h3>
+          <p class="plain">目標：開機就自動進入點餐畫面、全螢幕、不休眠，客人和店員不會不小心關掉它。照你的裝置選一種做法。</p>
+          <div class="toggles">
+            <label class="chk"><input type="checkbox" id="sFs" ${s.autoFullscreen ? "checked" : ""}> 開啟後第一次碰螢幕，自動進入全螢幕</label>
+            <label class="chk"><input type="checkbox" id="sAwake" ${s.keepAwake ? "checked" : ""}> 盡量讓螢幕保持不休眠</label>
+          </div>
+          <p class="plain small ${s.boots > 1 ? "ok" : ""}">資料保存檢查：這台裝置的點餐機已啟動 <b>${s.boots || 1}</b> 次（最早 ${s.firstBoot ? P.dayOf(new Date(s.firstBoot)) : "今天"}）。營業模式每天重開機後，這個次數應該一直往上加。如果每天都是 1，代表瀏覽器關掉時把資料清掉了，這台不能這樣用。</p>
+
+          <details open><summary>Windows 電腦（最簡單，家用版也能用）</summary>
+            <ol class="how">
+              <li>電腦要有 Google Chrome。接下來的設定都要<b>連著網路</b>做。</li>
+              <li>在桌面按右鍵 → 新增 → 捷徑，「項目位置」貼上下面這一行，名稱取「點餐機」：
+                <div class="cmd"><code id="cmdChrome">"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" --kiosk --user-data-dir="C:\\KitLabPOS" --no-first-run --disable-pinch --overscroll-history-navigation=0 https://kitlab.store/pos/</code><button type="button" class="btn sm" data-copy="cmdChrome">複製</button></div>
+                <small>Chrome 如果裝在 <code>C:\\Program Files (x86)\\</code>，把路徑改成那邊。<code>--user-data-dir</code> 會建立一個專用的資料夾，菜單和訂單都存在裡面，所以<b>一定要用這個捷徑來做第一次設定</b>。</small></li>
+              <li>雙擊捷徑打開，就是全螢幕。完成店名、密碼、菜單的設定。</li>
+              <li>開機自動執行：按 <kbd>Win</kbd>+<kbd>R</kbd>，輸入 <code>shell:startup</code> 按 Enter，把剛才的捷徑複製進去。</li>
+              <li>開機自動登入：<kbd>Win</kbd>+<kbd>R</kbd> 輸入 <code>netplwiz</code>，取消勾選「使用者必須輸入使用者名稱和密碼」。（Windows 11 若沒有這個選項，先到 設定 → 帳戶 → 登入選項，關掉「為了提高安全性…僅允許 Windows Hello 登入」。）</li>
+              <li>不要休眠：設定 → 系統 → 電源，「螢幕」和「睡眠」都選「永不」。</li>
+              <li>要離開營業畫面：按 <kbd>Alt</kbd>+<kbd>F4</kbd>。</li>
+            </ol>
+            <p class="plain small">這個做法擋不住別人按 Alt+F4 或 Windows 鍵離開。想鎖死，看下一項。</p>
+          </details>
+
+          <details><summary>Windows 鎖定成「只能開這一個畫面」（專業版、企業版、教育版；家用版沒有）</summary>
+            <ol class="how">
+              <li>設定 → 帳戶 → 其他使用者 → 「設定資訊站（Kiosk）」按「開始」。</li>
+              <li>建立一個新的本機帳號（不能用 Microsoft 帳號，也不能用系統管理員帳號），應用程式選 <b>Microsoft Edge</b>。</li>
+              <li>顯示方式選「數位看板或互動式顯示」，網址填 <code>https://kitlab.store/pos/</code>，閒置時間盡量設長。</li>
+              <li>用這個帳號登入就會直接開成全螢幕；程式被關掉時，系統會自動再開起來。要離開時按 <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Delete</kbd>，換回管理員帳號。必須在機器前面操作，遠端桌面不能用。</li>
+            </ol>
+            <p class="plain warn">⚠ 重要：Microsoft 說明 Edge 的營業模式是以「無痕（InPrivate）」方式執行，文件沒有說明關掉後資料會不會留下。這台點餐機的菜單和訂單都存在瀏覽器裡，所以請先測試：點一張單，然後登出再登入（或重開機），看單還在不在，上面「啟動次數」有沒有累計。<b>如果資料不見，就改用上一項的 Chrome 做法。</b></p>
+          </details>
+
+          <details><summary>Android 平板</summary>
+            <ol class="how">
+              <li>用 Chrome 開 <code>https://kitlab.store/pos/</code>（連網），完成設定。</li>
+              <li>Chrome 選單 →「安裝應用程式」或「加到主畫面」，之後都從主畫面的圖示開，會是全螢幕。</li>
+              <li>鎖在這個 App：設定 → 安全性（或「安全性與隱私」）→「螢幕固定」打開；開啟點餐機後，從「最近使用的應用程式」畫面把它釘選。各廠牌選單名稱略有不同。</li>
+              <li>螢幕休眠時間設到最長，平常插著電。</li>
+            </ol>
+          </details>
+
+          <details><summary>iPad</summary>
+            <ol class="how">
+              <li>用 Safari 開 <code>https://kitlab.store/pos/</code>（連網），完成設定。</li>
+              <li>按「分享」→「加入主畫面」，之後從主畫面的圖示開，會是全螢幕。</li>
+              <li>鎖在這個 App：設定 → 輔助使用 →「引導使用模式」打開；開啟點餐機後，連按三下側邊按鈕（或主畫面按鈕）就鎖住。</li>
+              <li>設定 → 螢幕顯示與亮度 →「自動鎖定」選「永不」，平常插著電。</li>
+            </ol>
+          </details>
+
+          <details><summary>不管用哪一種，都要做的事</summary>
+            <ul class="how">
+              <li>第一次一定要連網打開；之後沒有網路也能用。</li>
+              <li>設定完，先把網路拔掉，重新整理一次，確認還能開。</li>
+              <li>每週到上面的「備份」下載一份備份檔，存到別的地方。</li>
+              <li>店員密碼不要讓客人知道；客人畫面右下角的「店員」鈕才是進入收銀的入口。</li>
+              <li>準備一個備案（紙本單），機器壞掉時生意不要停。</li>
+            </ul>
+          </details>
+        </section>
+
         <section class="set"><h3>備份</h3>
           <p class="plain">所有資料都只存在這台裝置裡。換裝置、清除瀏覽器資料或重灌前，請先下載備份。</p>
           <p class="plain ${s.lastBackup && (Date.now() - s.lastBackup) < 7 * 864e5 ? "" : "warn"}">上次備份：${bk}（目前有 ${nOrders} 筆訂單）</p>
@@ -392,7 +459,7 @@
 
         <section class="set"><h3>啟用狀態</h3>
           ${P.license ? `<p class="plain ok">✓ 已啟用：${esc(P.license.s || "")}　<small>${esc(P.license.d || "")}</small></p>` :
-            `<p class="plain">目前是<b>試用版</b>：功能完整，但每天最多 ${P.DEMO_LIMIT} 筆訂單。購買後會拿到啟用碼或啟用連結。</p>
+            `<p class="plain">目前是<b>試用版</b>：功能完整，但每天最多 ${P.DEMO_LIMIT} 筆訂單，供評估使用。正式營業請購買啟用，購買後會拿到啟用碼或啟用連結。</p>
              <label>啟用碼<textarea id="sCode" rows="3" placeholder="貼上以 KL1. 開頭的啟用碼"></textarea></label>
              <button type="button" class="btn primary" id="sAct">啟用</button>`}
         </section>
@@ -423,6 +490,12 @@
       await P.saveSettings(); P.applyAccent(); root.querySelector(".st-brand").firstChild.textContent = P.settings.shop; P.toast("已儲存");
     });
     $("sPin").addEventListener("click", () => P.changePin());
+    $("sFs").addEventListener("change", async e => { P.settings.autoFullscreen = e.target.checked; await P.saveSettings(); });
+    $("sAwake").addEventListener("change", async e => { P.settings.keepAwake = e.target.checked; await P.saveSettings(); if (e.target.checked) P.keepAwake(); });
+    body.querySelectorAll("button[data-copy]").forEach(b => b.addEventListener("click", async () => {
+      const t = $(b.dataset.copy).textContent;
+      try { await navigator.clipboard.writeText(t); P.toast("已複製"); } catch (_) { const r = document.createRange(); r.selectNodeContents($(b.dataset.copy)); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); P.toast("請按 Ctrl+C 複製"); }
+    }));
     $("sBackup").addEventListener("click", async () => {
       const d = await P.exportAll();
       P.download(`kitlab-pos-備份-${P.dayOf()}.json`, JSON.stringify(d));
