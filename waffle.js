@@ -34,7 +34,7 @@
   var box = document.createElement("div"); box.className = "kw";
   var dots = ""; for (var i = 0; i < 9; i++) dots += '<circle cx="' + (5 + (i % 3) * 7) + '" cy="' + (5 + Math.floor(i / 3) * 7) + '" r="2"/>';
   box.innerHTML = '<button class="kw-b" type="button" aria-haspopup="true" aria-expanded="false" aria-label="KitLab 全家桶" title="KitLab 全家桶" data-nav><svg viewBox="0 0 24 24" aria-hidden="true">' + dots + '</svg></button>' +
-    '<div class="kw-p" hidden role="menu" aria-label="KitLab 全家桶"><h3>KITLAB 全家桶</h3><div class="kw-g">' +
+    '<div class="kw-p" hidden role="menu" aria-label="KitLab 全家桶"><h3>KITLAB</h3><div class="kw-g">' +
     APPS.map(function (a) {
       var href = ROOT + a.u, cur = a.u && (here.indexOf(new URL(href, location.href).pathname.replace(/index\.html$/, "")) === 0);
       return '<a role="menuitem" href="' + href + '"' + (cur ? ' aria-current="page"' : "") + ' data-nav><img src="' + (a.data || ROOT + a.ic) + '" alt="" width="46" height="46"><span>' + a.n + "</span></a>";
