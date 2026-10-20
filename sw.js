@@ -1,6 +1,6 @@
 /* KitLab 商店 service worker：離線可看已載入過的頁面。
    改了頁面或樣式後，把下面的版本號加 1，使用者下次開啟就會更新。 */
-const VERSION = "v18";
+const VERSION = "v19";
 const CACHE = "skillstore-" + VERSION;
 const CORE = [
   "./", "index.html", "terms.html", "store.css", "style.css", "main.js", "side.html", "fpsclinic.html", "images/lol-demo.jpg", "manifest.webmanifest",

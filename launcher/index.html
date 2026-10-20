@@ -283,6 +283,7 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
       <button class="chip glass" id="chipUpd" data-nav hidden><b></b><span id="chipTxt"></span></button>
       <div class="padst" id="pad"><svg width="22" height="16" viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 2h12a5 5 0 0 1 5 5.5l-.6 4.2A3.6 3.6 0 0 1 16.3 13L14.5 11h-5l-1.8 2a3.6 3.6 0 0 1-6.1-1.3L1 7.5A5 5 0 0 1 6 2z"/><path d="M7 5.5v4M5 7.5h4"/></svg><span id="padtxt">手把</span></div>
       <div class="btime" id="btime">--:--</div>
+      <button class="fsb" id="hmb" data-nav>設為首頁</button>
       <button class="fsb" id="fs" data-nav>全螢幕</button>
     </header>
 
@@ -358,6 +359,25 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
         <div class="fine" id="sfine">這是我們收錄的站點，不是我們的作品。我們只寫推薦介紹並連到官方網站，不嵌入、不轉載；名稱與圖示屬原開發者所有。開發者如想修改介紹或不希望被收錄，歡迎告訴我們。完整說明在 kitlab.store/terms.html。</div>
       </div>
     </section>
+
+    <div class="scrim" id="hm" hidden>
+      <div class="sheet glass" role="dialog" aria-modal="true" aria-labelledby="hmT" style="width:760px;overflow:auto">
+        <header>
+          <div><h2 id="hmT">設為首頁／安裝</h2><div class="sub">每次打開瀏覽器就是 Dash，或裝成像 App 一樣的圖示</div></div>
+          <span class="sp"></span><button class="xbtn" data-back data-nav aria-label="關閉">×</button>
+        </header>
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" id="hmInst" data-nav>安裝成應用</button>
+          <button class="btn2 glass" id="hmCopy" data-nav>複製 Dash 網址</button>
+        </div>
+        <div class="note" id="hmHint" hidden></div>
+        <div class="grp"><h4>電腦：Chrome</h4><div class="note">設定 → 「啟動時」→ 選「開啟特定網頁或一組網頁」→ 新增網頁，貼上上面複製的網址。想連「首頁」按鈕也一起設，到「外觀」打開「顯示首頁按鈕」，選「輸入自訂網址」貼上。</div></div>
+        <div class="grp"><h4>電腦：Edge</h4><div class="note">設定 → 「啟動、首頁和新索引標籤」→ 「Microsoft Edge 啟動時」選「開啟這些頁面」→ 新增頁面貼上網址。首頁按鈕也在同一頁設定。</div></div>
+        <div class="grp"><h4>電腦：Firefox</h4><div class="note">設定 → 「首頁」→ 「首頁與新視窗」選「自訂網址」，貼上網址。</div></div>
+        <div class="grp"><h4>手機、平板</h4><div class="note">Android Chrome：右上角 ⋮ → 「安裝應用程式」或「加到主畫面」。iPhone、iPad：用 Safari 按分享 → 「加入主畫面」。裝好後桌面會有 Dash 圖示，打開就是全螢幕。</div></div>
+        <div class="grp"><h4>換電腦、重灌也不怕</h4><div class="note">你的捷徑和從商店安裝的應用只存在這個瀏覽器裡。按右上角的「雲端同步」，用復原碼加密備份，換裝置時輸入同一組復原碼就能拿回來。</div></div>
+      </div>
+    </div>
 
     <div class="scrim" id="ota" hidden>
       <div class="sheet glass" role="dialog" aria-modal="true" aria-labelledby="otaT">
@@ -663,6 +683,7 @@ $("#foldName").addEventListener("change", function () { var f = links[topIdx(cur
 var GROUPS = DATA.groups || [], GCOL = "kitlab-dash-groups-col";
 function gSite(g, it) {
   var h = ""; try { h = new URL(it.url).hostname; } catch (e) {}
+  if (it.icon) return { id: g.id + "-" + it.name, name: it.name, url: it.url, color: it.color || g.color || "#5FD3BC", icon: it.icon, mask: true };
   if (it.i) return { id: g.id + "-" + it.name, name: it.name, url: it.url, color: it.color || g.color || "#5FD3BC", icon: "icons/brand/" + it.i + ".svg" };
   return { id: g.id + "-" + it.name, name: it.name, url: it.url, fav: 1, color: it.color || g.color || "#5FD3BC",
     icon: "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + encodeURIComponent(it.url) + "&size=128" };
@@ -851,6 +872,29 @@ $("#fs").onclick = function () {
   Promise.resolve(p).catch(function () { $("#fs").textContent = "不支援"; });
 };
 if (!document.documentElement.requestFullscreen || matchMedia("(display-mode: fullscreen)").matches) $("#fs").hidden = true;
+
+/* 設為首頁／安裝：瀏覽器不允許網頁自己改首頁，所以提供安裝按鈕、複製網址和各瀏覽器的設定步驟 */
+var DASH_URL = "https://kitlab.store/launcher/", instEvt = null;
+window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); instEvt = e; });
+window.addEventListener("appinstalled", function () { instEvt = null; $("#hm").hidden || back(); toast("已安裝，桌面上找得到 Dash 圖示", null); });
+if (matchMedia("(display-mode: standalone)").matches || matchMedia("(display-mode: fullscreen)").matches || navigator.standalone) $("#hmb").hidden = true;
+$("#hmb").onclick = function () {
+  var h = $("#hmHint"), ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  $("#hmInst").hidden = ios;
+  h.hidden = false;
+  h.textContent = instEvt ? "按「安裝成應用」，Dash 會有自己的視窗和桌面圖示。" : (ios ? "iPhone、iPad 請用 Safari 的分享 → 加入主畫面。" : "這個瀏覽器目前沒有提供一鍵安裝，請照下面的步驟，或從網址列右邊的安裝圖示、瀏覽器選單裡的「安裝應用程式」操作。");
+  show("hm");
+  setTimeout(function () { var a = $("#hm [data-nav]:not([hidden])"); if (a) a.focus({ preventScroll: true }); }, 30);
+};
+$("#hmInst").onclick = function () {
+  if (!instEvt) { toast("請照下面的步驟安裝", null); return; }
+  var e = instEvt; instEvt = null; e.prompt();
+};
+$("#hmCopy").onclick = function () {
+  var done = function () { toast("已複製網址，貼到瀏覽器的首頁設定就可以", null); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(DASH_URL).then(done, function () { prompt("複製這個網址", DASH_URL); });
+  else prompt("複製這個網址", DASH_URL);
+};
 
 var tt;
 function toast(msg, act) {

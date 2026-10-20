@@ -22,6 +22,25 @@
   ],
   "groups": [
     {
+      "id": "kitlab",
+      "name": "KitLab",
+      "color": "#F2B632",
+      "items": [
+        {
+          "name": "點餐收銀機",
+          "url": "https://kitlab.store/pos/",
+          "color": "#F2B632",
+          "icon": "icons/kitlab-pos.png"
+        },
+        {
+          "name": "KitLab 商店",
+          "url": "https://kitlab.store/",
+          "color": "#5FD3BC",
+          "icon": "../icons/icon-192.png"
+        }
+      ]
+    },
+    {
       "id": "google",
       "name": "Google",
       "color": "#4285F4",
