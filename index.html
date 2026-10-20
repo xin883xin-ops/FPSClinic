@@ -292,6 +292,16 @@
   </div>
 </footer>
 
+<script>
+/* 來訪計數：不放 cookie、不存 IP。站長自己在網址後面加 ?me=1 開一次，這個瀏覽器以後就不計入。 */
+(function(){try{
+  if(/[?&]me=1/.test(location.search))localStorage.setItem("kl_me","1");
+  if(/[?&]me=0/.test(location.search))localStorage.removeItem("kl_me");
+  if(localStorage.getItem("kl_me"))return;
+}catch(e){}
+if(navigator.sendBeacon)navigator.sendBeacon("/api/v1/hit",JSON.stringify({p:location.pathname,r:document.referrer}));
+})();
+</script>
 <script src="main.js"></script>
 </body>
 </html>

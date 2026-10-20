@@ -8,6 +8,7 @@
  *   GET  /v1/catalog          商店整份目錄（分類、輪播、上架中的應用），邊緣快取
  *   GET  /v1/apps/:id         單一應用
  *   POST /v1/feedback         推薦新站點／回報問題（Dash 與商店共用）
+ *   POST /v1/hit              首頁來訪計數（不用 cookie、不存 IP；有新訪客時傳 WhatsApp 通知站長）
  *
  * 加密同步（免登入，Header：Authorization: Bearer <由復原碼推導的權杖>）：
  *   GET    /v1/vault/:id      取回密文
@@ -22,8 +23,14 @@
  *   PATCH  /v1/admin/apps/:id          修改任何欄位，例如 {"status":"hidden"} 下架
  *   DELETE /v1/admin/apps/:id          等同下架（保留紀錄，Dash 已安裝的人不受影響）
  *   POST   /v1/admin/publish           目錄版本號 +1，清掉快取
+ *   GET    /v1/admin/stats?days=14     來訪統計（每日人數、來源、國家）
  *
- * 不登入、不追蹤：訪客安裝了哪些應用只存在他自己的裝置，這裡完全不知道。
+ * 不登入：訪客安裝了哪些應用只存在他自己的裝置，這裡完全不知道。
+ * 首頁來訪計數只存「當天的匿名雜湊＋頁面＋來源網站＋國家」，不存 IP、不放 cookie，180 天後刪除。
+ *
+ * WhatsApp 通知（CallMeBot，選用；沒設定就只計數、不通知）：
+ *   npx wrangler secret put WA_PHONE     例如 886912345678（國碼開頭、不加 + 或 0）
+ *   npx wrangler secret put WA_APIKEY    CallMeBot 給的 apikey
  */
 
 const APP_FIELDS = ["name", "url", "category", "summary_zh", "desc_en", "featured", "offline", "publisher", "source", "listing_url", "tags", "status", "sort"];
@@ -33,8 +40,9 @@ export default {
   async scheduled(event, env, ctx) {
     ctx.waitUntil(env.DB.batch([
       env.DB.prepare("DELETE FROM vaults WHERE updated_at < datetime('now','-400 days')"),
-      env.DB.prepare("DELETE FROM feedback WHERE status!='new' AND created_at < datetime('now','-180 days')")
-    ]));
+      env.DB.prepare("DELETE FROM feedback WHERE status!='new' AND created_at < datetime('now','-180 days')"),
+      env.DB.prepare("DELETE FROM hits WHERE created_at < datetime('now','-180 days')")
+    ]).catch(() => {}));
   },
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
@@ -68,6 +76,7 @@ async function route(req, env, ctx, url) {
     return json({ ok: true, app: compact(row) }, 200, { "Cache-Control": "public, max-age=300" });
   }
   if (m === "POST" && p === "/v1/feedback") return feedback(req, env);
+  if (m === "POST" && p === "/v1/hit") return hit(req, env, ctx);
   if ((r = p.match(/^\/v1\/vault\/([0-9a-f]{64})$/))) return vault(req, env, m, r[1]);
 
   if (p.startsWith("/v1/admin/")) {
@@ -104,6 +113,7 @@ async function route(req, env, ctx, url) {
       await bump(env);
       return json({ ok: true });
     }
+    if (m === "GET" && p === "/v1/admin/stats") return stats(env, Math.min(90, Math.max(1, +url.searchParams.get("days") || 14)));
     if (m === "POST" && p === "/v1/admin/publish") { const v = await bump(env); return json({ ok: true, version: v }); }
   }
   throw httpErr(404, "沒有這個網址");
@@ -173,6 +183,63 @@ async function feedback(req, env) {
     .bind(kind, String(b.source || "").slice(0, 20), String(b.app_id || "").slice(0, 40) || null, String(b.app_name || "").slice(0, 120) || null,
       link || null, message || "(只附網址)", String(b.contact || "").slice(0, 120) || null, ipHash).run();
   return json({ ok: true });
+}
+
+/* ---------- 首頁來訪計數 + WhatsApp 通知 ----------
+   訪客身分 = sha256(IP + 瀏覽器 + 當天日期 + 鹽)，每天換一次，無法跨天追蹤，也還原不出 IP。 */
+let hitsReady = false;
+const BOT_RE = /bot|crawl|spider|slurp|preview|facebookexternalhit|curl|wget|python|headless|lighthouse|monitor|uptime/i;
+async function hit(req, env, ctx) {
+  const noContent = new Response(null, { status: 204 });
+  const ua = req.headers.get("User-Agent") || "";
+  if (!ua || BOT_RE.test(ua)) return noContent;
+  let b = {}; try { b = JSON.parse(await req.text()); } catch (e) {}
+  const path = String(b.p || "/").slice(0, 80);
+  if (!path.startsWith("/")) return noContent;
+  let ref = "";
+  try { const h = new URL(String(b.r || "")).hostname; if (h && h !== "kitlab.store" && h !== "www.kitlab.store") ref = h.slice(0, 80); } catch (e) {}
+  const country = (req.headers.get("CF-IPCountry") || "").slice(0, 2);
+  const day = new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);          // 台灣日期
+  const vh = (await sha256((req.headers.get("CF-Connecting-IP") || "0") + "|" + ua + "|" + day + "|" + (env.SALT || "kitlab"))).slice(0, 24);
+
+  if (!hitsReady) {
+    await env.DB.batch([
+      env.DB.prepare("CREATE TABLE IF NOT EXISTS hits (id INTEGER PRIMARY KEY AUTOINCREMENT, day TEXT NOT NULL, vh TEXT NOT NULL, path TEXT, ref TEXT, country TEXT, created_at TEXT NOT NULL DEFAULT (datetime('now')))"),
+      env.DB.prepare("CREATE UNIQUE INDEX IF NOT EXISTS hits_uni ON hits(day, vh, path)"),
+      env.DB.prepare("CREATE INDEX IF NOT EXISTS hits_day ON hits(day)")
+    ]);
+    hitsReady = true;
+  }
+  const r = await env.DB.prepare("INSERT OR IGNORE INTO hits(day,vh,path,ref,country) VALUES(?,?,?,?,?)").bind(day, vh, path, ref || null, country || null).run();
+  if (!r.meta.changes) return noContent;                                               // 今天來過了
+  ctx.waitUntil(notifyVisit(env, day, path, ref, country).catch((e) => console.error("notify", e)));
+  return noContent;
+}
+
+/* 新訪客通知：5 分鐘內最多傳一則，訊息裡合計這段時間的新訪客數，避免洗版 */
+async function notifyVisit(env, day, path, ref, country) {
+  if (!env.WA_PHONE || !env.WA_APIKEY) return;
+  const last = (await env.DB.prepare("SELECT value FROM meta WHERE key='last_visit_notify'").first())?.value || "1970-01-01 00:00:00";
+  const claim = await env.DB.prepare("INSERT INTO meta(key,value) VALUES('last_visit_notify',datetime('now')) ON CONFLICT(key) DO UPDATE SET value=datetime('now') WHERE value <= datetime('now','-5 minutes') RETURNING value").first();
+  if (!claim) return;
+  const n = (await env.DB.prepare("SELECT COUNT(*) AS n FROM hits WHERE created_at > ?").bind(last).first()).n;
+  const todayN = (await env.DB.prepare("SELECT COUNT(DISTINCT vh) AS n FROM hits WHERE day=?").bind(day).first()).n;
+  const text = `KitLab 商店有新訪客：${n} 位\n頁面 ${path}${ref ? "\n來自 " + ref : ""}${country ? "\n地區 " + country : ""}\n今天累計 ${todayN} 位`;
+  const u = "https://api.callmebot.com/whatsapp.php?phone=" + encodeURIComponent(env.WA_PHONE) + "&text=" + encodeURIComponent(text) + "&apikey=" + encodeURIComponent(env.WA_APIKEY);
+  await fetch(u);
+}
+
+async function stats(env, days) {
+  const since = new Date(Date.now() + 8 * 3600e3 - days * 86400e3).toISOString().slice(0, 10);
+  try {
+    const [perDay, refs, countries, paths] = await env.DB.batch([
+      env.DB.prepare("SELECT day, COUNT(DISTINCT vh) AS visitors FROM hits WHERE day>=? GROUP BY day ORDER BY day DESC").bind(since),
+      env.DB.prepare("SELECT ref, COUNT(*) AS n FROM hits WHERE day>=? AND ref IS NOT NULL GROUP BY ref ORDER BY n DESC LIMIT 15").bind(since),
+      env.DB.prepare("SELECT country, COUNT(*) AS n FROM hits WHERE day>=? GROUP BY country ORDER BY n DESC LIMIT 10").bind(since),
+      env.DB.prepare("SELECT path, COUNT(*) AS n FROM hits WHERE day>=? GROUP BY path ORDER BY n DESC LIMIT 10").bind(since)
+    ]);
+    return json({ ok: true, days, perDay: perDay.results, refs: refs.results, countries: countries.results, paths: paths.results });
+  } catch (e) { return json({ ok: true, days, perDay: [], note: "還沒有任何來訪紀錄" }); }
 }
 
 /* ---------- 加密同步保險箱 ---------- */
