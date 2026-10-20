@@ -222,6 +222,43 @@
   </div>
 </section>
 
+<!-- 開始 -->
+<style>
+  #coming-soon{--cs-bg:#0A0E17;--cs-surface:#121927;--cs-line:#222d44;--cs-text:#F5F7FB;--cs-muted:#9AA5BA;--cs-mint:#4DE3C1;--cs-mint-ink:#06211b;--cs-warn:#FFC857;
+    color:var(--cs-text);background:var(--cs-bg);padding:48px max(16px,env(safe-area-inset-left,0px));line-height:1.7}
+  #coming-soon *{box-sizing:border-box}
+  #coming-soon .cs-wrap{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+  #coming-soon .cs-kicker{font-size:13px;letter-spacing:.12em;color:var(--cs-mint)}
+  #coming-soon h2{margin:0;font-size:clamp(26px,5vw,34px);line-height:1.25;text-wrap:balance}
+  #coming-soon .cs-lead{margin:0;color:var(--cs-muted);max-width:36em}
+  #coming-soon .cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  #coming-soon .cs-item{background:var(--cs-surface);border:1px solid var(--cs-line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+  #coming-soon .cs-item h3{margin:0;font-size:19px}
+  #coming-soon .cs-item p{margin:0;color:var(--cs-muted);font-size:15px}
+  #coming-soon .cs-tag{align-self:flex-start;font-size:12px;font-weight:800;padding:2px 10px;border-radius:99px;border:1px solid var(--cs-line);color:var(--cs-muted)}
+  #coming-soon .cs-tag.live{background:var(--cs-mint);color:var(--cs-mint-ink);border-color:var(--cs-mint)}
+  #coming-soon .cs-tag.soon{background:var(--cs-mint);color:var(--cs-mint-ink);border-color:var(--cs-mint)}
+  #coming-soon .cs-note{margin:0;color:var(--cs-muted);font-size:13px}
+</style>
+<section id="coming-soon" aria-labelledby="cs-title">
+  <div class="cs-wrap">
+    <span class="cs-kicker">即將推出</span>
+    <h2 id="cs-title">下一批要上架的東西</h2>
+    <p class="cs-lead">這些都是從實際使用情境長出來的小工具，一張 QR、一支手機就能用。上線順序與內容可能調整。</p>
+    <div class="cs-grid">
+      <article class="cs-item"><span class="cs-tag live">已開放</span><h3>語音名片</h3><p>名片上的 QR，掃了就能留一段語音給你。每張名片有自己專屬的留言空間，新留言寄 Email 通知。</p></article>
+      <article class="cs-item"><span class="cs-tag">未開放</span><h3>定位名片</h3><p>客戶掃一下，按一個鈕就把位置傳給你，地址不好說的地方也找得到。適合除草、園藝、野外維修。</p></article>
+      <article class="cs-item"><span class="cs-tag">未開放</span><h3>點單名片</h3><p>飲料店的菜單 QR，客人勾選品項、傳位置，訂單自動送到店家，店家不用有網站。</p></article>
+      <article class="cs-item"><span class="cs-tag">未開放</span><h3>找到我們</h3><p>QR 直接開導航到店面或場地，還能放電話、營業時間和入口說明。搬家不用重印。</p></article>
+      <article class="cs-item"><span class="cs-tag">未開放</span><h3>會員卡</h3><p>每位會員一個專屬文件盒，合約、保固單、服務紀錄掃卡就看得到，不用帶紙本。</p></article>
+      <article class="cs-item"><span class="cs-tag">未開放</span><h3>新聞遙控器</h3><p>電腦當電視、手機當遙控器，左右轉台看台灣新聞直播，不用安裝。</p></article>
+      <article class="cs-item"><span class="cs-tag">未開放</span><h3>手機簡報筆</h3><p>用手機取代實體簡報筆，翻頁與控制簡報。細節還在規劃。</p></article>
+    </div>
+    <p class="cs-note">「已開放」代表現在就能試用，「未開放」代表還沒開放使用，上線順序與時間可能調整。</p>
+  </div>
+</section>
+<!-- 結束 -->
+
 <!-- 大橫幅 -->
 <section class="sec" id="more">
   <div class="wrap banners">
