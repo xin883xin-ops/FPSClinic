@@ -2,10 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://kitlab.store/</loc><lastmod>2026-10-19</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://kitlab.store/launcher/</loc><lastmod>2026-10-19</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://kitlab.store/launcher/store/</loc><lastmod>2026-10-19</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://kitlab.store/launcher/about.html</loc><lastmod>2026-10-19</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kitlab.store/launcher/store/</loc><lastmod>2026-10-18</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kitlab.store/launcher/about.html</loc><lastmod>2026-10-18</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://kitlab.store/site199/</loc><lastmod>2026-10-19</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://kitlab.store/fpsclinic.html</loc><lastmod>2026-10-19</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://kitlab.store/fpsclinic.html</loc><lastmod>2026-10-18</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://kitlab.store/drivers/</loc><lastmod>2026-10-19</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://kitlab.store/site199/samplesite/minsu-sea.html</loc><lastmod>2026-10-19</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
   <url><loc>https://kitlab.store/site199/samplesite/minsu-mountain.html</loc><lastmod>2026-10-19</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
@@ -14,5 +14,5 @@
   <url><loc>https://kitlab.store/site199/samplesite/menu-wheel.html</loc><lastmod>2026-10-19</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
   <url><loc>https://kitlab.store/site199/samplesite/menu-wheel2.html</loc><lastmod>2026-10-19</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
   <url><loc>https://kitlab.store/site199/samplesite/speed-dial.html</loc><lastmod>2026-10-19</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://kitlab.store/terms.html</loc><lastmod>2026-10-19</lastmod><changefreq>yearly</changefreq><priority>0.2</priority></url>
+  <url><loc>https://kitlab.store/terms.html</loc><lastmod>2026-10-18</lastmod><changefreq>yearly</changefreq><priority>0.2</priority></url>
 </urlset>
