@@ -14,7 +14,8 @@
   ];
   var here = location.pathname.replace(/index\.html$/, "");
 
-  var css = '.kw{position:relative;flex:none;margin-left:auto}.kw+*{margin-left:0}' +
+  var css = '.kw{position:relative;flex:none;margin-left:auto}.kw+*{margin-left:0;white-space:nowrap;flex:none}' +
+    '@media(max-width:340px){.kw+.btn{padding-left:12px;padding-right:12px;font-size:13px}}' +
     '.kw-b{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:inherit;display:grid;place-items:center;cursor:pointer;padding:0}' +
     '.kw-b:hover,.kw-b[aria-expanded="true"]{background:rgba(128,138,150,.22)}' +
     '.kw-b:focus-visible{outline:2px solid #5FD3BC;outline-offset:2px}' +
@@ -41,7 +42,14 @@
     }).join("") + '</div><div class="kw-f">KitLab 官方作品</div></div>';
 
   var btn = box.firstChild, pan = box.lastChild;
-  function set(on) { pan.hidden = !on; btn.setAttribute("aria-expanded", on ? "true" : "false"); if (on) { var h = document.querySelector(".top,.bar"); var br = btn.getBoundingClientRect(); pan.style.top = ((h && !h.classList.contains("bar") ? h.getBoundingClientRect().bottom : br.bottom) + 6) + "px"; pan.style.right = Math.max(12, Math.round(window.innerWidth - br.right)) + "px"; } }
+  function place() {
+    var h = document.querySelector(".top,.bar"), br = btn.getBoundingClientRect(), w = pan.offsetWidth, vw = window.innerWidth;
+    pan.style.top = ((h && !h.classList.contains("bar") ? h.getBoundingClientRect().bottom : br.bottom) + 6) + "px";
+    /* 面板右邊對齊按鈕，但不能讓左邊超出視窗：窄螢幕就退到右邊留 12px */
+    pan.style.right = Math.max(12, Math.min(Math.round(vw - br.right), vw - w - 12)) + "px";
+  }
+  function set(on) { pan.hidden = !on; btn.setAttribute("aria-expanded", on ? "true" : "false"); if (on) place(); }
+  window.addEventListener("resize", function () { if (!pan.hidden) place(); });
   btn.addEventListener("click", function (e) { e.stopPropagation(); set(pan.hidden); });
   document.addEventListener("click", function (e) { if (!pan.hidden && !box.contains(e.target)) set(false); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !pan.hidden) { set(false); btn.focus(); e.stopPropagation(); } }, true);
@@ -49,11 +57,19 @@
   function mount() {
     var host = document.querySelector(".top .wrap") || document.querySelector(".bar");
     if (!host) return;
-    if (host.classList.contains("bar")) { box.style.marginLeft = "4px"; host.appendChild(box); return; }
-    host.appendChild(box);
-    /* 如果右邊還有空位（前面的元素沒有把它推到最右），自己用 auto 推到右上角 */
-    var hr = host.getBoundingClientRect(), br = box.getBoundingClientRect(), pad = parseFloat(getComputedStyle(host).paddingRight) || 0;
-    box.style.marginLeft = (hr.right - pad - br.right > 8) ? "auto" : "0";
+    /* 順序：九個點在選單（或最右邊的按鈕）左邊，選單永遠在最右。
+       把九個點插在最後一個元素前面；如果那個元素原本靠 margin-left:auto 推到右邊，這個推力改由九個點接手。 */
+    var last = host.lastElementChild;
+    if (!last) { host.appendChild(box); return; }
+    var push = (parseFloat(getComputedStyle(last).marginLeft) || 0) > 8;
+    host.insertBefore(box, last);
+    if (push) last.style.marginLeft = "0";
+    box.style.marginLeft = push ? "auto" : (host.classList.contains("bar") ? "4px" : "0");
+    if (!push && !host.classList.contains("bar")) {
+      /* 如果前面的元素沒有把這組按鈕推到最右，自己用 auto 推過去 */
+      var hr = host.getBoundingClientRect(), lr = last.getBoundingClientRect(), pad = parseFloat(getComputedStyle(host).paddingRight) || 0;
+      if (hr.right - pad - lr.right > 8) box.style.marginLeft = "auto";
+    }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount); else mount();
 })();
