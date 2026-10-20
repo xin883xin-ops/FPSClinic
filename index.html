@@ -183,6 +183,14 @@
           <div class="foot"><span class="price">免費 <small>資料不離開你的電腦</small></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
         </a>
 
+        <a class="ptile p4" href="cards/" draggable="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="22" width="76" height="52" rx="7"/><rect x="20" y="32" width="14" height="14" rx="2" fill="#7CF0B4" stroke="none"/><rect x="38" y="32" width="14" height="14" rx="2"/><rect x="20" y="50" width="14" height="14" rx="2"/><path d="M44 58h8M60 36h18M60 46h12M60 56h18"/></svg></div>
+          <div class="tag">智慧名片 · 掃 QR 就能用</div>
+          <h3>智慧名片</h3>
+          <div class="by">提供者 KitLab 官方 <span class="tick"><svg viewBox="0 0 12 12" fill="none" stroke="#0B141A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5l2.5 2.5L10 3.5"/></svg></span></div>
+          <div class="foot"><span class="price">語音名片已開放 <small>客人免安裝，店家免網站</small></span><span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+        </a>
+
         <a class="ptile p3 soon" href="#wish" draggable="false">
           <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="28" y="8" width="40" height="80" rx="9"/><path d="M42 18h12M44 76h8"/></svg></div>
           <div class="tag">App 開發 · 即將推出</div>
@@ -238,6 +246,15 @@
   #coming-soon .cs-tag{align-self:flex-start;font-size:12px;font-weight:800;padding:2px 10px;border-radius:99px;border:1px solid var(--cs-line);color:var(--cs-muted)}
   #coming-soon .cs-tag.live{background:var(--cs-mint);color:var(--cs-mint-ink);border-color:var(--cs-mint)}
   #coming-soon .cs-tag.soon{background:var(--cs-mint);color:var(--cs-mint-ink);border-color:var(--cs-mint)}
+  #coming-soon .cs-family{grid-column:1/-1;background:var(--cs-surface);border:1px solid var(--cs-line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+  #coming-soon .cs-family h3{margin:0;font-size:21px}
+  #coming-soon .cs-family>p{margin:0;color:var(--cs-muted);font-size:15px}
+  #coming-soon .cs-subs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+  #coming-soon .cs-sub{border:1px solid var(--cs-line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+  #coming-soon .cs-sub b{font-size:16px}
+  #coming-soon .cs-sub span.d{color:var(--cs-muted);font-size:14px;line-height:1.55}
+  #coming-soon a.cs-more{align-self:flex-start;color:var(--cs-mint);font-weight:700;font-size:15px;text-decoration:none}
+  #coming-soon a.cs-more:hover{text-decoration:underline}
   #coming-soon .cs-note{margin:0;color:var(--cs-muted);font-size:13px}
 </style>
 <section id="coming-soon" aria-labelledby="cs-title">
@@ -246,13 +263,21 @@
     <h2 id="cs-title">下一批要上架的東西</h2>
     <p class="cs-lead">這些都是從實際使用情境長出來的小工具，一張 QR、一支手機就能用。上線順序與內容可能調整。</p>
     <div class="cs-grid">
-      <article class="cs-item"><span class="cs-tag live">已開放</span><h3>語音名片</h3><p>名片上的 QR，掃了就能留一段語音給你。每張名片有自己專屬的留言空間，新留言寄 Email 通知。</p></article>
-      <article class="cs-item"><span class="cs-tag">未開放</span><h3>定位名片</h3><p>客戶掃一下，按一個鈕就把位置傳給你，地址不好說的地方也找得到。適合除草、園藝、野外維修。</p></article>
-      <article class="cs-item"><span class="cs-tag">未開放</span><h3>點單名片</h3><p>飲料店的菜單 QR，客人勾選品項、傳位置，訂單自動送到店家，店家不用有網站。</p></article>
-      <article class="cs-item"><span class="cs-tag">未開放</span><h3>找到我們</h3><p>QR 直接開導航到店面或場地，還能放電話、營業時間和入口說明。搬家不用重印。</p></article>
-      <article class="cs-item"><span class="cs-tag">未開放</span><h3>會員卡</h3><p>每位會員一個專屬文件盒，合約、保固單、服務紀錄掃卡就看得到，不用帶紙本。</p></article>
+      <article class="cs-family">
+        <span class="cs-tag live">已開放</span>
+        <h3>智慧名片</h3>
+        <p>名片上的 QR，掃一下就能留語音、傳位置、點單。客人不用安裝，店家不用有網站。名片類的都放在這裡。</p>
+        <div class="cs-subs">
+          <div class="cs-sub"><span class="cs-tag live">已開放</span><b>語音名片</b><span class="d">掃一下留一段語音給你，新留言寄 Email 通知。</span></div>
+          <div class="cs-sub"><span class="cs-tag">未開放</span><b>定位名片</b><span class="d">按一個鈕就把位置傳給你，地址不好說也找得到。</span></div>
+          <div class="cs-sub"><span class="cs-tag">未開放</span><b>點單名片</b><span class="d">菜單上的 QR，客人勾選品項、傳位置，訂單送到店家。</span></div>
+          <div class="cs-sub"><span class="cs-tag">未開放</span><b>找到我們</b><span class="d">QR 直接導航到店面，還能放電話與營業時間。</span></div>
+          <div class="cs-sub"><span class="cs-tag">未開放</span><b>會員卡</b><span class="d">每位會員一個專屬文件盒，合約與保固單掃卡就看得到。</span></div>
+        </div>
+        <a class="cs-more" href="cards/">看智慧名片的詳細說明 →</a>
+      </article>
       <article class="cs-item"><span class="cs-tag">未開放</span><h3>新聞遙控器</h3><p>電腦當電視、手機當遙控器，左右轉台看台灣新聞直播，不用安裝。</p></article>
-      <article class="cs-item"><span class="cs-tag">未開放</span><h3>手機簡報筆</h3><p>用手機取代實體簡報筆，翻頁與控制簡報。細節還在規劃。</p></article>
+      <article class="cs-item"><span class="cs-tag">未開放</span><h3>手機簡報筆</h3><p>用手機取代實體簡報筆，翻頁與控制簡報。</p></article>
     </div>
     <p class="cs-note">「已開放」代表現在就能試用，「未開放」代表還沒開放使用，上線順序與時間可能調整。</p>
   </div>
