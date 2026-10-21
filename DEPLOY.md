@@ -83,3 +83,20 @@ curl -X DELETE -H "Authorization: Bearer $T" $API/v1/admin/apps/506          # �
 - 試用版：功能完整，每天最多 20 筆訂單（`pos/core.js` 的 `DEMO_LIMIT`）。
 - 不開立發票。這點已寫在第一次設定畫面和「設定 → 關於」。
 - 同一台裝置開兩個視窗（一個客人畫面、一個 `…/pos/#staff` 收銀畫面）會即時同步；兩台不同的裝置還不能同步，是下一版的工作。
+
+## 機密值清單（secret）
+
+只列名稱與用途，**值不要寫進程式碼、文件、git 或對話**。值存在 Cloudflare secret，另外自己備一份在密碼管理器。
+Cloudflare secret 設好後無法讀回，遺失只能重建再覆蓋。
+
+| 名稱 | 用途 | 遺失時怎麼辦 |
+|---|---|---|
+| `ADMIN_TOKEN` | 管理 API（`/api/v1/admin/*`、`GET /api/voice-signups`） | 自己產一組 40 字隨機值，覆蓋即可 |
+| `SALT` | IP／來訪雜湊的鹽 | 覆蓋即可（只影響限流與當日計數） |
+| `WA_PHONE`、`WA_APIKEY` | 新訪客 WhatsApp 通知（選用） | CallMeBot 重新取得 |
+| `RESEND_API_KEY` | 語音名片登記後寄信 | Resend 後台 → API Keys 重建，權限選 Sending access，撤銷舊的 |
+| `RESEND_FROM` | 寄件人，例如 `KitLab <noreply@kitlab.store>`（父網域已在 Resend 驗證） | 直接重設 |
+| `TAWK_MAIL` | 收登記通知的 tawk.to 工單信箱 | 直接重設 |
+
+設定：`npx wrangler secret put 名稱`（需要 Node 22；這台機器預設 `node` 是 v10，要用 `/usr/bin/node node_modules/wrangler/bin/wrangler.js secret put 名稱`）。
+沒設 `RESEND_*`／`TAWK_MAIL` 時，登記照常寫入，只是不寄信。
