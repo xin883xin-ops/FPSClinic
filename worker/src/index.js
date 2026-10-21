@@ -78,7 +78,7 @@ async function route(req, env, ctx, url) {
     return json({ ok: true, app: compact(row) }, 200, { "Cache-Control": "public, max-age=300" });
   }
   if (m === "POST" && p === "/v1/feedback") return feedback(req, env);
-  if (m === "POST" && p === "/voice-signup") return voiceSignup(req, env);
+  if (m === "POST" && p === "/voice-signup") return voiceSignup(req, env, ctx);
   if (m === "GET" && p === "/voice-signups") { requireAdmin(req, env); return voiceSignups(env, url); }
   if (m === "POST" && p === "/v1/hit") return hit(req, env, ctx);
   if ((r = p.match(/^\/v1\/vault\/([0-9a-f]{64})$/))) return vault(req, env, m, r[1]);
@@ -199,7 +199,7 @@ async function voiceTable(env) {
   ]);
   voiceReady = true;
 }
-async function voiceSignup(req, env) {
+async function voiceSignup(req, env, ctx) {
   const b = await body(req);
   if (b.website) return json({ ok: true });                      // 隱藏欄位被填 = 機器人，假裝成功
   const f = (k, n) => String(b[k] == null ? "" : b[k]).trim().slice(0, n);
@@ -216,7 +216,21 @@ async function voiceSignup(req, env) {
 
   await env.DB.prepare("INSERT INTO voice_signups(name,job,contact,mail,note,ip_hash) VALUES(?,?,?,?,?,?)")
     .bind(name, job || null, contact, mail, note || null, ipHash).run();
+  ctx.waitUntil(mailSignup(env, { name, job, contact, mail, note }).catch((e) => console.error("signup mail", e)));
   return json({ ok: true });
+}
+
+/* 登記成功後寄到 tawk.to 工單信箱（Resend）；沒設定 secret 就略過，寄失敗也不影響登記
+   npx wrangler secret put RESEND_API_KEY / RESEND_FROM（例如 "KitLab <noreply@kitlab.store>"）/ TAWK_MAIL */
+async function mailSignup(env, d) {
+  if (!env.RESEND_API_KEY || !env.RESEND_FROM || !env.TAWK_MAIL) return;
+  const text = ["name：" + d.name, "job：" + (d.job || "無"), "contact：" + d.contact, "mail：" + d.mail, "note：" + (d.note || "無")].join("\n");
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { "Authorization": "Bearer " + env.RESEND_API_KEY, "Content-Type": "application/json" },
+    body: JSON.stringify({ from: env.RESEND_FROM, to: [env.TAWK_MAIL], subject: "新語音名片登記：" + d.name.replace(/[\r\n]+/g, " "), text })
+  });
+  if (!res.ok) console.error("resend", res.status, (await res.text()).slice(0, 200));
 }
 async function voiceSignups(env, url) {
   await voiceTable(env);
