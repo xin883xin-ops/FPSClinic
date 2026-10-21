@@ -159,6 +159,7 @@ sup a { text-decoration: none; font-size: .7em; }
 .p4 { background: linear-gradient(160deg, #1F6FB5 0%, #0C2A46 100%); }
 .p5 { background: linear-gradient(160deg, #5B3F8C 0%, #1B1233 100%); }
 .p6 { background: linear-gradient(160deg, #A8741A 0%, #3A2605 100%); }
+.p10 { background: linear-gradient(160deg, #3D5BFF 0%, #0B1240 100%); }
 .p9 { background: linear-gradient(160deg, #C2345F 0%, #3B0A1E 100%); }
 .p7 { background: radial-gradient(120% 90% at 10% 0%, #18A497 0%, transparent 60%), radial-gradient(90% 80% at 100% 100%, #3D5BFF 0%, transparent 65%), #0A0D12; }
 .p8 { background: radial-gradient(110% 80% at 0% 0%, #F2B632 0%, transparent 58%), radial-gradient(90% 80% at 100% 100%, #EE4B2B 0%, transparent 66%), #0F1830; }
@@ -274,3 +275,35 @@ html.toolbox-open { overflow: hidden; }
 
 /* 最窄的手機：頂列按鈕再縮一點（放在檔尾，蓋過上面的工具箱尺寸） */
 @media (max-width: 400px) { .top .tools { width: 40px; height: 40px; } }
+
+/* ---------- 頂欄對齊（固定規則）----------
+   以前有好幾個元素各自用 margin:auto 推右邊，空間被平分，按鈕群會漂到中間；
+   視窗大小在載入後改變（轉向、縮放）時還會錯位。
+   現在只有「Toolkit」這一個元素負責把右邊整組推到底，其他的 auto 一律取消。
+   順序固定：品牌、選單、｜Toolkit、安裝、搜尋、九個點、三槓｜靠右。 */
+.top .wrap > .brand { margin-right: 20px; }
+.top .wrap > .menu { margin: 0; }
+.top .wrap > .kw { margin-left: 0 !important; }
+.top .wrap > .tools { margin-left: auto; }
+.top .wrap > .burger { margin-left: 0; }
+@media (max-width: 1000px) {
+  .top .wrap > .brand { margin-right: 0; }
+}
+
+/* ---------- 固定側邊欄（不展開）---------- */
+.siderail { display: none; }
+@media (min-width: 1001px) {
+  body { padding-right: 56px; }
+  .siderail { display: flex; position: fixed; z-index: 60; top: 0; right: 0; bottom: 0; width: 56px; box-sizing: border-box; padding: 76px 0 16px; flex-direction: column; align-items: center; background: #0A1218; border-left: 1px solid var(--line); }
+  .sr-group { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .sr-btn { position: relative; width: 40px; height: 40px; display: grid; place-items: center; border: 0; border-radius: 12px; background: transparent; color: var(--muted); cursor: pointer; text-decoration: none; transition: background .15s, color .15s; }
+  .sr-btn svg { width: 22px; height: 22px; }
+  .sr-btn:hover, .sr-btn:focus-visible { background: #1B2B35; color: var(--ink); outline: 0; }
+  .sr-btn:focus-visible { box-shadow: 0 0 0 2px var(--teal-bright); }
+  .sr-btn::after { content: attr(data-tip); position: absolute; right: 48px; top: 50%; transform: translate(6px, -50%); padding: 6px 10px; border-radius: 8px; background: #1B2C36; border: 1px solid rgba(255,255,255,.12); color: var(--ink); font-size: 13px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .15s, transform .15s; }
+  .sr-btn:hover::after, .sr-btn:focus-visible::after { opacity: 1; transform: translate(0, -50%); }
+  .sr-sep { width: 22px; height: 1px; margin: 6px 0; background: var(--line); }
+  /* 工具箱滑出時留出側邊欄 */
+  .toolbox { right: 56px; width: min(460px, calc(100vw - 56px)); }
+  .toolbox-scrim { right: 56px; }
+}
