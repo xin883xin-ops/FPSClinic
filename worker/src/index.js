@@ -8,6 +8,7 @@
  *   GET  /v1/catalog          商店整份目錄（分類、輪播、上架中的應用），邊緣快取
  *   GET  /v1/apps/:id         單一應用
  *   POST /v1/feedback         推薦新站點／回報問題（Dash 與商店共用）
+ *   POST /voice-signup        語音輸入報名（name、contact、mail 必填；同 IP 每分鐘限一筆；website 為隱藏欄位陷阱）
  *   POST /v1/hit              首頁來訪計數（不用 cookie、不存 IP；有新訪客時傳 WhatsApp 通知站長）
  *
  * 加密同步（免登入，Header：Authorization: Bearer <由復原碼推導的權杖>）：
@@ -17,6 +18,7 @@
  *   伺服器只拿到密文；復原碼與金鑰從不離開使用者的瀏覽器。超過 400 天沒更新的保險箱會自動清掉。
  *
  * 管理（Header：Authorization: Bearer <ADMIN_TOKEN>）：
+ *   GET    /voice-signups             語音輸入報名名單與總數
  *   GET    /v1/admin/feedback?status=new
  *   PATCH  /v1/admin/feedback/:id      {status:"done"|"spam"|"new"}
  *   POST   /v1/admin/apps              新增應用（id 不給就自動編號）
@@ -76,6 +78,8 @@ async function route(req, env, ctx, url) {
     return json({ ok: true, app: compact(row) }, 200, { "Cache-Control": "public, max-age=300" });
   }
   if (m === "POST" && p === "/v1/feedback") return feedback(req, env);
+  if (m === "POST" && p === "/voice-signup") return voiceSignup(req, env);
+  if (m === "GET" && p === "/voice-signups") { requireAdmin(req, env); return voiceSignups(env, url); }
   if (m === "POST" && p === "/v1/hit") return hit(req, env, ctx);
   if ((r = p.match(/^\/v1\/vault\/([0-9a-f]{64})$/))) return vault(req, env, m, r[1]);
 
@@ -183,6 +187,45 @@ async function feedback(req, env) {
     .bind(kind, String(b.source || "").slice(0, 20), String(b.app_id || "").slice(0, 40) || null, String(b.app_name || "").slice(0, 120) || null,
       link || null, message || "(只附網址)", String(b.contact || "").slice(0, 120) || null, ipHash).run();
   return json({ ok: true });
+}
+
+/* ---------- 語音輸入報名 ---------- */
+let voiceReady = false;
+async function voiceTable(env) {
+  if (voiceReady) return;
+  await env.DB.batch([
+    env.DB.prepare("CREATE TABLE IF NOT EXISTS voice_signups (id INTEGER PRIMARY KEY AUTOINCREMENT, created_at TEXT NOT NULL DEFAULT (datetime('now')), name TEXT NOT NULL, job TEXT, contact TEXT NOT NULL, mail TEXT NOT NULL, note TEXT, ip_hash TEXT)"),
+    env.DB.prepare("CREATE INDEX IF NOT EXISTS voice_signups_ip ON voice_signups(ip_hash, created_at)")
+  ]);
+  voiceReady = true;
+}
+async function voiceSignup(req, env) {
+  const b = await body(req);
+  if (b.website) return json({ ok: true });                      // 隱藏欄位被填 = 機器人，假裝成功
+  const f = (k, n) => String(b[k] == null ? "" : b[k]).trim().slice(0, n);
+  const name = f("name", 80), job = f("job", 120), contact = f("contact", 120), mail = f("mail", 200), note = f("note", 2000);
+  if (!name) throw httpErr(400, "請填寫姓名");
+  if (!contact) throw httpErr(400, "請填寫聯絡方式");
+  if (!mail) throw httpErr(400, "請填寫 Email");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) throw httpErr(400, "Email 格式不對");
+
+  await voiceTable(env);
+  const ipHash = await sha256((req.headers.get("CF-Connecting-IP") || "0") + "|" + (env.SALT || "kitlab"));
+  const recent = await env.DB.prepare("SELECT COUNT(*) AS n FROM voice_signups WHERE ip_hash=? AND created_at > datetime('now','-1 minute')").bind(ipHash).first();
+  if (recent.n >= 1) throw httpErr(429, "送出太頻繁了，請一分鐘後再試");
+
+  await env.DB.prepare("INSERT INTO voice_signups(name,job,contact,mail,note,ip_hash) VALUES(?,?,?,?,?,?)")
+    .bind(name, job || null, contact, mail, note || null, ipHash).run();
+  return json({ ok: true });
+}
+async function voiceSignups(env, url) {
+  await voiceTable(env);
+  const limit = Math.min(1000, Math.max(1, +url.searchParams.get("limit") || 500));
+  const [list, total] = await env.DB.batch([
+    env.DB.prepare("SELECT id,created_at,name,job,contact,mail,note FROM voice_signups ORDER BY id DESC LIMIT ?").bind(limit),
+    env.DB.prepare("SELECT COUNT(*) AS n FROM voice_signups")
+  ]);
+  return json({ ok: true, total: total.results[0].n, items: list.results }, 200, { "Cache-Control": "no-store" });
 }
 
 /* ---------- 首頁來訪計數 + WhatsApp 通知 ----------

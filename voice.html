@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KitLab 語音名片</title>
+<meta name="description" content="在原本的紙本名片印上 QR Code，客人掃一下就能留語音，新留言寄到你的 Email。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: left-aligned work-order feel. Hero = text + sample card; equation band; steps; ruled list; dark offer band with form. */
+:root {
+  --bg: #f4f6f5;
+  --surface: #ffffff;
+  --ink: #14202b;
+  --muted: #4d5b67;
+  --line: #d3dad7;
+  --accent: #f2b705;
+  --on-accent: #14202b;
+  --band: #14202b;
+  --on-band: #eef2ef;
+  --band-muted: #a9b6c0;
+  --band-line: #2f4150;
+  --field: #ffffff;
+  --focus: #1a5fb4;
+  --font-body: "Noto Sans TC", "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --font-num: "Barlow Condensed", "Arial Narrow", "Noto Sans TC", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1820; --surface: #17232d; --ink: #eef1ee; --muted: #9eabb6; --line: #2a3a46;
+    --band: #0a1117; --on-band: #eef2ef; --band-muted: #9eabb6; --band-line: #263543;
+    --field: #0f1820; --focus: #6ea8ff; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1820; --surface: #17232d; --ink: #eef1ee; --muted: #9eabb6; --line: #2a3a46;
+  --band: #0a1117; --on-band: #eef2ef; --band-muted: #9eabb6; --band-line: #263543;
+  --field: #0f1820; --focus: #6ea8ff; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+  -webkit-text-size-adjust: 100%;
+}
+.wrap { max-width: 1040px; margin-inline: auto; }
+h1, h2, h3, p, ul, ol, dl, dd, figure { margin: 0; padding: 0; }
+h1, h2, h3 { line-height: 1.3; text-wrap: balance; font-weight: 900; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  min-height: 52px; padding: 0 26px; border-radius: 8px; border: 2px solid var(--ink);
+  font: 700 17px/1 var(--font-body); text-decoration: none; cursor: pointer;
+  background: var(--accent); color: var(--on-accent); border-color: var(--accent);
+}
+.btn:hover { filter: brightness(.95); }
+.btn.line { background: transparent; color: var(--ink); border-color: var(--ink); }
+.small { font-size: 14.5px; color: var(--muted); line-height: 1.7; }
+.band-dark .small { color: var(--band-muted); }
+
+/* header */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 18px; }
+.brand { display: flex; align-items: baseline; gap: 10px; font-weight: 900; text-decoration: none; }
+.brand b { font-family: var(--font-num); font-size: 26px; letter-spacing: .02em; }
+.brand span { font-size: 15px; font-weight: 700; color: var(--muted); }
+.top .btn { min-height: 42px; padding: 0 18px; font-size: 15px; }
+
+/* hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 40px 56px; align-items: center; padding-block: 36px 72px; }
+.hero h1 { font-size: clamp(2.1rem, 6.4vw, 3.6rem); letter-spacing: -.01em; }
+.hero .sub { margin-top: 20px; font-size: 18.5px; max-width: 30em; }
+.hero .cta { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+.hero .note { margin-top: 16px; }
+.demo { position: relative; min-width: 0; padding-bottom: 54px; }
+.card {
+  position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+  aspect-ratio: 1.75; width: 100%; max-width: 420px; margin-inline: auto;
+  padding: 7% 7%; transform: rotate(-2deg); box-shadow: 0 10px 28px rgba(20,32,43,.16);
+  display: grid; grid-template-columns: 1fr auto; grid-template-rows: 1fr auto; column-gap: 12px;
+}
+.card .who { font-size: clamp(15px, 4.2vw, 21px); font-weight: 900; line-height: 1.3; }
+.card .job { margin-top: 4px; font-size: clamp(11px, 3vw, 13.5px); color: var(--muted); line-height: 1.5; }
+.card .tel { align-self: end; font-family: var(--font-num); font-size: clamp(16px, 4.6vw, 22px); font-weight: 600; letter-spacing: .03em; }
+.card .scan { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 5px; width: clamp(88px, 28vw, 118px); }
+.card .scan .qr { width: 100%; background: #fff; padding: 5px; border: 1px solid var(--line); }
+.card .scan small { font-size: clamp(10px, 2.7vw, 12px); font-weight: 700; text-align: center; line-height: 1.35; }
+.mail {
+  position: absolute; right: 0; bottom: 0; width: min(100%, 330px);
+  background: var(--band); color: var(--on-band); border-radius: 8px; padding: 12px 14px;
+  box-shadow: 0 10px 24px rgba(20,32,43,.28); font-size: 13.5px; line-height: 1.55;
+}
+.mail .mh { display: flex; justify-content: space-between; gap: 10px; color: var(--band-muted); font-size: 12px; }
+.mail .wave { display: flex; align-items: center; gap: 3px; height: 22px; margin: 6px 0 4px; }
+.mail .wave i { width: 3px; border-radius: 2px; background: var(--accent); }
+.tag { display: block; margin-top: 10px; text-align: center; }
+
+/* sections */
+.sec { padding-block: 64px; border-top: 1px solid var(--line); }
+.sec h2 { font-size: clamp(1.6rem, 4.6vw, 2.4rem); }
+.sec .lead { margin-top: 14px; max-width: 34em; }
+.cases { margin-top: 32px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 2px solid var(--ink); }
+.cases > div { padding: 18px 22px 8px 0; }
+.cases > div + div { padding-left: 22px; border-left: 1px solid var(--line); }
+.cases h3 { font-size: 20px; }
+.cases p { margin-top: 6px; color: var(--muted); }
+
+/* equation */
+.eq { margin-top: 36px; display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1.1fr); gap: 18px; align-items: center; }
+.eq .op { font-family: var(--font-num); font-size: 44px; font-weight: 700; line-height: 1; }
+.eq figure { text-align: center; }
+.eq figcaption { margin-top: 10px; font-weight: 700; font-size: 15.5px; line-height: 1.5; }
+.mini { aspect-ratio: 1.75; background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 11% 9%; display: flex; flex-direction: column; justify-content: space-between; text-align: left; }
+.mini i { display: block; height: 7px; border-radius: 4px; background: var(--line); }
+.mini i:first-child { width: 55%; background: var(--muted); height: 9px; }
+.mini i:nth-child(2) { width: 38%; }
+.mini.has-qr { position: relative; }
+.mini.has-qr .qr { position: absolute; right: 8%; bottom: 12%; width: 30%; background: #fff; padding: 3px; border: 1px solid var(--line); }
+.qrbox { aspect-ratio: 1.75; display: grid; place-items: center; }
+.qrbox .qr { height: 100%; aspect-ratio: 1; background: #fff; padding: 6px; border: 2px solid var(--ink); }
+.callout { margin-top: 34px; padding: 18px 22px; border-left: 6px solid var(--accent); background: var(--surface); max-width: 46em; font-weight: 500; }
+
+/* steps */
+.steps { margin-top: 32px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; list-style: none; counter-reset: s; }
+.steps li { counter-increment: s; border-top: 2px solid var(--ink); padding-top: 14px; }
+.steps li::before { content: counter(s); display: block; font-family: var(--font-num); font-size: 40px; font-weight: 700; line-height: 1; margin-bottom: 8px; }
+.steps h3 { font-size: 20px; }
+.steps p { margin-top: 6px; color: var(--muted); }
+
+/* ruled list */
+.rows { margin-top: 28px; border-top: 1px solid var(--line); }
+.rows div { display: grid; grid-template-columns: minmax(0, 15em) minmax(0, 1fr); gap: 4px 28px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.rows dt { font-weight: 900; font-size: 18.5px; }
+.rows dd { color: var(--muted); }
+
+/* dark band */
+.band-dark { background: var(--band); color: var(--on-band); max-width: 1040px; margin: 8px auto 0; border-radius: 14px; padding-inline: clamp(18px, 4vw, 44px); }
+.band-dark .sec { border-top: 0; }
+.who-list { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; list-style: none; }
+.who-list li { border: 1px solid var(--band-line); border-radius: 6px; padding: 8px 16px; font-weight: 500; }
+
+/* offer + form */
+.offer { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 40px 56px; align-items: start; }
+.big { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; margin-top: 14px; }
+.big b { font-family: var(--font-num); font-size: clamp(64px, 14vw, 104px); line-height: .95; font-weight: 700; color: var(--accent); }
+.big span { font-size: 19px; font-weight: 700; }
+.incl { margin-top: 20px; list-style: none; display: grid; gap: 8px; }
+.incl li { padding-left: 26px; position: relative; }
+.incl li::before { content: ""; position: absolute; left: 3px; top: .55em; width: 11px; height: 6px; border-left: 3px solid var(--accent); border-bottom: 3px solid var(--accent); transform: rotate(-45deg); }
+form { background: var(--surface); color: var(--ink); border-radius: 10px; padding: 26px 24px; display: grid; gap: 16px; min-width: 0; }
+form h3 { font-size: 21px; }
+label { display: grid; gap: 6px; font-weight: 700; font-size: 15.5px; min-width: 0; }
+label small { font-weight: 400; color: var(--muted); font-size: 13.5px; }
+input, select, textarea {
+  width: 100%; min-height: 48px; padding: 10px 12px; border-radius: 6px; border: 1.5px solid var(--line);
+  background: var(--field); color: var(--ink); font: 400 16px/1.5 var(--font-body);
+}
+textarea { min-height: 84px; resize: vertical; }
+form .btn { width: 100%; }
+.result { background: var(--field); border: 1.5px dashed var(--ink); border-radius: 8px; padding: 14px; display: grid; gap: 10px; }
+.result textarea { min-height: 150px; font-size: 14.5px; }
+.result .acts { display: flex; flex-wrap: wrap; gap: 10px; }
+.result .btn { width: auto; flex: 1 1 160px; min-height: 46px; }
+.err { color: #b3261e; font-size: 14.5px; font-weight: 700; }
+:root[data-theme="dark"] .err { color: #ff8a80; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .err { color: #ff8a80; } }
+
+/* faq */
+.faq { margin-top: 26px; border-top: 1px solid var(--line); max-width: 46em; }
+details { border-bottom: 1px solid var(--line); }
+summary { cursor: pointer; padding: 16px 28px 16px 0; font-weight: 700; list-style: none; position: relative; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; position: absolute; right: 4px; top: 12px; font-family: var(--font-num); font-size: 28px; font-weight: 600; }
+details[open] summary::after { content: "–"; }
+details p { padding: 0 0 18px; color: var(--muted); }
+
+.final { padding-block: 72px; }
+.final h2 { font-size: clamp(1.7rem, 5vw, 2.7rem); max-width: 16em; }
+.final .btn { margin-top: 26px; }
+.ideas { margin-top: 36px; }
+.ideas ul { margin-top: 8px; list-style: none; display: grid; gap: 6px; }
+.ideas li { padding-left: 1.2em; position: relative; }
+.ideas li::before { content: "\201C"; position: absolute; left: 0; font-weight: 900; }
+footer { border-top: 1px solid var(--line); padding-block: 26px 40px; }
+
+.dock { display: none; }
+@media (max-width: 860px) {
+  .hero, .offer { grid-template-columns: minmax(0, 1fr); }
+  .hero { padding-block: 20px 56px; }
+  .eq { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .eq figure { max-width: 280px; margin-inline: auto; width: 100%; }
+  .eq .op { text-align: center; font-size: 36px; }
+}
+@media (max-width: 700px) {
+  body { font-size: 16.5px; padding-bottom: 76px; }
+  .cases, .steps { grid-template-columns: minmax(0, 1fr); }
+  .cases > div, .cases > div + div { padding: 16px 0 6px; border-left: 0; border-top: 1px solid var(--line); }
+  .cases > div:first-child { border-top: 0; }
+  .rows div { grid-template-columns: minmax(0, 1fr); }
+  .sec { padding-block: 48px; }
+  .brand span { display: none; }
+  .dock {
+    display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    padding: 10px max(16px, env(safe-area-inset-left, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-right, 0px));
+    background: var(--bg); border-top: 1px solid var(--line); transition: transform .2s;
+  }
+  .dock.off { transform: translateY(110%); }
+  .dock .btn { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .dock { transition: none; } }
+</style>
+<style>[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#top"><b>KitLab</b><span>語音名片</span></a>
+    <a class="btn" href="#apply">免費試用</a>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div>
+        <h1>接不到電話，生意也不會跑掉。</h1>
+        <p class="sub">在你原本的紙本名片印上一個 QR Code，客人掃一下就能留語音給你，新留言馬上寄到你的 Email。</p>
+        <div class="cta">
+          <a class="btn" href="#apply">免費試用語音名片</a>
+          <a class="btn line" href="#how">看怎麼運作</a>
+        </div>
+        <p class="small note">客人不用安裝 App，你不用架網站，名片照原本的印刷店印。</p>
+      </div>
+      <div class="demo" aria-label="語音名片示意圖">
+        <div class="card">
+          <div>
+            <div class="who">王大明 水電修繕</div>
+            <div class="job">到府維修　馬桶・漏水・熱水器<br>全區服務</div>
+          </div>
+          <div class="tel">09XX-XXX-XXX</div>
+          <div class="scan"><div class="qr" data-qr="7"></div><small>找不到我？<br>掃這裡留語音</small></div>
+        </div>
+        <div class="mail" role="img" aria-label="Email 通知示意：新語音留言">
+          <div class="mh"><span>新語音留言</span><span>0:23</span></div>
+          <div class="wave" data-wave></div>
+          <div>廚房水龍頭一直滴水，地址在……今天傍晚後都有人在家。</div>
+        </div>
+        <span class="small tag">示意圖，姓名與電話為範例</span>
+      </div>
+    </section>
+
+    <section class="sec">
+      <h2>你在爬梯子、修管線的時候，電話響了。</h2>
+      <p class="lead">手上都是工具，根本騰不出手接電話。等你忙完回撥，對方可能已經找了別人。而且就算接到了，也常常要問半天：哪裡壞掉？什麼狀況？地址在哪？</p>
+      <div class="cases">
+        <div><h3>漏接</h3><p>在現場施工、開車中，電話接不到。</p></div>
+        <div><h3>說不清</h3><p>客人在電話裡講不清楚問題，你也聽不清楚。</p></div>
+        <div><h3>忘記回</h3><p>一天十幾通電話，晚上才發現有一通忘了回。</p></div>
+      </div>
+    </section>
+
+    <section class="sec" id="how">
+      <h2>讓名片幫你接電話。</h2>
+      <p class="lead">客人找不到你的時候，掃一下名片上的 QR Code，就能直接錄一段話，把問題、地址、方便的時間一次講清楚。你忙完再一次聽完、一次回覆。</p>
+      <div class="eq" aria-label="你原本的名片加上 QR Code 等於語音名片">
+        <figure><div class="mini"><i></i><i></i><i></i></div><figcaption>你原本的名片</figcaption></figure>
+        <div class="op" aria-hidden="true">＋</div>
+        <figure><div class="qrbox"><div class="qr" data-qr="3"></div></div><figcaption>一張 QR Code</figcaption></figure>
+        <div class="op" aria-hidden="true">＝</div>
+        <figure><div class="mini has-qr"><i></i><i></i><i></i><div class="qr" data-qr="3"></div></div><figcaption>語音名片</figcaption></figure>
+      </div>
+      <p class="callout">我們把技術都放在那張 QR Code 後面。你只要拿原本的名片，加上這張 QR Code 就可以了，不用換成別種卡片，印法也跟以前一樣。</p>
+    </section>
+
+    <section class="sec">
+      <h2>三步驟，名片就能收留言。</h2>
+      <ol class="steps">
+        <li><h3>申請你的 QR Code</h3><p>填下面的登記表，我們聯絡你開通，並給你專屬的 QR Code 圖檔。</p></li>
+        <li><h3>印在名片上</h3><p>交給你平常的印刷店，印在名片背面或角落就可以。</p></li>
+        <li><h3>開始收語音</h3><p>客人掃碼留言，新留言會寄到你的 Email 通知你。</p></li>
+      </ol>
+    </section>
+
+    <section class="sec">
+      <h2>簡單到不像新科技。</h2>
+      <dl class="rows">
+        <div><dt>客人免安裝</dt><dd>手機相機掃一下就能用，長輩也會。</dd></div>
+        <div><dt>你不用架網站</dt><dd>沒有官網、沒有粉專也沒關係，一張名片就夠。</dd></div>
+        <div><dt>紙本名片照常用</dt><dd>不用換成昂貴的 NFC 卡，照原本的名片和印刷店來印。</dd></div>
+        <div><dt>印一次，長期有效</dt><dd>QR Code 指向 KitLab 的固定網址。之後內容怎麼調整，名片都不用重印。</dd></div>
+        <div><dt>留言寄到 Email</dt><dd>不怕漏掉，隨時回頭翻都找得到。</dd></div>
+      </dl>
+    </section>
+  </main>
+</div>
+
+<div class="band-dark">
+  <div class="wrap">
+    <section class="sec">
+      <h2>特別適合常常在外面跑的你。</h2>
+      <ul class="who-list">
+        <li>水電師傅</li><li>冷氣師傅</li><li>修繕師傅</li><li>清潔</li><li>搬家</li><li>鎖匠</li><li>其他到府服務</li><li>常在外面、沒辦法隨時接電話的業務與工作室</li>
+      </ul>
+    </section>
+
+    <section class="sec" id="apply" style="padding-top:8px;scroll-margin-top:12px">
+      <div class="offer">
+        <div>
+          <h2>我們正在找第一批使用者。</h2>
+          <div class="big"><span>前</span><b>50</b><span>位，免費試用</span><b>3</b><span>個月</span></div>
+          <p style="margin-top:18px">你只要願意用用看，並告訴我們好不好用，就能免費試用。</p>
+          <ul class="incl">
+            <li>專屬語音名片 QR Code</li>
+            <li>新留言 Email 通知</li>
+            <li>我們協助你完成設定</li>
+            <li>印刷檔案格式由我們提供</li>
+          </ul>
+          <p class="small" style="margin-top:20px">試用期結束前，我們會先告知後續價格，由你決定要不要繼續用。</p>
+        </div>
+
+        <form id="signup" novalidate>
+          <h3>登記試用</h3>
+          <label for="f-name">名字或店名
+            <input id="f-name" name="name" autocomplete="name" required placeholder="例如：王大明水電">
+          </label>
+          <label for="f-job">行業
+            <select id="f-job" name="job">
+              <option>水電</option><option>冷氣</option><option>修繕</option><option>清潔</option><option>搬家</option><option>鎖匠</option><option>其他到府服務</option><option>其他</option>
+            </select>
+          </label>
+          <label for="f-contact">LINE ID 或手機
+            <input id="f-contact" name="contact" autocomplete="tel" required placeholder="方便我們聯絡你的方式">
+          </label>
+          <label for="f-mail">收留言的 Email
+            <input id="f-mail" name="mail" type="email" autocomplete="email" required placeholder="name@example.com">
+          </label>
+          <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>網站 <input id="f-website" name="website" tabindex="-1" autocomplete="off"></label></div>
+          <label for="f-note">想跟我們說的 <small>（選填，例如什麼時候要印名片）</small>
+            <textarea id="f-note" name="note"></textarea>
+          </label>
+          <p class="err" id="err" role="alert" hidden></p>
+          <button class="btn" type="submit">整理登記內容</button>
+          <p class="small">按下後會整理好你的登記內容。把它貼到 LINE 傳給我們，登記就完成了。資料只用來聯絡你試用的事。</p>
+
+          <div class="result" id="result" hidden>
+            <strong id="result-title">請把下面的內容傳到 LINE</strong>
+            <textarea id="result-text" readonly aria-label="登記內容"></textarea>
+            <div class="acts">
+              <button class="btn" type="button" id="copy">複製內容</button>
+              <a class="btn line" href="https://line.me/ti/p/~xin883xin" target="_blank" rel="noopener">開啟 LINE</a>
+            </div>
+            <p class="small" id="result-note">LINE ID：<b>xin883xin</b>。複製後到 LINE 貼上傳送，我們收到才算登記完成。</p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="sec" style="border-top:0">
+    <h2>常見問題</h2>
+    <div class="faq">
+      <details><summary>客人需要下載 App 嗎？</summary><p>不用。用手機相機掃 QR Code，就會打開留言頁面。</p></details>
+      <details><summary>我需要有網站或粉絲專頁嗎？</summary><p>不需要。語音名片就是為沒有網站的人設計的。</p></details>
+      <details><summary>一定要重印名片嗎？</summary><p>要把 QR Code 印上去，所以需要印一次。如果你剛好要補印名片，順便加上去就好。</p></details>
+      <details><summary>QR Code 要印多大？</summary><p>建議至少 2 × 2 公分，四周留一點白邊。深色的碼印在淺色的底上最好掃。送印前先用手機掃一次確認。</p></details>
+      <details><summary>留言會寄到哪裡？</summary><p>寄到你設定的 Email。</p></details>
+      <details><summary>以後我想換功能或改內容，要重印嗎？</summary><p>不用。QR Code 連到 KitLab 的固定網址，內容由我們後台調整，印好的名片都可以繼續用。</p></details>
+      <details><summary>試用期結束後，名片會不會失效？</summary><p>不會變成錯誤頁面。沒有續用的話，掃碼會顯示基本的聯絡頁面。</p></details>
+      <details><summary>留言的內容安全嗎？</summary><p>留言是給名片主人聽的。語音檔的保存位置、保存期限，以及誰能聽到，我們會在開通前用一頁隱私說明交代清楚。</p></details>
+    </div>
+  </section>
+
+  <section class="final">
+    <h2>下一通你接不到的電話，讓名片幫你接。</h2>
+    <a class="btn" href="#apply">免費試用語音名片</a>
+    <div class="ideas">
+      <strong>QR Code 旁邊建議印一行字，掃的人會更多：</strong>
+      <ul>
+        <li>找不到我？掃這裡留語音</li>
+        <li>掃一下，直接留話給我</li>
+        <li>在忙沒接到？掃我留言</li>
+        <li>報修請掃碼，講清楚我馬上回</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="small">KitLab 語音名片　kitlab.store/voice　LINE ID：xin883xin</footer>
+</div>
+
+<div class="dock" id="dock"><a class="btn" href="#apply">免費試用語音名片</a></div>
+
+<script>
+(function () {
+  var LINE_ID = "xin883xin";
+  var SIGNUP_ENDPOINT = "/api/voice-signup"; // 之後有後台接口時填入，例如 "/api/voice-signup"；留空則只整理內容讓使用者貼到 LINE
+
+  // 示意用 QR 圖樣（非真實 QR Code，不可掃描）
+  function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function qrSVG(seed) {
+    var n = 25, r = rng(seed), s = "";
+    function finder(x, y) { return (x < 7 && y < 7) || (x >= n - 7 && y < 7) || (x < 7 && y >= n - 7); }
+    function ring(x, y, ox, oy) { var dx = x - ox, dy = y - oy; if (dx < 0 || dy < 0 || dx > 6 || dy > 6) return null; return dx === 0 || dy === 0 || dx === 6 || dy === 6 || (dx >= 2 && dx <= 4 && dy >= 2 && dy <= 4); }
+    for (var y = 0; y < n; y++) for (var x = 0; x < n; x++) {
+      var on;
+      if (finder(x, y)) { on = ring(x, y, 0, 0); if (on === null) on = ring(x, y, n - 7, 0); if (on === null) on = ring(x, y, 0, n - 7); }
+      else if ((x === 7 || y === 7 || x === n - 8 || y === n - 8) && (x < 8 || y < 8) && !(x > 7 && y > 7)) on = false;
+      else on = r() > 0.52;
+      if (on) s += '<rect x="' + x + '" y="' + y + '" width="1" height="1"/>';
+    }
+    return '<svg viewBox="0 0 ' + n + ' ' + n + '" width="100%" height="100%" fill="#14202b" shape-rendering="crispEdges" role="img" aria-label="QR Code 示意">' + s + '</svg>';
+  }
+  document.querySelectorAll("[data-qr]").forEach(function (el) { el.innerHTML = qrSVG(parseInt(el.getAttribute("data-qr"), 10)); });
+
+  var wave = document.querySelector("[data-wave]");
+  if (wave) { var hs = [6, 12, 8, 18, 10, 20, 14, 7, 16, 11, 19, 9, 13, 6, 15, 8, 12, 5, 10, 7]; wave.innerHTML = hs.map(function (h) { return '<i style="height:' + h + 'px"></i>'; }).join(""); }
+
+  // 手機版底部按鈕：登記表單進入畫面後收起
+  var dock = document.getElementById("dock"), apply = document.getElementById("apply");
+  if (dock && apply && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) { dock.classList.toggle("off", es[0].isIntersecting); }, { threshold: 0.12 }).observe(apply);
+  }
+
+  // 登記表單
+  var form = document.getElementById("signup"), err = document.getElementById("err");
+  var result = document.getElementById("result"), rtext = document.getElementById("result-text");
+  var rtitle = document.getElementById("result-title"), rnote = document.getElementById("result-note");
+  function v(id) { return (document.getElementById(id).value || "").trim(); }
+  function showErr(t) { err.textContent = t; err.hidden = !t; }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault(); showErr("");
+    var name = v("f-name"), contact = v("f-contact"), mail = v("f-mail");
+    if (!name) return showErr("請填名字或店名。");
+    if (!contact) return showErr("請填 LINE ID 或手機，我們才聯絡得到你。");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) return showErr("Email 格式不太對，請再確認。");
+    var text = ["【KitLab 語音名片 試用登記】", "名字／店名：" + name, "行業：" + v("f-job"), "聯絡方式：" + contact, "收留言 Email：" + mail]
+      .concat(v("f-note") ? ["補充：" + v("f-note")] : []).join("\n");
+    rtext.value = text; result.hidden = false;
+    rtitle.textContent = "請把下面的內容傳到 LINE";
+    rnote.innerHTML = "LINE ID：<b>" + LINE_ID + "</b>。複製後到 LINE 貼上傳送，我們收到才算登記完成。";
+    if (SIGNUP_ENDPOINT) {
+      fetch(SIGNUP_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: name, job: v("f-job"), contact: contact, mail: mail, note: v("f-note"), website: v("f-website") }) })
+        .then(function (r) { if (r.ok) { rtitle.textContent = "已收到你的登記"; rnote.textContent = "我們會盡快用你留的方式聯絡你。想更快的話，也可以把內容傳到 LINE：" + LINE_ID; } })
+        .catch(function () {});
+    }
+    result.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  });
+
+  document.getElementById("copy").addEventListener("click", function () {
+    var b = this;
+    function ok() { b.textContent = "已複製"; setTimeout(function () { b.textContent = "複製內容"; }, 1800); }
+    function fallback() { rtext.focus(); rtext.select(); b.textContent = "已選取，請長按複製"; }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(rtext.value).then(ok, fallback); else fallback();
+  });
+})();
+</script>
+
+</body>
+</html>

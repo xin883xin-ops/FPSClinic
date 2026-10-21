@@ -70,3 +70,16 @@ CREATE TABLE IF NOT EXISTS vaults (
 );
 CREATE INDEX IF NOT EXISTS vaults_ip ON vaults(ip_hash, created_at);
 CREATE INDEX IF NOT EXISTS vaults_updated ON vaults(updated_at);
+
+-- 語音輸入報名（ip_hash 只用來限制同 IP 每分鐘一筆）
+CREATE TABLE IF NOT EXISTS voice_signups (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  name       TEXT NOT NULL,
+  job        TEXT,
+  contact    TEXT NOT NULL,
+  mail       TEXT NOT NULL,
+  note       TEXT,
+  ip_hash    TEXT
+);
+CREATE INDEX IF NOT EXISTS voice_signups_ip ON voice_signups(ip_hash, created_at);
