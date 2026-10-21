@@ -94,7 +94,7 @@ Cloudflare secret 設好後無法讀回，遺失只能重建再覆蓋。
 | `ADMIN_TOKEN` | 管理 API（`/api/v1/admin/*`、`GET /api/voice-signups`） | 自己產一組 40 字隨機值，覆蓋即可 |
 | `SALT` | IP／來訪雜湊的鹽 | 覆蓋即可（只影響限流與當日計數） |
 | `WA_PHONE`、`WA_APIKEY` | 新訪客 WhatsApp 通知（選用） | CallMeBot 重新取得 |
-| `RESEND_API_KEY` | 語音名片登記後寄信 | Resend 後台 → API Keys 重建，權限選 Sending access，撤銷舊的 |
+| `RESEND_API_KEY` | 語音名片登記後寄信；**與 `voice-card` Worker 共用同一個 Resend 帳號，換 key 時兩邊都要覆蓋** | Resend 後台 → API Keys 重建，權限選 Sending access，撤銷舊的 |
 | `RESEND_FROM` | 寄件人，例如 `KitLab <noreply@kitlab.store>`（父網域已在 Resend 驗證） | 直接重設 |
 | `TAWK_MAIL` | 收登記通知的 tawk.to 工單信箱 | 直接重設 |
 
