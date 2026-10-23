@@ -127,6 +127,9 @@
     $("kScrim").addEventListener("click", closeSheet);
     const wheel = $("kWheel");
     wheel.addEventListener("scroll", onScroll, { passive: true });
+    wheel.addEventListener("touchstart", () => { touching = true; }, { passive: true });
+    wheel.addEventListener("touchend", () => { touching = false; lastScrollAt = performance.now(); }, { passive: true });
+    wheel.addEventListener("touchcancel", () => { touching = false; }, { passive: true });
     wheel.addEventListener("click", e => { const b = e.target.closest(".row"); if (b) goTo(+b.dataset.i); });
     wheel.addEventListener("keydown", e => {
       if (e.key === "ArrowDown") { e.preventDefault(); goTo(S.sel + 1); }
@@ -135,8 +138,8 @@
     });
     renderChips(); renderWheel(); renderCart();
     if (fitRO) fitRO.disconnect();
-    if ("ResizeObserver" in window) { fitRO = new ResizeObserver(fitWheel); fitRO.observe(wheel); }
-    fitWheel();
+    if ("ResizeObserver" in window) { fitRO = new ResizeObserver(() => fitWheel()); fitRO.observe(wheel); }
+    fitWheel(true);
   }
 
   function exit() { const cb = S.onExit; P.kiosk.unmount(); cb && cb(); }
@@ -158,14 +161,22 @@
       <span class="mid"><span class="nm">${esc(it.name)}</span><span class="sb">${it.soldOut ? "今天賣完了" : esc((it.tags || []).join("・") || it.cat)}</span></span>
       <span class="pr">${it.soldOut ? "售完" : money(it.price)}</span></button>`).join("");
     S.sel = Math.max(0, Math.min(S.sel, L.length - 1));
-    fitWheel(); paintRows(); showHero(false);
+    fitWheel(true); paintRows(); showHero(false);
   }
 
-  function fitWheel() {
+  /* 手機滑動時網址列會縮放，轉盤高度跟著變，ResizeObserver 會一直叫 fitWheel。
+     以前每次都把 scrollTop 硬拉回「目前選到的那列」，手指正在滑就被拉回去，
+     所以「往上滑之後就滑不下去」。現在只有「不是使用者正在滑」才會校正位置。 */
+  let lastScrollAt = 0, touching = false;
+  function fitWheel(force) {
     const wheel = $("kWheel"); if (!wheel) return;
     const h = wheel.clientHeight, r = ROW();
     wheel.style.paddingBlock = Math.max(0, (h - r) / 2) + "px";
-    wheel.scrollTop = S.sel * r;
+    const busy = touching || (performance.now() - lastScrollAt < 400);
+    if (force === true || !busy) {
+      const want = S.sel * r;
+      if (Math.abs(wheel.scrollTop - want) > 1) wheel.scrollTop = want;
+    }
     paintRows();
   }
 
@@ -180,6 +191,7 @@
     });
   }
   function onScroll() {
+    lastScrollAt = performance.now();
     if (raf) return;
     raf = requestAnimationFrame(() => {
       raf = 0;

@@ -136,3 +136,23 @@
     img.src = url;
   });
 })();
+
+/* ---- 手機鍵盤：不要蓋住正在輸入的欄位（例如備註） ----
+   手機的螢幕鍵盤常常是「浮」在畫面上，不會把網頁縮小，底部的面板就被蓋住。
+   用 visualViewport 量出鍵盤高度，存成 CSS 變數 --kb，面板往上讓出這個高度；
+   欄位取得焦點時，再把它捲到看得到的位置。 */
+(function () {
+  "use strict";
+  const vv = window.visualViewport;
+  const root = document.documentElement;
+  function setKb() {
+    const kb = vv ? Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop)) : 0;
+    root.style.setProperty("--kb", (kb > 80 ? kb : 0) + "px");   // 小於 80px 不算鍵盤（網址列伸縮）
+  }
+  if (vv) { vv.addEventListener("resize", setKb); vv.addEventListener("scroll", setKb); setKb(); }
+  document.addEventListener("focusin", e => {
+    const el = e.target;
+    if (!el || !/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
+    setTimeout(() => { try { el.scrollIntoView({ block: "center", behavior: "smooth" }); } catch (_) {} }, 320);
+  });
+})();

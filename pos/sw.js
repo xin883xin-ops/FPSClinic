@@ -1,5 +1,5 @@
 /* KitLab 點餐收銀機 service worker：把整個 App 存在裝置裡，沒有網路也能開。
-   改了任何檔案後，把 VERSION 加 1，裝置下次有網路時就會自動更新。 */
+   所有檔案都先連網路拿最新，連不上才用裝置裡存的，所以改了程式不用動版本號。 */
 const VERSION = "pos-v2";
 const CORE = [
   "./", "index.html", "pos.css", "art.js", "core.js", "ui.js", "kiosk.js", "staff.js", "app.js",
@@ -22,18 +22,18 @@ self.addEventListener("fetch", e => {
   if (!same && !FONT_HOSTS.includes(url.hostname)) return;
   if (same && !url.pathname.startsWith(new URL("./", location.href).pathname)) return;
 
+  // 先連網路拿最新（改了程式不用動版本號），連不上才用裝置裡存的（沒網路也能開）
   e.respondWith((async () => {
     const cache = await caches.open(VERSION);
-    const hit = await cache.match(req, { ignoreSearch: true });
-    // 先給快取（離線也立刻能開），同時在背景更新
-    const net = fetch(req).then(res => {
+    try {
+      const res = await fetch(req);
       if (res && (res.ok || res.type === "opaque")) cache.put(req, res.clone());
       return res;
-    }).catch(() => null);
-    if (hit) { e.waitUntil(net); return hit; }
-    const res = await net;
-    if (res) return res;
-    if (req.mode === "navigate") { const home = await cache.match("index.html"); if (home) return home; }
-    return new Response("", { status: 504, statusText: "offline" });
+    } catch (_) {
+      const hit = await cache.match(req, { ignoreSearch: true });
+      if (hit) return hit;
+      if (req.mode === "navigate") { const home = await cache.match("index.html"); if (home) return home; }
+      return new Response("", { status: 504, statusText: "offline" });
+    }
   })());
 });
