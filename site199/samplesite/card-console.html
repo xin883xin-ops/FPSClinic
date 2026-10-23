@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>智慧名片 店家控制台（範例）</title>
+<meta name="description" content="店家用的智慧名片控制台：一個畫面、幾個開關，右邊即時看到客人掃 QR 看到的名片。">
+<style>
+:root{--bg:#0a0a0a;--card:#111113;--line:#27272a;--text:#fafafa;--soft:#a1a1aa;--mute:#71717a;--ok:#22c55e;--rest:#ef4444;--warn:#f59e0b;--pri:#fafafa;--onpri:#0a0a0a;--r:10px}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font:400 15px/1.6 Inter,-apple-system,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;min-height:100svh}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+:focus-visible{outline:2px solid #fafafa;outline-offset:2px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line)}
+.top b{font-weight:600;letter-spacing:.02em}.top span{color:var(--mute);font-size:13px}
+.wrap{max-width:1040px;margin:0 auto;padding:20px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}
+.tabs{display:none}
+h2{font-size:12px;font-weight:600;color:var(--mute);letter-spacing:.1em;margin:0 0 10px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:16px}
+.secret{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:13px;color:var(--soft)}
+.secret code{background:#18181b;border:1px solid var(--line);border-radius:6px;padding:3px 8px;color:var(--text);font-size:12px;word-break:break-all}
+/* status */
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg button{border:1px solid var(--line);border-radius:var(--r);padding:16px 8px;font-weight:600;font-size:17px;display:flex;flex-direction:column;align-items:center;gap:4px;background:#0d0d0f}
+.seg button small{font-weight:400;font-size:12px;color:var(--mute)}
+.seg button i{width:10px;height:10px;border-radius:50%;display:block}
+.seg button[aria-pressed=true]{border-color:var(--text);background:#18181b}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}
+.row[hidden]{display:none}
+.row .l{min-width:0}.row .l b{font-weight:500;display:block}.row .l small{color:var(--mute);font-size:12.5px;display:block}
+.sw{flex:none;width:46px;height:28px;border-radius:99px;background:#3f3f46;position:relative;transition:background .15s}
+.sw::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fafafa;transition:transform .15s}
+.sw[aria-checked=true]{background:var(--ok)}.sw[aria-checked=true]::after{transform:translateX(18px)}
+.hours{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+input[type=time],input[type=text],input[type=number]{background:#0d0d0f;border:1px solid var(--line);border-radius:8px;padding:8px 10px;color:var(--text);min-width:0}
+.menu .it{display:grid;grid-template-columns:1fr 84px auto;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.menu .it:first-child{border-top:0}
+.sold{border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:13px;color:var(--soft)}
+.sold[aria-pressed=true]{background:var(--rest);border-color:var(--rest);color:#fff}
+.hint{color:var(--mute);font-size:12.5px;margin-top:8px}
+/* phone */
+.phonewrap{position:sticky;top:16px}
+.phone{background:#000;border:1px solid #3f3f46;border-radius:34px;padding:10px;box-shadow:0 20px 60px #000a}
+.screen{background:#f4f4f5;color:#18181b;border-radius:26px;overflow:hidden;min-height:560px;display:flex;flex-direction:column}
+.p-head{padding:22px 18px 14px;background:#fff;border-bottom:1px solid #e4e4e7}
+.p-head h3{font-size:22px;line-height:1.3}
+.p-head p{color:#71717a;font-size:13px}
+.badge{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:7px 14px;border-radius:99px;font-weight:600;font-size:15px}
+.badge i{width:10px;height:10px;border-radius:50%;background:currentColor}
+.badge.ok{background:#dcfce7;color:#15803d}.badge.rest{background:#fee2e2;color:#b91c1c}.badge.early{background:#fef3c7;color:#b45309}
+.p-hours{margin-top:6px;font-size:13px;color:#52525b}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 14px 4px}
+.acts a{background:#18181b;color:#fff;text-decoration:none;border-radius:12px;padding:12px 6px;text-align:center;font-weight:600;font-size:14px}
+.acts a.alt{background:#fff;color:#18181b;border:1px solid #d4d4d8}
+.p-sec{padding:14px 18px}
+.p-sec h4{font-size:12px;color:#71717a;letter-spacing:.1em;margin-bottom:6px}
+.p-it{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #e4e4e7;font-size:15px}
+.p-it:first-of-type{border-top:0}
+.p-it.s{color:#a1a1aa}.p-it.s span:first-child{text-decoration:line-through}
+.p-it em{font-style:normal;font-size:12px;color:#b91c1c;margin-left:6px}
+.foot{margin-top:auto;padding:12px;text-align:center;font-size:11px;color:#a1a1aa}
+.note{color:var(--mute);font-size:12px;text-align:center;margin-top:10px}
+@media(max-width:860px){
+ .wrap{grid-template-columns:1fr;padding:14px}
+ .tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:12px 14px 0;max-width:1040px;margin:0 auto}
+ .tabs button{border:1px solid var(--line);border-radius:99px;padding:9px;font-weight:500;color:var(--soft)}
+ .tabs button[aria-pressed=true]{background:var(--pri);color:var(--onpri);border-color:var(--pri)}
+ .phonewrap{position:static}
+ body[data-view=console] .phonewrap,body[data-view=card] .console{display:none}
+}
+</style>
+</head>
+<body data-view="console">
+<div class="top"><div><b>KitLab 智慧名片</b> <span>店家控制台</span></div><span>阿新快炒（範例）</span></div>
+<div class="tabs" role="tablist"><button id="t-c" aria-pressed="true">我的設定</button><button id="t-p" aria-pressed="false">客人看到的</button></div>
+
+<div class="wrap">
+<main class="console">
+ <div class="panel secret"><span>只有你知道的專屬連結，存到手機桌面就能用</span><code>kitlab.store/m/7fK2-x9Qa</code></div>
+
+ <div class="panel">
+  <h2>今天營業嗎</h2>
+  <div class="seg" id="status">
+   <button data-s="ok" aria-pressed="true"><i style="background:var(--ok)"></i>營業中<small>照平常時間</small></button>
+   <button data-s="early" aria-pressed="false"><i style="background:var(--warn)"></i>提早打烊<small id="earlyTxt">今天 20:00</small></button>
+   <button data-s="rest" aria-pressed="false"><i style="background:var(--rest)"></i>今天休息<small>客人看到紅燈</small></button>
+  </div>
+  <div class="row" id="earlyRow" hidden><div class="l"><b>今天打烊時間</b></div><input type="time" id="earlyT" value="20:00"></div>
+  <div class="row" style="margin-top:10px"><div class="l"><b>平常營業時間</b><small>設定一次，平常日子不用再動</small></div>
+   <div class="hours"><input type="time" id="o1" value="17:00"> – <input type="time" id="o2" value="23:30"></div></div>
+  <div class="row"><div class="l"><b>每週固定休息</b></div>
+   <div class="hours"><button class="sold" id="dow" aria-pressed="false">每週一休</button></div></div>
+ </div>
+
+ <div class="panel">
+  <h2>名片上要顯示哪些功能</h2>
+  <div id="mods"></div>
+  <p class="hint">沒打開的功能，客人那邊就不會出現。只想放菜單和電話也可以。</p>
+ </div>
+
+ <div class="panel menu">
+  <h2>菜單　<span style="font-weight:400;letter-spacing:0">按「售完」，客人馬上看到</span></h2>
+  <div id="menu"></div>
+ </div>
+</main>
+
+<aside class="phonewrap">
+ <div class="phone"><div class="screen" id="screen"></div></div>
+ <p class="note">客人掃 QR 看到的畫面，你改的設定會即時更新</p>
+</aside>
+</div>
+
+<script>
+var M=[
+ {k:'call',n:'一鍵打電話',d:'客人點一下就撥給你',on:true},
+ {k:'map',n:'地圖導航',d:'開 Google 地圖帶他來',on:true},
+ {k:'menu',n:'菜單與價格',d:'顯示下面的菜單',on:true},
+ {k:'line',n:'LINE 聯絡',d:'一鍵加你的 LINE',on:false},
+ {k:'voice',n:'語音留言',d:'客人按住說話留言給你',on:false},
+ {k:'loc',n:'傳位置',d:'客人把自己的位置傳給你（外送、取貨）',on:false},
+ {k:'form',n:'填表單',d:'預約、訂位、詢問',on:false},
+ {k:'file',n:'收檔案',d:'客人傳照片、文件給你',on:false}
+];
+var items=[{n:'蛋炒飯',p:70,s:false},{n:'三杯雞',p:280,s:false},{n:'炒青菜',p:100,s:false},{n:'蛤蜊湯',p:120,s:true}];
+var st='ok',earlyT='20:00',closedMon=false;
+var $=function(i){return document.getElementById(i)};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+function drawMods(){
+ $('mods').innerHTML=M.map(function(m,i){return '<div class="row"><div class="l"><b>'+m.n+'</b><small>'+m.d+'</small></div><button class="sw" role="switch" aria-label="'+m.n+'" aria-checked="'+m.on+'" data-i="'+i+'"></button></div>'}).join('');
+}
+function drawMenu(){
+ $('menu').innerHTML=items.map(function(it,i){return '<div class="it"><input type="text" value="'+esc(it.n)+'" data-i="'+i+'" data-f="n" aria-label="品名"><input type="number" value="'+it.p+'" min="0" data-i="'+i+'" data-f="p" aria-label="價格"><button class="sold" aria-pressed="'+it.s+'" data-i="'+i+'">售完</button></div>'}).join('');
+}
+function card(){
+ var o1=$('o1').value,o2=$('o2').value,txt,cls,label;
+ if(st==='rest'){cls='rest';label='今天休息';txt='明天再來看看'}
+ else if(st==='early'){cls='early';label='提早打烊';txt='今天營業到 '+earlyT}
+ else if(closedMon&&new Date().getDay()===1){cls='rest';label='今天公休';txt='每週一休息'}
+ else{cls='ok';label='營業中';txt='今天 '+o1+' – '+o2}
+ var on=function(k){return M.filter(function(m){return m.k===k})[0].on};
+ var A={call:['tel:0900000000','打電話',''],line:['#','LINE 聯絡','alt'],map:['#','導航','alt'],voice:['#','語音留言','alt'],loc:['#','傳位置','alt'],form:['#','預約／詢問','alt'],file:['#','傳檔案','alt']};
+ var acts=['call','map','line','voice','loc','form','file'].filter(on).map(function(k){return '<a href="'+A[k][0]+'" class="'+A[k][2]+'" onclick="return false">'+A[k][1]+'</a>'}).join('');
+ var menu=on('menu')?'<div class="p-sec"><h4>菜單</h4>'+items.map(function(it){return '<div class="p-it'+(it.s?' s':'')+'"><span>'+esc(it.n)+(it.s?'<em>今日售完</em>':'')+'</span><span>$'+esc(it.p)+'</span></div>'}).join('')+'</div>':'';
+ $('screen').innerHTML='<div class="p-head"><h3>阿新快炒</h3><p>宜蘭・熱炒・近羅東火車站</p><div class="badge '+cls+'"><i></i>'+label+'</div><div class="p-hours">'+txt+'</div></div>'+(acts?'<div class="acts">'+acts+'</div>':'')+menu+'<div class="foot">KitLab 智慧名片</div>';
+}
+function sync(){
+ [].forEach.call(document.querySelectorAll('#status button'),function(b){b.setAttribute('aria-pressed',b.dataset.s===st)});
+ $('earlyRow').hidden=st!=='early';$('earlyTxt').textContent='今天 '+earlyT;
+ $('dow').setAttribute('aria-pressed',closedMon);card();
+}
+$('status').onclick=function(e){var b=e.target.closest('button');if(!b)return;st=b.dataset.s;sync()};
+$('earlyT').oninput=function(){earlyT=this.value;sync()};
+$('o1').oninput=$('o2').oninput=card;
+$('dow').onclick=function(){closedMon=!closedMon;sync()};
+$('mods').onclick=function(e){var b=e.target.closest('.sw');if(!b)return;var m=M[b.dataset.i];m.on=!m.on;b.setAttribute('aria-checked',m.on);card()};
+$('menu').onclick=function(e){var b=e.target.closest('.sold');if(!b)return;var it=items[b.dataset.i];it.s=!it.s;b.setAttribute('aria-pressed',it.s);card()};
+$('menu').oninput=function(e){var t=e.target,it=items[t.dataset.i];if(!it)return;it[t.dataset.f]=t.dataset.f==='p'?(t.value||0):t.value;card()};
+function view(v){document.body.dataset.view=v;$('t-c').setAttribute('aria-pressed',v==='console');$('t-p').setAttribute('aria-pressed',v==='card')}
+$('t-c').onclick=function(){view('console')};$('t-p').onclick=function(){view('card')};
+drawMods();drawMenu();sync();
+</script>
+</body>
+</html>
