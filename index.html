@@ -270,61 +270,6 @@
   </div>
 </section>
 
-<!-- 開始 -->
-<style>
-  #coming-soon{--cs-bg:#0A0E17;--cs-surface:#121927;--cs-line:#222d44;--cs-text:#F5F7FB;--cs-muted:#9AA5BA;--cs-mint:#4DE3C1;--cs-mint-ink:#06211b;--cs-warn:#FFC857;
-    color:var(--cs-text);background:var(--cs-bg);padding:48px max(16px,env(safe-area-inset-left,0px));line-height:1.7}
-  #coming-soon *{box-sizing:border-box}
-  #coming-soon .cs-wrap{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
-  #coming-soon .cs-kicker{font-size:13px;letter-spacing:.12em;color:var(--cs-mint)}
-  #coming-soon h2{margin:0;font-size:clamp(26px,5vw,34px);line-height:1.25;text-wrap:balance}
-  #coming-soon .cs-lead{margin:0;color:var(--cs-muted);max-width:36em}
-  #coming-soon .cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
-  #coming-soon .cs-item{background:var(--cs-surface);border:1px solid var(--cs-line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
-  #coming-soon .cs-item h3{margin:0;font-size:19px}
-  #coming-soon .cs-item p{margin:0;color:var(--cs-muted);font-size:15px}
-  #coming-soon .cs-tag{align-self:flex-start;font-size:12px;font-weight:800;padding:2px 10px;border-radius:99px;border:1px solid var(--cs-line);color:var(--cs-muted)}
-  #coming-soon .cs-tag.live{background:var(--cs-mint);color:var(--cs-mint-ink);border-color:var(--cs-mint)}
-  #coming-soon .cs-tag.soon{background:var(--cs-mint);color:var(--cs-mint-ink);border-color:var(--cs-mint)}
-  #coming-soon .cs-family{grid-column:1/-1;background:var(--cs-surface);border:1px solid var(--cs-line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
-  #coming-soon .cs-family h3{margin:0;font-size:21px}
-  #coming-soon .cs-family>p{margin:0;color:var(--cs-muted);font-size:15px}
-  #coming-soon .cs-subs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
-  #coming-soon .cs-sub{border:1px solid var(--cs-line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
-  #coming-soon .cs-sub b{font-size:16px}
-  #coming-soon .cs-sub span.d{color:var(--cs-muted);font-size:14px;line-height:1.55}
-  #coming-soon a.cs-more{align-self:flex-start;color:var(--cs-mint);font-weight:700;font-size:15px;text-decoration:none}
-  #coming-soon a.cs-more:hover{text-decoration:underline}
-  #coming-soon .cs-note{margin:0;color:var(--cs-muted);font-size:13px}
-</style>
-<section id="coming-soon" aria-labelledby="cs-title">
-  <div class="cs-wrap">
-    <span class="cs-kicker">即將推出</span>
-    <h2 id="cs-title">下一批要上架的東西</h2>
-    <p class="cs-lead">這些都是從實際使用情境長出來的小工具，一張 QR、一支手機就能用。上線順序與內容可能調整。</p>
-    <div class="cs-grid">
-      <article class="cs-family">
-        <span class="cs-tag live">已開放</span>
-        <h3>智慧名片</h3>
-        <p>名片上的 QR，掃一下就能留語音、傳位置、點單。客人不用安裝，店家不用有網站。名片類的都放在這裡。</p>
-        <div class="cs-subs">
-          <div class="cs-sub"><span class="cs-tag live">已開放</span><b>語音名片</b><span class="d">掃一下留一段語音給你，新留言寄 Email 通知。</span></div>
-          <div class="cs-sub"><span class="cs-tag live">展示版</span><b>營業狀態</b><span class="d">老闆一鍵切換「營業中、提早打烊、今天休息」，客人掃一下就知道，不用查 Google。<a href="site199/samplesite/card-console.html">試玩 →</a></span></div>
-          <div class="cs-sub"><span class="cs-tag">未開放</span><b>定位名片</b><span class="d">按一個鈕就把位置傳給你，地址不好說也找得到。</span></div>
-          <div class="cs-sub"><span class="cs-tag live">展示版</span><b>點單名片</b><span class="d">菜單上的 QR，客人勾選品項送出，訂單即時出現在店家的畫面，不被平台抽成。<a href="site199/samplesite/card-console.html">試玩 →</a></span></div>
-          <div class="cs-sub"><span class="cs-tag">未開放</span><b>找到我們</b><span class="d">QR 直接導航到店面，還能放電話與營業時間。</span></div>
-          <div class="cs-sub"><span class="cs-tag">未開放</span><b>會員卡</b><span class="d">每位會員一個專屬文件盒，合約與保固單掃卡就看得到。</span></div>
-        </div>
-        <a class="cs-more" href="cards/">看智慧名片的詳細說明 →</a>
-      </article>
-      <article class="cs-item"><span class="cs-tag">未開放</span><h3>新聞遙控器</h3><p>電腦當電視、手機當遙控器，左右轉台看台灣新聞直播，不用安裝。</p></article>
-      <article class="cs-item"><span class="cs-tag">未開放</span><h3>手機簡報筆</h3><p>用手機取代實體簡報筆，翻頁與控制簡報。</p></article>
-    </div>
-    <p class="cs-note">「已開放」代表現在就能試用，「未開放」代表還沒開放使用，上線順序與時間可能調整。</p>
-  </div>
-</section>
-<!-- 結束 -->
-
 <!-- 大橫幅 -->
 <section class="sec" id="more">
   <div class="wrap banners">
