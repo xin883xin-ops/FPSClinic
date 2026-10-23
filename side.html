@@ -626,6 +626,7 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
     days: '<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M8 3v4M16 3v4M9 15.5l2 2 4-4"/>',
     pass: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3M12 15v2"/>',
     lock: '<path d="M6 3h8l4 4v4M6 3v18h5M14 3v4h4"/><rect x="13" y="15" width="7" height="6" rx="1.5"/><path d="M14.5 15v-1.5a2 2 0 0 1 4 0V15"/>',
+    wiki: '<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5v-15z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3"/><path d="M9 8h6M9 12h4"/>',
     link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
     globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>',
     mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
@@ -662,8 +663,10 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
     net: { name: "網路檢測", title: "網路檢測", sub: "IP、WebRTC、DNS 與瀏覽器資訊，一次列出。", wide: 1 },
     port: { name: "埠掃描", title: "埠掃描", sub: "只掃描你自己的電腦與你自己的公網 IP。", wide: 1 },
     speed: { name: "測速", title: "網路測速", sub: "延遲、下載、上傳，使用 Cloudflare 測速伺服器。", wide: 1 },
-    lock: { name: "帶鎖筆記", title: "帶鎖筆記", sub: "用 nologin.in 傳檔案、傳文字。網址與密碼由你們雙方先約好。" }
+    lock: { name: "帶鎖筆記", title: "帶鎖筆記", sub: "用 nologin.in 傳檔案、傳文字。網址與密碼由你們雙方先約好。" },
+    wiki: { name: "萬物說明書", title: "萬物說明書", sub: "" }
   };
+  var WIKI_URL = "https://notes.kitlab.store/";
   var TOOL_KEYS = Object.keys(TOOLS);
   var NEW_TOOLS = ["upload", "short", "net", "port", "speed"];
 
@@ -730,7 +733,7 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
   function normalize(o) {
     var base = {
       shortcuts: DEFAULTS.map(function (s) { return { title: s.title, url: s.url, category: s.category }; }),
-      bar: defaultBar(), note: "", todos: [], days: [], locks: [], uploads: [], shorts: [], speeds: [], toolsV: 3,
+      bar: defaultBar(), note: "", todos: [], days: [], locks: [], uploads: [], shorts: [], speeds: [], toolsV: 4,
       engine: "google", accent: "teal", autoOpen: true, favicons: true, tourDone: false, updatedAt: 0, lastBackup: 0
     };
     if (Array.isArray(o)) o = { shortcuts: o };
@@ -755,6 +758,12 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
       function addTool(k) { if (!base.bar.some(function (b) { return b.type === "tool" && b.key === k; })) base.bar.push({ type: "tool", key: k }); }
       if (tv < 2) addTool("lock");
       if (tv < 3) NEW_TOOLS.forEach(addTool); /* 同樣只補一次 */
+      /* 萬物說明書：舊資料（toolsV 小於 4）只補一次，放在「帶鎖筆記」的右邊；之後使用者自己移除就不會再被補回 */
+      if (tv < 4 && !base.bar.some(function (b) { return b.type === "tool" && b.key === "wiki"; })) {
+        var li = -1;
+        base.bar.forEach(function (b, n) { if (b.type === "tool" && b.key === "lock") li = n; });
+        base.bar.splice(li >= 0 ? li + 1 : base.bar.length, 0, { type: "tool", key: "wiki" });
+      }
     }
     if (Array.isArray(o.uploads)) base.uploads = o.uploads.filter(function (u) { return u && typeof u.n === "string" && typeof u.u === "string" && /^https:\/\/\S+$/.test(u.u) && (!u.d || /^https:\/\/\S+$/.test(u.d)); }).slice(0, 20).map(function (u) { var r = { n: u.n.slice(0, 80), u: u.u, at: +u.at || 0 }; if (u.d) r.d = u.d; if (+u.x) r.x = +u.x; return r; });
     if (Array.isArray(o.shorts)) base.shorts = o.shorts.filter(function (s) { return s && typeof s.l === "string" && typeof s.s === "string" && /^https:\/\/(is|v)\.gd\/\S+$/.test(s.s); }).slice(0, 20).map(function (s) { return { l: s.l.slice(0, 500), s: s.s, at: +s.at || 0 }; });
@@ -782,7 +791,7 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
   try { var lr = localStorage.getItem(LS_LOOK); if (lr) look = Object.assign(look, JSON.parse(lr)); } catch (e) {}
 
   function payload() {
-    return { shortcuts: S.shortcuts, bar: S.bar, note: S.note, todos: S.todos, days: S.days, locks: S.locks, uploads: S.uploads, shorts: S.shorts, speeds: S.speeds, toolsV: 3, engine: S.engine, accent: S.accent, autoOpen: S.autoOpen, favicons: S.favicons, tourDone: S.tourDone, updatedAt: S.updatedAt, lastBackup: S.lastBackup };
+    return { shortcuts: S.shortcuts, bar: S.bar, note: S.note, todos: S.todos, days: S.days, locks: S.locks, uploads: S.uploads, shorts: S.shorts, speeds: S.speeds, toolsV: 4, engine: S.engine, accent: S.accent, autoOpen: S.autoOpen, favicons: S.favicons, tourDone: S.tourDone, updatedAt: S.updatedAt, lastBackup: S.lastBackup };
   }
   var warned = false;
   function saveLocal() {
@@ -1134,6 +1143,7 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
   var toolBody = $("toolBody"), curTool = "";
   function openTool(key) {
     var T = TOOLS[key]; if (!T) return;
+    if (key === "wiki") { window.open(WIKI_URL, "_blank", "noopener"); return; } /* 萬物說明書是獨立網站，直接開新分頁 */
     curTool = key;
     $("ttTool").textContent = T.title; $("ttToolSub").textContent = T.sub; $("ttToolSub").hidden = !T.sub;
     toolBody.onclick = null; toolBody.oninput = null; toolBody.onchange = null; toolBody.onsubmit = null;
@@ -1917,7 +1927,7 @@ html.embed .drawer { width: 100%; border-left: 0; box-shadow: none; transform: n
   /* ---------- 導覽 ---------- */
   var TOUR = [
     { sel: '[data-tour="search"]', t: "一個輸入框，兩種用法", b: "輸入網址會直接前往，其他文字會用左側選定的搜尋引擎搜尋。按 / 隨時跳到這裡。" },
-    { sel: '[data-tour="bar"]', t: "功能列", b: "備份、待辦、便條、計時器、字數統計、計算機、倒數日、密碼產生器、帶鎖筆記。按「編輯」可以移除，也能加自己常用的網站。" },
+    { sel: '[data-tour="bar"]', t: "功能列", b: "備份、待辦、便條、計時器、字數統計、計算機、倒數日、密碼產生器、帶鎖筆記、萬物說明書。按「編輯」可以移除，也能加自己常用的網站。" },
     { sel: '[data-tour="cats"]', t: "用分類找網站", b: "點一個分類，下方只顯示那一類。新增捷徑時輸入新的分類名稱，這裡會自動多出一格。" },
     { sel: '[data-tour="shelf"]', t: "最常使用排在最前面", b: "依你的點擊次數排序。用滑鼠拖曳、手指左右滑動，或按右上角的箭頭瀏覽。" },
     { sel: '[data-tour="add"]', t: "新增、編輯、刪除", b: "按「新增捷徑」加入網站，也能上傳自己的圖示。刪除後 7 秒內可以復原。" },
