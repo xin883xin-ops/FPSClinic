@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src * data: blob:; media-src * blob:; frame-src https://www.youtube-nocookie.com; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="robots" content="noindex">
+<title>帶鎖筆記</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+<!-- 首頁 -->
+<section id="v-home">
+  <header class="bar">
+    <h1>帶鎖筆記</h1>
+    <button id="fab" class="soft newbtn" type="button" aria-label="新增"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>新筆記</button>
+    <button id="lock" class="icon-btn" type="button" aria-label="立即鎖上">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+    </button>
+  </header>
+  <form id="f-open" class="keybox" autocomplete="off">
+    <label for="key" class="sr">暗號</label>
+    <svg class="keyico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></svg>
+    <input id="key" type="text" placeholder="例如 windows-robocopy" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go">
+    <button class="primary" type="submit">打開</button>
+  </form>
+  <div class="rowhead"><span id="lbl-recent">最近</span><span id="count"></span></div>
+  <ul id="recent" class="list"></ul>
+</section>
+
+<!-- 筆記 -->
+<section id="v-note" hidden>
+  <header class="bar">
+    <button class="icon-btn back" type="button" aria-label="返回"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <h2 id="n-title"></h2>
+    <button id="n-edit" class="ghost-accent" type="button">編輯</button>
+  </header>
+  <button id="n-ver" class="chip" type="button"></button>
+  <ul id="n-versions" class="vlist" hidden></ul>
+  <div id="n-old" class="banner" hidden><span>這是舊版本</span><button id="n-restore" class="primary small" type="button">還原</button></div>
+  <div id="n-body" class="card"></div>
+  <div id="n-media"></div>
+  <ul id="n-files" class="list"></ul>
+</section>
+
+<!-- 新增 / 編輯 -->
+<section id="v-edit" hidden>
+  <header class="bar">
+    <button class="icon-btn back" type="button" aria-label="返回"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <h2 id="e-title">新增</h2>
+  </header>
+  <label for="e-text" class="sr">筆記</label>
+  <textarea id="e-text" class="card area tall" placeholder="在這裡寫筆記…"></textarea>
+  <label for="e-key" class="lbl">暗號</label>
+  <div class="keybox">
+    <input id="e-key" type="text" placeholder="例如 windows-robocopy" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+  </div>
+  <button id="e-pick" class="soft wide" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V5M7.5 9.5L12 5l4.5 4.5M5 20h14"/></svg><span id="e-fstatus">附加檔案</span></button>
+  <input id="e-file" type="file" multiple hidden>
+  <ul id="e-files" class="chips"></ul>
+  <label for="e-link" class="lbl">連結</label>
+  <div class="keybox">
+    <input id="e-link" class="grow bare" type="url" placeholder="貼連結（YouTube 會直接播放）" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <button id="e-addlink" class="ghost" type="button">加入</button>
+  </div>
+  <ul id="e-links" class="chips"></ul>
+  <div class="spacer"></div>
+  <button id="e-save" class="primary big" type="button">存入</button>
+</section>
+
+<!-- 工具箱 .tools -->
+<section id="v-tools" hidden>
+  <header class="bar">
+    <button class="icon-btn back" type="button" aria-label="返回"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <h2>工具箱</h2>
+  </header>
+  <label for="t-pass" class="sr">密語</label>
+  <div class="keybox"><input id="t-pass" type="text" placeholder="密語" autocomplete="off" spellcheck="false"></div>
+  <label for="t-in" class="sr">輸入</label>
+  <textarea id="t-in" class="card area short" placeholder="要加密的文字，或要解密的密文"></textarea>
+  <div class="two">
+    <button id="t-enc" class="primary" type="button">加密</button>
+    <button id="t-dec" class="ghost big" type="button">解密</button>
+    <button id="t-hash" class="ghost big" type="button">SHA-256</button>
+  </div>
+  <label for="t-out" class="sr">結果</label>
+  <textarea id="t-out" class="card area short" placeholder="結果" readonly></textarea>
+  <button id="t-copy" class="ghost big" type="button">複製結果</button>
+  <p class="dim small-note">全部在這台裝置上計算，不會送出任何東西。</p>
+</section>
+
+<!-- 管理員 .sudo -->
+<section id="v-sudo" hidden>
+  <header class="bar">
+    <button class="icon-btn back" type="button" aria-label="返回"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <h2>管理員</h2>
+  </header>
+  <form id="s-login" class="keybox" autocomplete="off">
+    <label for="s-pass" class="sr">管理員密碼</label>
+    <input id="s-pass" type="password" placeholder="密碼" autocomplete="current-password">
+    <button class="primary" type="submit">登入</button>
+  </form>
+  <div id="s-panel" hidden>
+    <div class="card stat" id="s-stats"></div>
+    <button id="s-backup" class="primary big" type="button">立即備份</button>
+  </div>
+</section>
+
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

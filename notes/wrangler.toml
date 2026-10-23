@@ -1,0 +1,34 @@
+name = "kitlab-notes"
+main = "src/worker.js"
+compatibility_date = "2025-01-01"
+
+# 固定網址：部署時自動綁到你的網域（kitlab.store 要已在同一個 Cloudflare 帳號）
+routes = [
+  { pattern = "notes.kitlab.store", custom_domain = true }
+]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/api/*"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kitlab-notes"
+database_id = "換成 wrangler d1 create 給的 id"
+
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "kitlab-notes-files"
+
+[triggers]
+crons = ["*/30 * * * *"]
+
+[vars]
+BACKUP_REPO = "你的帳號/kitlab-notes-backup"
+BACKUP_BRANCH = "main"
+
+# 機密不寫在這裡，用指令設定：
+#   npx wrangler secret put ADMIN_PASSWORD   (管理員密碼)
+#   npx wrangler secret put ADMIN_SECRET     (隨機長字串，簽登入憑證用)
+#   npx wrangler secret put GITHUB_TOKEN     (只給備份 repo 的 contents 寫入權限)
