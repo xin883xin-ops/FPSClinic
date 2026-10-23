@@ -3,148 +3,260 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>智慧名片 店家控制台（範例）</title>
-<meta name="description" content="店家用的智慧名片控制台：一個畫面、幾個開關，右邊即時看到客人掃 QR 看到的名片。">
+<title>智慧名片 店家系統（範例）</title>
+<meta name="description" content="像車用導航一樣的店家系統：左邊選功能，大按鈕操作，右邊即時看到客人掃 QR 看到的名片。">
 <style>
-:root{--bg:#0a0a0a;--card:#111113;--line:#27272a;--text:#fafafa;--soft:#a1a1aa;--mute:#71717a;--ok:#22c55e;--rest:#ef4444;--warn:#f59e0b;--pri:#fafafa;--onpri:#0a0a0a;--r:10px}
-*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--text);font:400 15px/1.6 Inter,-apple-system,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;min-height:100svh}
+:root{--bg:#070a0f;--bar:#0c1118;--tile:#121923;--tile2:#18212d;--line:#243142;--text:#f1f5f9;--soft:#94a3b8;--mute:#64748b;--acc:#38bdf8;--ok:#22c55e;--warn:#f59e0b;--rest:#ef4444;--rail:88px}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font:400 16px/1.5 Inter,-apple-system,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;overflow:hidden}
 button,input{font:inherit;color:inherit}
 button{cursor:pointer;background:none;border:0}
-:focus-visible{outline:2px solid #fafafa;outline-offset:2px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line)}
-.top b{font-weight:600;letter-spacing:.02em}.top span{color:var(--mute);font-size:13px}
-.wrap{max-width:1040px;margin:0 auto;padding:20px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}
-.tabs{display:none}
-h2{font-size:12px;font-weight:600;color:var(--mute);letter-spacing:.1em;margin:0 0 10px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:16px}
-.secret{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:13px;color:var(--soft)}
-.secret code{background:#18181b;border:1px solid var(--line);border-radius:6px;padding:3px 8px;color:var(--text);font-size:12px;word-break:break-all}
-/* status */
-.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.seg button{border:1px solid var(--line);border-radius:var(--r);padding:16px 8px;font-weight:600;font-size:17px;display:flex;flex-direction:column;align-items:center;gap:4px;background:#0d0d0f}
-.seg button small{font-weight:400;font-size:12px;color:var(--mute)}
-.seg button i{width:10px;height:10px;border-radius:50%;display:block}
-.seg button[aria-pressed=true]{border-color:var(--text);background:#18181b}
-.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
-.row:first-of-type{border-top:0}
+input{user-select:text}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+svg{width:30px;height:30px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+.sys{height:100svh;display:grid;grid-template-rows:56px 1fr;grid-template-columns:var(--rail) minmax(0,1fr) 340px;grid-template-areas:"top top top" "rail main prev"}
+/* top status bar */
+.top{grid-area:top;display:flex;align-items:center;gap:16px;padding:0 18px;background:var(--bar);border-bottom:1px solid var(--line)}
+.top .shop{font-weight:600;font-size:17px}.top .sub{color:var(--mute);font-size:13px}
+.top .sp{flex:1}
+.light{display:flex;align-items:center;gap:8px;padding:5px 14px;border-radius:99px;font-weight:600;font-size:14px;background:#0a0f16;border:1px solid var(--line)}
+.light i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.clock{font-variant-numeric:tabular-nums;color:var(--soft);font-size:15px;min-width:48px;text-align:right}
+/* rail */
+.rail{grid-area:rail;background:var(--bar);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:6px;padding:10px 8px}
+.rail button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:76px;border-radius:14px;color:var(--soft);font-size:12.5px}
+.rail button[aria-current=page]{background:var(--tile2);color:var(--acc);box-shadow:inset 3px 0 0 var(--acc)}
+/* main */
+.main{grid-area:main;overflow-y:auto;padding:18px;min-width:0}
+.page{display:none}.page.on{display:block}
+h1{font-size:13px;font-weight:600;letter-spacing:.12em;color:var(--mute);margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.tile{background:var(--tile);border:1px solid var(--line);border-radius:18px;padding:16px;min-height:132px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;transition:transform .08s,background .15s}
+.tile:active{transform:scale(.97);background:var(--tile2)}
+.tile .ic{color:var(--acc)}
+.tile b{font-size:18px;font-weight:600;display:block}
+.tile small{color:var(--soft);font-size:13.5px;display:block;margin-top:2px}
+.tile.wide{grid-column:span 2}
+.tile.stat{background:linear-gradient(160deg,var(--tile2),var(--tile))}
+.tile.stat .big{font-size:26px;font-weight:700;display:flex;align-items:center;gap:10px}
+.tile.stat .big i{width:14px;height:14px;border-radius:50%;background:var(--c)}
+/* big choices */
+.choice{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.choice button{background:var(--tile);border:2px solid var(--line);border-radius:18px;min-height:128px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:20px;font-weight:600}
+.choice button i{width:16px;height:16px;border-radius:50%;background:var(--c)}
+.choice button small{font-size:13px;color:var(--soft);font-weight:400}
+.choice button[aria-pressed=true]{border-color:var(--c);background:var(--tile2)}
+.box{background:var(--tile);border:1px solid var(--line);border-radius:18px;padding:6px 16px;margin-bottom:16px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid var(--line);min-height:64px}
+.row:first-child{border-top:0}
 .row[hidden]{display:none}
-.row .l{min-width:0}.row .l b{font-weight:500;display:block}.row .l small{color:var(--mute);font-size:12.5px;display:block}
-.sw{flex:none;width:46px;height:28px;border-radius:99px;background:#3f3f46;position:relative;transition:background .15s}
-.sw::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fafafa;transition:transform .15s}
-.sw[aria-checked=true]{background:var(--ok)}.sw[aria-checked=true]::after{transform:translateX(18px)}
-.hours{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-input[type=time],input[type=text],input[type=number]{background:#0d0d0f;border:1px solid var(--line);border-radius:8px;padding:8px 10px;color:var(--text);min-width:0}
-.menu .it{display:grid;grid-template-columns:1fr 84px auto;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.row .l{min-width:0}.row .l b{font-weight:500;font-size:16.5px;display:block}.row .l small{color:var(--mute);font-size:13px;display:block}
+input[type=time],input[type=text],input[type=number]{background:#0a0f16;border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--text);min-width:0;font-size:16px}
+.hours{display:flex;gap:8px;align-items:center}
+.pill{border:2px solid var(--line);border-radius:99px;padding:10px 18px;font-weight:500;color:var(--soft);min-height:46px}
+.pill[aria-pressed=true]{border-color:var(--rest);color:#fff;background:#7f1d1d}
+.pill.sold[aria-pressed=true]{background:var(--rest);border-color:var(--rest)}
+/* feature cards */
+.feat{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.feat button{background:var(--tile);border:2px solid var(--line);border-radius:18px;padding:16px;min-height:140px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;position:relative}
+.feat button .ic{color:var(--mute)}
+.feat button b{font-size:17px;font-weight:600;display:block}
+.feat button small{font-size:13px;color:var(--mute);display:block;line-height:1.4}
+.feat button .st{position:absolute;right:14px;top:14px;font-size:12px;font-weight:600;color:var(--mute);border:1px solid var(--line);border-radius:99px;padding:2px 10px}
+.feat button[aria-checked=true]{border-color:var(--acc);background:var(--tile2)}
+.feat button[aria-checked=true] .ic{color:var(--acc)}
+.feat button[aria-checked=true] .st{color:#04121c;background:var(--acc);border-color:var(--acc)}
+.menu .it{display:grid;grid-template-columns:1fr 96px auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
 .menu .it:first-child{border-top:0}
-.sold{border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:13px;color:var(--soft)}
-.sold[aria-pressed=true]{background:var(--rest);border-color:var(--rest);color:#fff}
-.hint{color:var(--mute);font-size:12.5px;margin-top:8px}
-/* phone */
-.phonewrap{position:sticky;top:16px}
-.phone{background:#000;border:1px solid #3f3f46;border-radius:34px;padding:10px;box-shadow:0 20px 60px #000a}
-.screen{background:#f4f4f5;color:#18181b;border-radius:26px;overflow:hidden;min-height:560px;display:flex;flex-direction:column}
-.p-head{padding:22px 18px 14px;background:#fff;border-bottom:1px solid #e4e4e7}
-.p-head h3{font-size:22px;line-height:1.3}
-.p-head p{color:#71717a;font-size:13px}
-.badge{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:7px 14px;border-radius:99px;font-weight:600;font-size:15px}
-.badge i{width:10px;height:10px;border-radius:50%;background:currentColor}
+.hint{color:var(--mute);font-size:13px;margin:-4px 0 14px}
+.link{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.link code{background:#0a0f16;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:13px;color:var(--text);user-select:text;word-break:break-all}
+/* preview */
+.prev{grid-area:prev;background:var(--bar);border-left:1px solid var(--line);padding:16px;display:flex;flex-direction:column;align-items:center;overflow-y:auto}
+.prev .cap{color:var(--mute);font-size:12px;letter-spacing:.1em;margin-bottom:10px}
+.phone{width:100%;max-width:300px;background:#000;border:1px solid #334155;border-radius:34px;padding:9px}
+.screen{background:#f4f4f5;color:#18181b;border-radius:26px;overflow:hidden;min-height:520px;display:flex;flex-direction:column;user-select:none}
+.p-head{padding:20px 16px 12px;background:#fff;border-bottom:1px solid #e4e4e7}
+.p-head h3{font-size:21px;line-height:1.3}.p-head p{color:#71717a;font-size:12.5px}
+.badge{display:inline-flex;align-items:center;gap:8px;margin-top:10px;padding:6px 13px;border-radius:99px;font-weight:600;font-size:14px}
+.badge i{width:9px;height:9px;border-radius:50%;background:currentColor}
 .badge.ok{background:#dcfce7;color:#15803d}.badge.rest{background:#fee2e2;color:#b91c1c}.badge.early{background:#fef3c7;color:#b45309}
-.p-hours{margin-top:6px;font-size:13px;color:#52525b}
-.acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 14px 4px}
-.acts a{background:#18181b;color:#fff;text-decoration:none;border-radius:12px;padding:12px 6px;text-align:center;font-weight:600;font-size:14px}
+.p-hours{margin-top:5px;font-size:12.5px;color:#52525b}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:12px 12px 2px}
+.acts a{background:#18181b;color:#fff;text-decoration:none;border-radius:11px;padding:10px 4px;text-align:center;font-weight:600;font-size:13.5px}
 .acts a.alt{background:#fff;color:#18181b;border:1px solid #d4d4d8}
-.p-sec{padding:14px 18px}
-.p-sec h4{font-size:12px;color:#71717a;letter-spacing:.1em;margin-bottom:6px}
-.p-it{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #e4e4e7;font-size:15px}
+.p-sec{padding:12px 16px}.p-sec h4{font-size:11.5px;color:#71717a;letter-spacing:.1em;margin-bottom:4px}
+.p-it{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid #e4e4e7;font-size:14.5px}
 .p-it:first-of-type{border-top:0}
 .p-it.s{color:#a1a1aa}.p-it.s span:first-child{text-decoration:line-through}
-.p-it em{font-style:normal;font-size:12px;color:#b91c1c;margin-left:6px}
-.foot{margin-top:auto;padding:12px;text-align:center;font-size:11px;color:#a1a1aa}
-.note{color:var(--mute);font-size:12px;text-align:center;margin-top:10px}
-@media(max-width:860px){
- .wrap{grid-template-columns:1fr;padding:14px}
- .tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:12px 14px 0;max-width:1040px;margin:0 auto}
- .tabs button{border:1px solid var(--line);border-radius:99px;padding:9px;font-weight:500;color:var(--soft)}
- .tabs button[aria-pressed=true]{background:var(--pri);color:var(--onpri);border-color:var(--pri)}
- .phonewrap{position:static}
- body[data-view=console] .phonewrap,body[data-view=card] .console{display:none}
+.p-it em{font-style:normal;font-size:11.5px;color:#b91c1c;margin-left:6px}
+.foot{margin-top:auto;padding:10px;text-align:center;font-size:11px;color:#a1a1aa}
+
+@media(max-width:1100px){
+ .sys{grid-template-columns:var(--rail) minmax(0,1fr);grid-template-areas:"top top" "rail main"}
+ .prev{display:none}
+ body.showprev .main{display:none}body.showprev .prev{display:flex;grid-area:main;border:0;background:var(--bg)}
+}
+@media(max-width:700px){
+ .sys{grid-template-rows:52px 1fr 68px;grid-template-columns:1fr;grid-template-areas:"top" "main" "rail"}
+ body.showprev .prev{grid-area:main}
+ .rail{flex-direction:row;border-right:0;border-top:1px solid var(--line);padding:6px;gap:4px}
+ .rail button{flex:1;height:100%;font-size:11.5px;border-radius:12px}
+ .rail button[aria-current=page]{box-shadow:inset 0 3px 0 var(--acc)}
+ svg{width:26px;height:26px}
+ .top .sub,.top .clock{display:none}
+ .choice{grid-template-columns:1fr}.choice button{min-height:84px;flex-direction:row;gap:12px}
+ .grid,.feat{grid-template-columns:1fr 1fr}.tile.wide{grid-column:span 2}
+ .main{padding:14px}
 }
 </style>
 </head>
-<body data-view="console">
-<div class="top"><div><b>KitLab 智慧名片</b> <span>店家控制台</span></div><span>阿新快炒（範例）</span></div>
-<div class="tabs" role="tablist"><button id="t-c" aria-pressed="true">我的設定</button><button id="t-p" aria-pressed="false">客人看到的</button></div>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+ <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></symbol>
+ <symbol id="i-open" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+ <symbol id="i-menu" viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></symbol>
+ <symbol id="i-feat" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+ <symbol id="i-eye" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></symbol>
+ <symbol id="i-share" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><path d="M14 14h2v2h-2zM18 18h2.5M14 19v1.5M18.5 14v2"/></symbol>
+ <symbol id="i-call" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></symbol>
+ <symbol id="i-map" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 005 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+ <symbol id="i-line" viewBox="0 0 24 24"><path d="M4 11.5C4 7.4 7.6 4.5 12 4.5s8 2.9 8 7-3.6 7-8 7c-.8 0-1.6-.1-2.3-.3L6 20v-3.4C4.8 15.6 4 13.7 4 11.5z"/></symbol>
+ <symbol id="i-voice" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21"/></symbol>
+ <symbol id="i-loc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+ <symbol id="i-form" viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></symbol>
+ <symbol id="i-file" viewBox="0 0 24 24"><path d="M7 3.5h7l4 4V20a1 1 0 01-1 1H7a1 1 0 01-1-1V4.5a1 1 0 011-1z"/><path d="M14 3.5V8h4M12 17v-5M9.8 14l2.2-2.2 2.2 2.2"/></symbol>
+</defs></svg>
 
-<div class="wrap">
-<main class="console">
- <div class="panel secret"><span>只有你知道的專屬連結，存到手機桌面就能用</span><code>kitlab.store/m/7fK2-x9Qa</code></div>
-
- <div class="panel">
-  <h2>今天營業嗎</h2>
-  <div class="seg" id="status">
-   <button data-s="ok" aria-pressed="true"><i style="background:var(--ok)"></i>營業中<small>照平常時間</small></button>
-   <button data-s="early" aria-pressed="false"><i style="background:var(--warn)"></i>提早打烊<small id="earlyTxt">今天 20:00</small></button>
-   <button data-s="rest" aria-pressed="false"><i style="background:var(--rest)"></i>今天休息<small>客人看到紅燈</small></button>
-  </div>
-  <div class="row" id="earlyRow" hidden><div class="l"><b>今天打烊時間</b></div><input type="time" id="earlyT" value="20:00"></div>
-  <div class="row" style="margin-top:10px"><div class="l"><b>平常營業時間</b><small>設定一次，平常日子不用再動</small></div>
-   <div class="hours"><input type="time" id="o1" value="17:00"> – <input type="time" id="o2" value="23:30"></div></div>
-  <div class="row"><div class="l"><b>每週固定休息</b></div>
-   <div class="hours"><button class="sold" id="dow" aria-pressed="false">每週一休</button></div></div>
+<div class="sys">
+ <div class="top">
+  <span class="shop">阿新快炒</span><span class="sub">智慧名片系統</span><span class="sp"></span>
+  <span class="light" id="topLight" style="--c:var(--ok)"><i></i><span id="topTxt">營業中</span></span>
+  <span class="clock" id="clock">--:--</span>
  </div>
 
- <div class="panel">
-  <h2>名片上要顯示哪些功能</h2>
-  <div id="mods"></div>
-  <p class="hint">沒打開的功能，客人那邊就不會出現。只想放菜單和電話也可以。</p>
- </div>
+ <nav class="rail" id="rail" aria-label="功能選單">
+  <button data-p="home" aria-current="page"><svg><use href="#i-home"/></svg>首頁</button>
+  <button data-p="open"><svg><use href="#i-open"/></svg>營業</button>
+  <button data-p="menu"><svg><use href="#i-menu"/></svg>菜單</button>
+  <button data-p="feat"><svg><use href="#i-feat"/></svg>功能</button>
+  <button data-p="prev" id="prevBtn"><svg><use href="#i-eye"/></svg>預覽</button>
+ </nav>
 
- <div class="panel menu">
-  <h2>菜單　<span style="font-weight:400;letter-spacing:0">按「售完」，客人馬上看到</span></h2>
-  <div id="menu"></div>
- </div>
-</main>
+ <main class="main" id="mainEl">
+  <!-- 首頁 -->
+  <section class="page on" id="p-home">
+   <h1>首頁</h1>
+   <div class="grid">
+    <button class="tile stat wide" data-go="open" id="hStat" style="--c:var(--ok)">
+     <svg class="ic"><use href="#i-open"/></svg>
+     <div><div class="big"><i></i><span id="hStatTxt">營業中</span></div><small id="hStatSub">今天 17:00 – 23:30　點這裡改</small></div>
+    </button>
+    <button class="tile" data-go="menu"><svg class="ic"><use href="#i-menu"/></svg><div><b>菜單</b><small id="hMenu">0 項售完</small></div></button>
+    <button class="tile" data-go="feat"><svg class="ic"><use href="#i-feat"/></svg><div><b>名片功能</b><small id="hFeat">3 個開啟</small></div></button>
+    <button class="tile" data-go="share"><svg class="ic"><use href="#i-share"/></svg><div><b>QR 與連結</b><small>貼在店門口</small></div></button>
+    <button class="tile" data-go="prev"><svg class="ic"><use href="#i-eye"/></svg><div><b>客人看到的</b><small>即時預覽</small></div></button>
+   </div>
+  </section>
 
-<aside class="phonewrap">
- <div class="phone"><div class="screen" id="screen"></div></div>
- <p class="note">客人掃 QR 看到的畫面，你改的設定會即時更新</p>
-</aside>
+  <!-- 營業 -->
+  <section class="page" id="p-open">
+   <h1>今天營業嗎</h1>
+   <div class="choice" id="status">
+    <button data-s="ok" style="--c:var(--ok)"><i></i>營業中<small>照平常時間</small></button>
+    <button data-s="early" style="--c:var(--warn)"><i></i>提早打烊<small id="earlyTxt">今天 20:00</small></button>
+    <button data-s="rest" style="--c:var(--rest)"><i></i>今天休息<small>客人看到紅燈</small></button>
+   </div>
+   <div class="box">
+    <div class="row" id="earlyRow" hidden><div class="l"><b>今天打烊時間</b></div><input type="time" id="earlyT" value="20:00"></div>
+    <div class="row"><div class="l"><b>平常營業時間</b><small>設定一次，平常日子不用再動</small></div><div class="hours"><input type="time" id="o1" value="17:00"><span>–</span><input type="time" id="o2" value="23:30"></div></div>
+    <div class="row"><div class="l"><b>每週固定休息</b></div><button class="pill" id="dow" aria-pressed="false">每週一休</button></div>
+   </div>
+  </section>
+
+  <!-- 菜單 -->
+  <section class="page" id="p-menu">
+   <h1>菜單</h1>
+   <p class="hint">按「售完」，客人那邊馬上劃掉。</p>
+   <div class="box menu" id="menu"></div>
+  </section>
+
+  <!-- 功能 -->
+  <section class="page" id="p-feat">
+   <h1>名片要顯示哪些功能</h1>
+   <p class="hint">點一下開關。沒打開的，客人那邊就不會出現。</p>
+   <div class="feat" id="mods"></div>
+  </section>
+
+  <!-- QR 與連結 -->
+  <section class="page" id="p-share">
+   <h1>QR 與連結</h1>
+   <div class="box"><div class="row link"><div class="l"><b>客人掃的名片連結</b><small>印成 QR 貼在店門口、菜單、名片上</small></div><code>kitlab.store/c/axin</code></div>
+   <div class="row link"><div class="l"><b>只有你知道的專屬連結</b><small>存到手機桌面，用來按營業狀態；不要給別人</small></div><code>kitlab.store/m/7fK2-x9Qa</code></div></div>
+  </section>
+ </main>
+
+ <aside class="prev" id="prevPane">
+  <div class="cap">客人掃 QR 看到的畫面</div>
+  <div class="phone"><div class="screen" id="screen"></div></div>
+ </aside>
 </div>
 
 <script>
 var M=[
- {k:'call',n:'一鍵打電話',d:'客人點一下就撥給你',on:true},
- {k:'map',n:'地圖導航',d:'開 Google 地圖帶他來',on:true},
- {k:'menu',n:'菜單與價格',d:'顯示下面的菜單',on:true},
- {k:'line',n:'LINE 聯絡',d:'一鍵加你的 LINE',on:false},
- {k:'voice',n:'語音留言',d:'客人按住說話留言給你',on:false},
- {k:'loc',n:'傳位置',d:'客人把自己的位置傳給你（外送、取貨）',on:false},
- {k:'form',n:'填表單',d:'預約、訂位、詢問',on:false},
- {k:'file',n:'收檔案',d:'客人傳照片、文件給你',on:false}
+ {k:'call',n:'一鍵打電話',d:'客人點一下就撥給你',ic:'call',on:true},
+ {k:'map',n:'地圖導航',d:'開地圖帶客人過來',ic:'map',on:true},
+ {k:'menu',n:'菜單與價格',d:'顯示菜單',ic:'menu',on:true},
+ {k:'line',n:'LINE 聯絡',d:'一鍵加你的 LINE',ic:'line',on:false},
+ {k:'voice',n:'語音留言',d:'客人按住說話留言',ic:'voice',on:false},
+ {k:'loc',n:'傳位置',d:'客人傳自己位置給你',ic:'loc',on:false},
+ {k:'form',n:'填表單',d:'預約、訂位、詢問',ic:'form',on:false},
+ {k:'file',n:'收檔案',d:'客人傳照片、文件',ic:'file',on:false}
 ];
 var items=[{n:'蛋炒飯',p:70,s:false},{n:'三杯雞',p:280,s:false},{n:'炒青菜',p:100,s:false},{n:'蛤蜊湯',p:120,s:true}];
 var st='ok',earlyT='20:00',closedMon=false;
 var $=function(i){return document.getElementById(i)};
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function ico(n){return '<svg class="ic"><use href="#i-'+n+'"/></svg>'}
+
+function go(p){
+ var pv=p==='prev';
+ document.body.classList.toggle('showprev',pv);
+ var page=pv?null:p;
+ [].forEach.call(document.querySelectorAll('.page'),function(x){x.classList.toggle('on',x.id==='p-'+page)});
+ [].forEach.call(document.querySelectorAll('#rail button'),function(b){var m=b.dataset.p===p||(p==='share'&&b.dataset.p==='home');if(m)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+ $('p-home').classList.toggle('on',p==='home');
+ $('mainEl').scrollTop=0;
+}
+$('rail').onclick=function(e){var b=e.target.closest('button');if(b)go(b.dataset.p)};
+document.querySelector('.main').onclick=function(e){var t=e.target.closest('[data-go]');if(t)go(t.dataset.go)};
 
 function drawMods(){
- $('mods').innerHTML=M.map(function(m,i){return '<div class="row"><div class="l"><b>'+m.n+'</b><small>'+m.d+'</small></div><button class="sw" role="switch" aria-label="'+m.n+'" aria-checked="'+m.on+'" data-i="'+i+'"></button></div>'}).join('');
+ $('mods').innerHTML=M.map(function(m,i){return '<button role="switch" aria-checked="'+m.on+'" data-i="'+i+'"><span class="st">'+(m.on?'已開':'關')+'</span>'+ico(m.ic)+'<span><b>'+m.n+'</b><small>'+m.d+'</small></span></button>'}).join('');
 }
 function drawMenu(){
- $('menu').innerHTML=items.map(function(it,i){return '<div class="it"><input type="text" value="'+esc(it.n)+'" data-i="'+i+'" data-f="n" aria-label="品名"><input type="number" value="'+it.p+'" min="0" data-i="'+i+'" data-f="p" aria-label="價格"><button class="sold" aria-pressed="'+it.s+'" data-i="'+i+'">售完</button></div>'}).join('');
+ $('menu').innerHTML=items.map(function(it,i){return '<div class="it"><input type="text" value="'+esc(it.n)+'" data-i="'+i+'" data-f="n" aria-label="品名"><input type="number" value="'+it.p+'" min="0" data-i="'+i+'" data-f="p" aria-label="價格"><button class="pill sold" aria-pressed="'+it.s+'" data-i="'+i+'">售完</button></div>'}).join('');
+}
+function info(){
+ var o1=$('o1').value,o2=$('o2').value;
+ if(st==='rest')return{cls:'rest',label:'今天休息',txt:'明天再來看看',c:'var(--rest)'};
+ if(st==='early')return{cls:'early',label:'提早打烊',txt:'今天營業到 '+earlyT,c:'var(--warn)'};
+ if(closedMon&&new Date().getDay()===1)return{cls:'rest',label:'今天公休',txt:'每週一休息',c:'var(--rest)'};
+ return{cls:'ok',label:'營業中',txt:'今天 '+o1+' – '+o2,c:'var(--ok)'};
 }
 function card(){
- var o1=$('o1').value,o2=$('o2').value,txt,cls,label;
- if(st==='rest'){cls='rest';label='今天休息';txt='明天再來看看'}
- else if(st==='early'){cls='early';label='提早打烊';txt='今天營業到 '+earlyT}
- else if(closedMon&&new Date().getDay()===1){cls='rest';label='今天公休';txt='每週一休息'}
- else{cls='ok';label='營業中';txt='今天 '+o1+' – '+o2}
+ var f=info();
  var on=function(k){return M.filter(function(m){return m.k===k})[0].on};
- var A={call:['tel:0900000000','打電話',''],line:['#','LINE 聯絡','alt'],map:['#','導航','alt'],voice:['#','語音留言','alt'],loc:['#','傳位置','alt'],form:['#','預約／詢問','alt'],file:['#','傳檔案','alt']};
- var acts=['call','map','line','voice','loc','form','file'].filter(on).map(function(k){return '<a href="'+A[k][0]+'" class="'+A[k][2]+'" onclick="return false">'+A[k][1]+'</a>'}).join('');
+ var A={call:['打電話',''],map:['導航','alt'],line:['LINE 聯絡','alt'],voice:['語音留言','alt'],loc:['傳位置','alt'],form:['預約／詢問','alt'],file:['傳檔案','alt']};
+ var acts=['call','map','line','voice','loc','form','file'].filter(on).map(function(k){return '<a href="#" class="'+A[k][1]+'" onclick="return false">'+A[k][0]+'</a>'}).join('');
  var menu=on('menu')?'<div class="p-sec"><h4>菜單</h4>'+items.map(function(it){return '<div class="p-it'+(it.s?' s':'')+'"><span>'+esc(it.n)+(it.s?'<em>今日售完</em>':'')+'</span><span>$'+esc(it.p)+'</span></div>'}).join('')+'</div>':'';
- $('screen').innerHTML='<div class="p-head"><h3>阿新快炒</h3><p>宜蘭・熱炒・近羅東火車站</p><div class="badge '+cls+'"><i></i>'+label+'</div><div class="p-hours">'+txt+'</div></div>'+(acts?'<div class="acts">'+acts+'</div>':'')+menu+'<div class="foot">KitLab 智慧名片</div>';
+ $('screen').innerHTML='<div class="p-head"><h3>阿新快炒</h3><p>宜蘭・熱炒・近羅東火車站</p><div class="badge '+f.cls+'"><i></i>'+f.label+'</div><div class="p-hours">'+f.txt+'</div></div>'+(acts?'<div class="acts">'+acts+'</div>':'')+menu+'<div class="foot">KitLab 智慧名片</div>';
+ $('topTxt').textContent=f.label;$('topLight').style.setProperty('--c',f.c);
+ $('hStat').style.setProperty('--c',f.c);$('hStatTxt').textContent=f.label;$('hStatSub').textContent=f.txt+'　點這裡改';
+ $('hMenu').textContent=items.filter(function(i){return i.s}).length+' 項售完';
+ $('hFeat').textContent=M.filter(function(m){return m.on}).length+' 個開啟';
 }
 function sync(){
  [].forEach.call(document.querySelectorAll('#status button'),function(b){b.setAttribute('aria-pressed',b.dataset.s===st)});
@@ -155,11 +267,11 @@ $('status').onclick=function(e){var b=e.target.closest('button');if(!b)return;st
 $('earlyT').oninput=function(){earlyT=this.value;sync()};
 $('o1').oninput=$('o2').oninput=card;
 $('dow').onclick=function(){closedMon=!closedMon;sync()};
-$('mods').onclick=function(e){var b=e.target.closest('.sw');if(!b)return;var m=M[b.dataset.i];m.on=!m.on;b.setAttribute('aria-checked',m.on);card()};
+$('mods').onclick=function(e){var b=e.target.closest('button');if(!b)return;var m=M[b.dataset.i];m.on=!m.on;b.setAttribute('aria-checked',m.on);b.querySelector('.st').textContent=m.on?'已開':'關';card()};
 $('menu').onclick=function(e){var b=e.target.closest('.sold');if(!b)return;var it=items[b.dataset.i];it.s=!it.s;b.setAttribute('aria-pressed',it.s);card()};
 $('menu').oninput=function(e){var t=e.target,it=items[t.dataset.i];if(!it)return;it[t.dataset.f]=t.dataset.f==='p'?(t.value||0):t.value;card()};
-function view(v){document.body.dataset.view=v;$('t-c').setAttribute('aria-pressed',v==='console');$('t-p').setAttribute('aria-pressed',v==='card')}
-$('t-c').onclick=function(){view('console')};$('t-p').onclick=function(){view('card')};
+function tick(){var d=new Date();$('clock').textContent=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
+tick();setInterval(tick,20000);
 drawMods();drawMenu();sync();
 </script>
 </body>
