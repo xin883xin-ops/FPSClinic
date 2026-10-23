@@ -94,6 +94,44 @@ input[type=time],input[type=text],input[type=number]{background:#0a0f16;border:1
 .p-it em{font-style:normal;font-size:11.5px;color:#b91c1c;margin-left:6px}
 .foot{margin-top:auto;padding:10px;text-align:center;font-size:11px;color:#a1a1aa}
 
+.screen{height:560px;min-height:0;position:relative}
+.scr{flex:1;overflow-y:auto;min-height:0;display:flex;flex-direction:column}
+.stp{display:flex;align-items:center;gap:8px;flex:none}
+.stp button{width:32px;height:32px;border-radius:50%;border:1px solid #d4d4d8;background:#fff;font-size:19px;line-height:1;color:#18181b}
+.stp button.plus{background:#18181b;color:#fff;border-color:#18181b}
+.stp b{min-width:16px;text-align:center;font-size:15px}
+.p-it{align-items:center}
+.cartbar{flex:none;margin:8px;padding:11px 14px;border-radius:14px;background:#18181b;color:#fff;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:14.5px;width:calc(100% - 16px);text-align:left}
+.cartbar span:last-child{background:#fff;color:#18181b;border-radius:99px;padding:4px 12px;font-size:13px}
+.closedmsg{margin:12px 12px 0;padding:10px 12px;border-radius:10px;background:#fee2e2;color:#b91c1c;font-size:13.5px;font-weight:500}
+.sheet{position:absolute;inset:0;background:#fff;z-index:2;display:flex;flex-direction:column;padding:16px;overflow-y:auto}
+.sheet h3{font-size:18px;margin-bottom:4px}
+.sheet label{display:block;font-size:12.5px;color:#52525b;margin:10px 0 4px}
+.sheet input{width:100%;border:1px solid #d4d4d8;border-radius:10px;padding:10px;font-size:15px;color:#18181b;background:#fff;user-select:text}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg2 button{border:1.5px solid #d4d4d8;border-radius:10px;padding:10px;font-weight:600;color:#52525b}
+.seg2 button.on{border-color:#18181b;background:#18181b;color:#fff}
+.sheet .sum{margin-top:12px;border-top:1px solid #e4e4e7;padding-top:8px;font-size:14px;color:#3f3f46}
+.sheet .sum div{display:flex;justify-content:space-between;padding:2px 0}
+.sheet .go{margin-top:14px;background:#16a34a;color:#fff;border-radius:12px;padding:13px;font-weight:700;font-size:16px;width:100%}
+.sheet .back{margin-top:6px;color:#71717a;padding:8px;width:100%}
+.sheet .err{color:#b91c1c;font-size:12.5px;margin-top:6px}
+.done{margin:auto;text-align:center;color:#18181b}.done p{color:#52525b;font-size:14px;margin:6px 0 14px}
+.done .okc{width:60px;height:60px;border-radius:50%;background:#dcfce7;color:#15803d;display:grid;place-items:center;font-size:32px;margin:0 auto 12px}
+.rail button{position:relative}
+.badge-n{position:absolute;top:4px;right:10px;min-width:20px;height:20px;border-radius:99px;background:var(--rest);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;padding:0 5px}
+.badge-n[hidden]{display:none}
+.ord{background:var(--tile);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:12px}
+.ord.new{border-color:var(--acc)}.ord.done{opacity:.55}
+.ord .h{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.ord .h b{font-size:18px}.ord .h span{color:var(--soft);font-size:13px}
+.ord ul{list-style:none;padding:0;margin:8px 0}.ord li{display:flex;justify-content:space-between;padding:3px 0;color:var(--soft)}
+.ord .note{color:var(--warn);font-size:13.5px;margin-bottom:6px}
+.ord .f{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.ord .f b{font-size:17px}
+.ord .act{background:var(--acc);color:#04121c;border-radius:12px;padding:12px 18px;font-weight:700;min-height:46px}
+.ord.done .act{background:#1f2937;color:var(--soft)}
+.empty{color:var(--mute);padding:34px 0;text-align:center;line-height:1.8}
 @media(max-width:1100px){
  .sys{grid-template-columns:var(--rail) minmax(0,1fr);grid-template-areas:"top top" "rail main"}
  .prev{display:none}
@@ -121,6 +159,7 @@ input[type=time],input[type=text],input[type=number]{background:#0a0f16;border:1
  <symbol id="i-feat" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
  <symbol id="i-eye" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></symbol>
  <symbol id="i-share" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><path d="M14 14h2v2h-2zM18 18h2.5M14 19v1.5M18.5 14v2"/></symbol>
+ <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2.5l2 11h10.5l2-8H7"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="16.5" cy="19.5" r="1.3"/></symbol>
  <symbol id="i-call" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></symbol>
  <symbol id="i-map" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 005 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
  <symbol id="i-line" viewBox="0 0 24 24"><path d="M4 11.5C4 7.4 7.6 4.5 12 4.5s8 2.9 8 7-3.6 7-8 7c-.8 0-1.6-.1-2.3-.3L6 20v-3.4C4.8 15.6 4 13.7 4 11.5z"/></symbol>
@@ -140,6 +179,7 @@ input[type=time],input[type=text],input[type=number]{background:#0a0f16;border:1
  <nav class="rail" id="rail" aria-label="功能選單">
   <button data-p="home" aria-current="page"><svg><use href="#i-home"/></svg>首頁</button>
   <button data-p="open"><svg><use href="#i-open"/></svg>營業</button>
+  <button data-p="orders"><svg><use href="#i-cart"/></svg>訂單<span class="badge-n" id="badge" hidden>0</span></button>
   <button data-p="menu"><svg><use href="#i-menu"/></svg>菜單</button>
   <button data-p="feat"><svg><use href="#i-feat"/></svg>功能</button>
   <button data-p="prev" id="prevBtn"><svg><use href="#i-eye"/></svg>預覽</button>
@@ -154,6 +194,7 @@ input[type=time],input[type=text],input[type=number]{background:#0a0f16;border:1
      <svg class="ic"><use href="#i-open"/></svg>
      <div><div class="big"><i></i><span id="hStatTxt">營業中</span></div><small id="hStatSub">今天 17:00 – 23:30　點這裡改</small></div>
     </button>
+    <button class="tile" data-go="orders"><svg class="ic"><use href="#i-cart"/></svg><div><b>訂單</b><small id="hOrd">還沒有訂單</small></div></button>
     <button class="tile" data-go="menu"><svg class="ic"><use href="#i-menu"/></svg><div><b>菜單</b><small id="hMenu">0 項售完</small></div></button>
     <button class="tile" data-go="feat"><svg class="ic"><use href="#i-feat"/></svg><div><b>名片功能</b><small id="hFeat">3 個開啟</small></div></button>
     <button class="tile" data-go="share"><svg class="ic"><use href="#i-share"/></svg><div><b>QR 與連結</b><small>貼在店門口</small></div></button>
@@ -176,10 +217,16 @@ input[type=time],input[type=text],input[type=number]{background:#0a0f16;border:1
    </div>
   </section>
 
+  <!-- 訂單 -->
+  <section class="page" id="p-orders">
+   <h1>訂單</h1>
+   <div id="ordList"></div>
+  </section>
+
   <!-- 菜單 -->
   <section class="page" id="p-menu">
    <h1>菜單</h1>
-   <p class="hint">按「售完」，客人那邊馬上劃掉。</p>
+   <p class="hint">按「售完」，客人那邊馬上劃掉、不能再點。</p>
    <div class="box menu" id="menu"></div>
   </section>
 
@@ -209,6 +256,7 @@ var M=[
  {k:'call',n:'一鍵打電話',d:'客人點一下就撥給你',ic:'call',on:true},
  {k:'map',n:'地圖導航',d:'開地圖帶客人過來',ic:'map',on:true},
  {k:'menu',n:'菜單與價格',d:'顯示菜單',ic:'menu',on:true},
+ {k:'order',n:'線上點餐',d:'客人在菜單上直接點，訂單即時送到你這',ic:'cart',on:true},
  {k:'line',n:'LINE 聯絡',d:'一鍵加你的 LINE',ic:'line',on:false},
  {k:'voice',n:'語音留言',d:'客人按住說話留言',ic:'voice',on:false},
  {k:'loc',n:'傳位置',d:'客人傳自己位置給你',ic:'loc',on:false},
@@ -216,19 +264,22 @@ var M=[
  {k:'file',n:'收檔案',d:'客人傳照片、文件',ic:'file',on:false}
 ];
 var items=[{n:'蛋炒飯',p:70,s:false},{n:'三杯雞',p:280,s:false},{n:'炒青菜',p:100,s:false},{n:'蛤蜊湯',p:120,s:true}];
-var st='ok',earlyT='20:00',closedMon=false;
+var st='ok',earlyT='20:00',closedMon=false,page='home';
+var cart={},sheet='',form={mode:'外帶',name:'',phone:'',note:''},err='',orders=[],seq=0,unseen=0,lastNo='';
 var $=function(i){return document.getElementById(i)};
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function ico(n){return '<svg class="ic"><use href="#i-'+n+'"/></svg>'}
+function on(k){return M.filter(function(m){return m.k===k})[0].on}
+function hm(){var d=new Date();return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
 
 function go(p){
+ page=p;
  var pv=p==='prev';
  document.body.classList.toggle('showprev',pv);
- var page=pv?null:p;
- [].forEach.call(document.querySelectorAll('.page'),function(x){x.classList.toggle('on',x.id==='p-'+page)});
+ [].forEach.call(document.querySelectorAll('.page'),function(x){x.classList.toggle('on',!pv&&x.id==='p-'+p)});
  [].forEach.call(document.querySelectorAll('#rail button'),function(b){var m=b.dataset.p===p||(p==='share'&&b.dataset.p==='home');if(m)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
- $('p-home').classList.toggle('on',p==='home');
- $('mainEl').scrollTop=0;
+ if(p==='orders')unseen=0;
+ $('mainEl').scrollTop=0;renderOrders();
 }
 $('rail').onclick=function(e){var b=e.target.closest('button');if(b)go(b.dataset.p)};
 document.querySelector('.main').onclick=function(e){var t=e.target.closest('[data-go]');if(t)go(t.dataset.go)};
@@ -246,18 +297,77 @@ function info(){
  if(closedMon&&new Date().getDay()===1)return{cls:'rest',label:'今天公休',txt:'每週一休息',c:'var(--rest)'};
  return{cls:'ok',label:'營業中',txt:'今天 '+o1+' – '+o2,c:'var(--ok)'};
 }
+function cartInfo(){
+ var n=0,t=0,lines=[];
+ Object.keys(cart).forEach(function(k){var it=items[k];if(!it||it.s||!cart[k]){delete cart[k];return}n+=cart[k];t+=cart[k]*it.p;lines.push({n:it.n,q:cart[k],p:it.p})});
+ return{n:n,t:t,lines:lines};
+}
 function card(){
- var f=info();
- var on=function(k){return M.filter(function(m){return m.k===k})[0].on};
+ var f=info(),closed=f.cls==='rest',can=on('menu')&&on('order')&&!closed,c=cartInfo();
+ if(sheet==='form'&&!c.n)sheet='';
+ var keep=$('screen').querySelector('.scr');var sc=keep?keep.scrollTop:0;
  var A={call:['打電話',''],map:['導航','alt'],line:['LINE 聯絡','alt'],voice:['語音留言','alt'],loc:['傳位置','alt'],form:['預約／詢問','alt'],file:['傳檔案','alt']};
  var acts=['call','map','line','voice','loc','form','file'].filter(on).map(function(k){return '<a href="#" class="'+A[k][1]+'" onclick="return false">'+A[k][0]+'</a>'}).join('');
- var menu=on('menu')?'<div class="p-sec"><h4>菜單</h4>'+items.map(function(it){return '<div class="p-it'+(it.s?' s':'')+'"><span>'+esc(it.n)+(it.s?'<em>今日售完</em>':'')+'</span><span>$'+esc(it.p)+'</span></div>'}).join('')+'</div>':'';
- $('screen').innerHTML='<div class="p-head"><h3>阿新快炒</h3><p>宜蘭・熱炒・近羅東火車站</p><div class="badge '+f.cls+'"><i></i>'+f.label+'</div><div class="p-hours">'+f.txt+'</div></div>'+(acts?'<div class="acts">'+acts+'</div>':'')+menu+'<div class="foot">KitLab 智慧名片</div>';
+ var msg=(on('menu')&&on('order')&&closed)?'<div class="closedmsg">'+f.label+'，暫時不接單</div>':'';
+ var menu=on('menu')?'<div class="p-sec"><h4>'+(can?'點餐':'菜單')+'</h4>'+items.map(function(it,i){
+   var right='$'+esc(it.p);
+   if(can&&!it.s){var q=cart[i]||0;right='<span class="stp">'+(q?'<button data-a="dec" data-i="'+i+'" aria-label="減少">−</button><b>'+q+'</b>':'')+'<button class="plus" data-a="inc" data-i="'+i+'" aria-label="加一份">+</button></span>'}
+   return '<div class="p-it'+(it.s?' s':'')+'"><span>'+esc(it.n)+(it.s?'<em>今日售完</em>':'')+(can&&!it.s?' <small style="color:#71717a">$'+esc(it.p)+'</small>':'')+'</span><span>'+right+'</span></div>'}).join('')+'</div>':'';
+ var body='<div class="p-head"><h3>阿新快炒</h3><p>宜蘭・熱炒・近羅東火車站</p><div class="badge '+f.cls+'"><i></i>'+f.label+'</div><div class="p-hours">'+f.txt+'</div></div>'+msg+(acts?'<div class="acts">'+acts+'</div>':'')+menu+'<div class="foot">KitLab 智慧名片</div>';
+ var bar=(can&&c.n&&!sheet)?'<button class="cartbar" data-a="open"><span>'+c.n+' 項　$'+c.t+'</span><span>去結帳</span></button>':'';
+ var sh='';
+ if(sheet==='form'){
+  sh='<div class="sheet"><h3>送出訂單</h3><label>取餐方式</label><div class="seg2"><button data-a="mode" data-m="外帶" class="'+(form.mode==='外帶'?'on':'')+'">外帶</button><button data-a="mode" data-m="內用" class="'+(form.mode==='內用'?'on':'')+'">內用</button></div>'
+  +'<label>'+(form.mode==='內用'?'桌號或名字':'名字')+'</label><input data-f="name" value="'+esc(form.name)+'" placeholder="'+(form.mode==='內用'?'例如 3 號桌':'怎麼稱呼')+'">'
+  +'<label>電話（選填）</label><input data-f="phone" type="tel" inputmode="tel" value="'+esc(form.phone)+'" placeholder="好了通知你">'
+  +'<label>備註（選填）</label><input data-f="note" value="'+esc(form.note)+'" placeholder="不要辣、少鹽…">'
+  +'<div class="sum">'+c.lines.map(function(l){return '<div><span>'+esc(l.n)+' × '+l.q+'</span><span>$'+l.p*l.q+'</span></div>'}).join('')+'<div style="font-weight:700;color:#18181b;margin-top:4px"><span>合計</span><span>$'+c.t+'</span></div></div>'
+  +(err?'<div class="err">'+err+'</div>':'')+'<button class="go" data-a="send">送出給店家</button><button class="back" data-a="close">回去再看看</button></div>';
+ }else if(sheet==='done'){
+  sh='<div class="sheet"><div class="done"><div class="okc">✓</div><h3>已送出</h3><p>訂單編號 '+esc(lastNo)+'<br>店家收到了，好了會叫你</p><button class="go" data-a="close" style="width:100%">回到菜單</button></div></div>';
+ }
+ $('screen').innerHTML='<div class="scr">'+body+'</div>'+bar+sh;
+ var ns=$('screen').querySelector('.scr');if(ns)ns.scrollTop=sc;
  $('topTxt').textContent=f.label;$('topLight').style.setProperty('--c',f.c);
  $('hStat').style.setProperty('--c',f.c);$('hStatTxt').textContent=f.label;$('hStatSub').textContent=f.txt+'　點這裡改';
  $('hMenu').textContent=items.filter(function(i){return i.s}).length+' 項售完';
  $('hFeat').textContent=M.filter(function(m){return m.on}).length+' 個開啟';
+ renderOrders();
 }
+var ST={new:'開始製作',cook:'完成，通知客人',done:'已完成'};
+function renderOrders(){
+ var pend=orders.filter(function(o){return o.s!=='done'}).length;
+ $('hOrd').textContent=orders.length?(pend?pend+' 筆待處理':'全部完成'):'還沒有訂單';
+ var b=$('badge');b.textContent=unseen;b.hidden=!unseen;
+ if(!$('p-orders').classList.contains('on'))return;
+ $('ordList').innerHTML=orders.length?orders.map(function(o,i){
+  return '<div class="ord '+(o.s==='new'?'new':o.s==='done'?'done':'')+'"><div class="h"><b>'+esc(o.no)+'　'+esc(o.mode)+'・'+esc(o.name)+'</b><span>'+o.time+(o.phone?'　'+esc(o.phone):'')+'</span></div>'
+  +(o.note?'<div class="note">備註：'+esc(o.note)+'</div>':'')
+  +'<ul>'+o.lines.map(function(l){return '<li><span>'+esc(l.n)+' × '+l.q+'</span><span>$'+l.p*l.q+'</span></li>'}).join('')+'</ul>'
+  +'<div class="f"><b>合計 $'+o.t+'</b><button class="act" data-oi="'+i+'" '+(o.s==='done'?'disabled':'')+'>'+ST[o.s]+'</button></div></div>'}).join('')
+  :'<div class="empty">還沒有訂單<br>客人在名片上點餐送出後，會即時出現在這裡</div>';
+}
+$('ordList').onclick=function(e){var b=e.target.closest('.act');if(!b)return;var o=orders[b.dataset.oi];o.s=o.s==='new'?'cook':'done';renderOrders()};
+
+$('screen').onclick=function(e){
+ var t=e.target.closest('[data-a]');if(!t)return;var a=t.dataset.a,i=t.dataset.i;
+ if(a==='inc'){cart[i]=(cart[i]||0)+1}
+ else if(a==='dec'){cart[i]=Math.max(0,(cart[i]||0)-1)}
+ else if(a==='open'){sheet='form';err=''}
+ else if(a==='close'){sheet=''}
+ else if(a==='mode'){form.mode=t.dataset.m}
+ else if(a==='send'){
+  if(!form.name.trim()){err=form.mode==='內用'?'請填桌號或名字':'請填名字，店家才知道是誰';card();return}
+  var c=cartInfo();if(!c.n){sheet='';card();return}
+  seq++;lastNo='#'+(100+seq);
+  orders.unshift({no:lastNo,mode:form.mode,name:form.name.trim(),phone:form.phone.trim(),note:form.note.trim(),lines:c.lines,t:c.t,time:hm(),s:'new'});
+  if(page!=='orders')unseen++;
+  cart={};sheet='done';form.note='';
+ }
+ card();
+};
+$('screen').oninput=function(e){var t=e.target;if(t.dataset.f){form[t.dataset.f]=t.value}};
+
 function sync(){
  [].forEach.call(document.querySelectorAll('#status button'),function(b){b.setAttribute('aria-pressed',b.dataset.s===st)});
  $('earlyRow').hidden=st!=='early';$('earlyTxt').textContent='今天 '+earlyT;
@@ -270,7 +380,7 @@ $('dow').onclick=function(){closedMon=!closedMon;sync()};
 $('mods').onclick=function(e){var b=e.target.closest('button');if(!b)return;var m=M[b.dataset.i];m.on=!m.on;b.setAttribute('aria-checked',m.on);b.querySelector('.st').textContent=m.on?'已開':'關';card()};
 $('menu').onclick=function(e){var b=e.target.closest('.sold');if(!b)return;var it=items[b.dataset.i];it.s=!it.s;b.setAttribute('aria-pressed',it.s);card()};
 $('menu').oninput=function(e){var t=e.target,it=items[t.dataset.i];if(!it)return;it[t.dataset.f]=t.dataset.f==='p'?(t.value||0):t.value;card()};
-function tick(){var d=new Date();$('clock').textContent=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
+function tick(){$('clock').textContent=hm()}
 tick();setInterval(tick,20000);
 drawMods();drawMenu();sync();
 </script>
