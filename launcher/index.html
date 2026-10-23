@@ -402,7 +402,7 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
         <label class="fld" id="fUrlW">站點網址<input id="fUrl" type="url" placeholder="https://" data-nav></label>
         <label class="fld">說說看<textarea id="fMsg" rows="4" data-nav></textarea></label>
         <input id="fWeb" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
-        <div class="sendrow"><button class="btn" type="submit" id="fSend" data-nav>送出</button><span>也可以直接 LINE 我們：<b id="lineId"></b></span></div>
+        <div class="sendrow"><button class="btn" type="submit" id="fSend" data-nav>送出</button></div>
       </form>
     </div>
 
@@ -436,7 +436,6 @@ button.btn2:hover,button.btn2:focus-visible{background:var(--glass2)}
 <script>
 (function () {
 "use strict";
-var LINE_ID = "xin883xin";               /* API 連不上時，改請訪客用 LINE 傳 */
 var API = "/api";   /* Cloudflare Worker：建議與回報存進 D1 */
 var MAX_DOCK = 7, PER = 21;
 var $ = function (s) { return document.querySelector(s); };
@@ -820,8 +819,7 @@ function openOta() {
   setTimeout(function () { var a = $("#ota [data-nav]:not([hidden])"); if (a) a.focus({ preventScroll: true }); }, 30);
 }
 
-/* 建議：目前用 LINE 收，之後改成直接送出 */
-$("#lineId").textContent = LINE_ID;
+/* 建議與回報 */
 var mode = "add";
 function setMode(m, s) {
   mode = m;
@@ -850,7 +848,7 @@ $("#sugForm").addEventListener("submit", function (e) {
     .catch(function (err) {
       var text = "【Dash" + (mode === "add" ? "推薦站點" : "回報") + "】" + (url ? " " + url : "") + "\n" + msg;
       if (navigator.clipboard) navigator.clipboard.writeText(text).catch(function () {});
-      toast((err && err.message && !/fetch|network/i.test(err.message) ? err.message + "。" : "") + "暫時送不出去，內容已複製，可以用 LINE 傳給我們：" + LINE_ID, null);
+      toast((err && err.message && !/fetch|network/i.test(err.message) ? err.message + "。" : "") + "暫時送不出去，內容已複製，請稍後再試一次。", null);
     })
     .then(function () { btn.disabled = false; btn.textContent = "送出"; });
 });

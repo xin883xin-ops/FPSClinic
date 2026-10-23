@@ -24,7 +24,7 @@
 <!--
   站長筆記：
   條款與隱私在 terms.html。
-  LINE ID、各頁網址、技能清單都在 main.js 最上面設定。
+  各頁網址、技能清單都在 main.js 最上面設定。
   工具箱 KitLab Toolkit（右上角按鈕）的內容在 side.html；網址加 ?embed=1 是嵌入模式。
   廣告區（最上方）與商品磚（熱門技能）的內容，直接改下面的 HTML。
 -->
@@ -302,9 +302,8 @@
     <div>
       <h2>想要的技能還沒有？</h2>
       <p>告訴我們你想解決什麼，我們排進清單。</p>
-      <p class="lineid">LINE ID：<span class="line-id">xin883xin</span></p>
     </div>
-    <a class="btn line-link" href="#wish">加 LINE 告訴我們</a>
+    <a class="btn" href="#" data-chat>線上告訴我們</a>
   </div>
 </section>
 
@@ -334,7 +333,7 @@
       </div>
       <div><h4>找技能</h4><ul><li><a href="#cats">全部分類</a></li><li><a href="#tiles">熱門技能</a></li></ul></div>
       <div><h4>關於</h4><ul><li><a href="#more">作品與加入</a></li><li><a href="#n1">廣告說明</a></li></ul></div>
-      <div><h4>聯絡</h4><ul><li><a class="line-link" href="#wish">LINE 洽詢</a></li><li><button class="linklike" type="button" data-install hidden>安裝到桌面</button></li><li><a href="terms.html#terms">服務條款</a></li><li><a href="terms.html#privacy">隱私權</a></li></ul></div>
+      <div><h4>聯絡</h4><ul><li><a href="#" data-chat>線上詢問</a></li><li><button class="linklike" type="button" data-install hidden>安裝到桌面</button></li><li><a href="terms.html#terms">服務條款</a></li><li><a href="terms.html#privacy">隱私權</a></li></ul></div>
     </div>
     <div class="copy">© 2026 KitLab 商店<a href="terms.html">條款與隱私</a></div>
   </div>
@@ -351,6 +350,7 @@ if(navigator.sendBeacon)navigator.sendBeacon("/api/v1/hit",JSON.stringify({p:loc
 })();
 </script>
 <script src="main.js"></script>
+<script src="chat.js" defer></script>
 <script>
 /* 側邊欄按鈕：工具箱、搜尋直接用頂欄同一組按鈕，行為完全一致 */
 (function(){

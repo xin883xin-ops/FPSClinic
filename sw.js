@@ -3,7 +3,7 @@
 const VERSION = "v37";
 const CACHE = "skillstore-" + VERSION;
 const CORE = [
-  "./", "index.html", "terms.html", "store.css", "style.css", "main.js", "side.html", "fpsclinic.html", "images/lol-demo.jpg", "manifest.webmanifest",
+  "./", "index.html", "terms.html", "store.css", "style.css", "main.js", "chat.js", "side.html", "fpsclinic.html", "images/lol-demo.jpg", "manifest.webmanifest",
   "site199/", "site199/index.html", "drivers/", "drivers/index.html",
   "sync.js", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png",
   "pos/about.html", "waffle.js", "pos/preview.jpg", "site199/samplesite/thumbs/pos.jpg",

@@ -1,7 +1,6 @@
 var SCRIPT_URL = (document.currentScript && document.currentScript.src) || location.href;
 
 /* 站長設定：全站只改這裡 ------------------------------------------- */
-var LINE_ID = "xin883xin";              // 個人 ID 直接填；官方帳號請連 @ 一起填，例如 "@xxxx"
 var FPS_URL = "fpsclinic.html";          // FPSClinic 頁面網址（相對路徑）
 var SITE199_URL = "site199/";           // 199 一頁式網頁服務頁（相對路徑）
 
@@ -21,16 +20,6 @@ var SKILLS = [
   "use strict";
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-
-  /* LINE 連結與文字：所有 .line-link / .line-id 一起換 */
-  var id = (LINE_ID || "").trim();
-  if (id) {
-    var url = id.charAt(0) === "@"
-      ? "https://line.me/R/ti/p/" + encodeURIComponent(id)
-      : "https://line.me/ti/p/~" + encodeURIComponent(id);
-    $$("a.line-link").forEach(function (a) { a.href = url; a.target = "_blank"; a.rel = "noopener"; });
-    $$(".line-id").forEach(function (el) { el.textContent = id; el.classList.remove("tbd"); });
-  }
 
   /* 手機選單 */
   var burger = $("#burger"), menu = $("#menu");
@@ -85,8 +74,7 @@ var SKILLS = [
       return !t || (s.name + " " + s.by + " " + s.words + " " + s.cat).toLowerCase().indexOf(t) > -1;
     });
     if (!hit.length) {
-      out.innerHTML = '<p class="none">還沒有這個技能。<a class="line-link" href="#wish">告訴我們你想要什麼</a>，我們會排進清單。</p>';
-      if (id) $$("a.line-link", out).forEach(function (a) { a.href = url; a.target = "_blank"; });
+      out.innerHTML = '<p class="none">還沒有這個技能。<a href="#" data-chat>告訴我們你想要什麼</a>，我們會排進清單。</p>';
       return;
     }
     out.innerHTML = hit.map(function (s) {

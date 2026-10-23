@@ -7,21 +7,6 @@
 <meta name="description" content="在原本的紙本名片印上 QR Code，客人掃一下就能留語音，新留言寄到你的 Email。">
 <link rel="preconnect" href="https://embed.tawk.to" crossorigin>
 <link rel="dns-prefetch" href="https://va.tawk.to">
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-/* 手機底部有固定的「免費試用」列，聊天圖示往上抬，才不會蓋住按鈕 */
-Tawk_API.customStyle = { visibility: { mobile: { position: 'br', xOffset: 12, yOffset: 84 } } };
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/6acbe49bf5cc5c34c2fbba6f/1k4m7a0ct';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-(s0&&s0.parentNode||document.head).insertBefore(s1,s0||null);
-})();
-</script>
-<!--End of Tawk.to Script-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
@@ -78,7 +63,6 @@ a { color: inherit; }
   background: var(--accent); color: var(--on-accent); border-color: var(--accent);
 }
 .btn:hover { filter: brightness(.95); }
-.btn.line { background: transparent; color: var(--ink); border-color: var(--ink); }
 .small { font-size: 14.5px; color: var(--muted); line-height: 1.7; }
 .band-dark .small { color: var(--band-muted); }
 
@@ -350,7 +334,7 @@ footer { border-top: 1px solid var(--line); padding-block: 26px 40px; }
               <option>水電</option><option>冷氣</option><option>修繕</option><option>清潔</option><option>搬家</option><option>鎖匠</option><option>其他到府服務</option><option>其他</option>
             </select>
           </label>
-          <label for="f-contact">LINE ID 或手機
+          <label for="f-contact">手機或其他聯絡方式
             <input id="f-contact" name="contact" autocomplete="tel" required placeholder="方便我們聯絡你的方式">
           </label>
           <label for="f-mail">收留言的 Email
@@ -361,17 +345,17 @@ footer { border-top: 1px solid var(--line); padding-block: 26px 40px; }
             <textarea id="f-note" name="note"></textarea>
           </label>
           <p class="err" id="err" role="alert" hidden></p>
-          <button class="btn" type="submit">整理登記內容</button>
-          <p class="small">按下後會整理好你的登記內容。把它貼到 LINE 傳給我們，登記就完成了。資料只用來聯絡你試用的事。</p>
+          <button class="btn" type="submit">送出登記</button>
+          <p class="small">按下就直接送出登記，我們會用你留的方式聯絡你。資料只用來聯絡你試用的事。</p>
 
           <div class="result" id="result" hidden>
-            <strong id="result-title">請把下面的內容傳到 LINE</strong>
-            <textarea id="result-text" readonly aria-label="登記內容"></textarea>
-            <div class="acts">
+            <strong id="result-title">送出中…</strong>
+            <textarea id="result-text" readonly aria-label="登記內容" hidden></textarea>
+            <div class="acts" id="result-acts" hidden>
               <button class="btn" type="button" id="copy">複製內容</button>
-              <a class="btn line" href="https://line.me/ti/p/~xin883xin" target="_blank" rel="noopener">開啟 LINE</a>
+              <a class="btn" href="#" data-chat>線上詢問</a>
             </div>
-            <p class="small" id="result-note">LINE ID：<b>xin883xin</b>。複製後到 LINE 貼上傳送，我們收到才算登記完成。</p>
+            <p class="small" id="result-note"></p>
           </div>
         </form>
       </div>
@@ -408,15 +392,14 @@ footer { border-top: 1px solid var(--line); padding-block: 26px 40px; }
     </div>
   </section>
 
-  <footer class="small">KitLab 語音名片　kitlab.store/voice　LINE ID：xin883xin</footer>
+  <footer class="small">KitLab 語音名片　kitlab.store/voice</footer>
 </div>
 
 <div class="dock" id="dock"><a class="btn" href="#apply">免費試用語音名片</a></div>
 
 <script>
 (function () {
-  var LINE_ID = "xin883xin";
-  var SIGNUP_ENDPOINT = "/api/voice-signup"; // 之後有後台接口時填入，例如 "/api/voice-signup"；留空則只整理內容讓使用者貼到 LINE
+  var SIGNUP_ENDPOINT = "/api/voice-signup";
 
   // 示意用 QR 圖樣（非真實 QR Code，不可掃描）
   function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -455,18 +438,24 @@ footer { border-top: 1px solid var(--line); padding-block: 26px 40px; }
     e.preventDefault(); showErr("");
     var name = v("f-name"), contact = v("f-contact"), mail = v("f-mail");
     if (!name) return showErr("請填名字或店名。");
-    if (!contact) return showErr("請填 LINE ID 或手機，我們才聯絡得到你。");
+    if (!contact) return showErr("請填手機或其他聯絡方式，我們才聯絡得到你。");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) return showErr("Email 格式不太對，請再確認。");
     var text = ["【KitLab 語音名片 試用登記】", "名字／店名：" + name, "行業：" + v("f-job"), "聯絡方式：" + contact, "收留言 Email：" + mail]
       .concat(v("f-note") ? ["補充：" + v("f-note")] : []).join("\n");
-    rtext.value = text; result.hidden = false;
-    rtitle.textContent = "請把下面的內容傳到 LINE";
-    rnote.innerHTML = "LINE ID：<b>" + LINE_ID + "</b>。複製後到 LINE 貼上傳送，我們收到才算登記完成。";
-    if (SIGNUP_ENDPOINT) {
-      fetch(SIGNUP_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: name, job: v("f-job"), contact: contact, mail: mail, note: v("f-note"), website: v("f-website") }) })
-        .then(function (r) { if (r.ok) { rtitle.textContent = "已收到你的登記"; rnote.textContent = "我們會盡快用你留的方式聯絡你。想更快的話，也可以把內容傳到 LINE：" + LINE_ID; } })
-        .catch(function () {});
+    var racts = document.getElementById("result-acts");
+    rtext.value = text; rtext.hidden = true; racts.hidden = true;
+    result.hidden = false; rtitle.textContent = "送出中…"; rnote.textContent = "";
+    function fail() {
+      rtitle.textContent = "暫時送不出去";
+      rnote.textContent = "內容已整理在下面，請複製後點「線上詢問」傳給我們，登記才算完成。";
+      rtext.hidden = false; racts.hidden = false;
     }
+    fetch(SIGNUP_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: name, job: v("f-job"), contact: contact, mail: mail, note: v("f-note"), website: v("f-website") }) })
+      .then(function (r) {
+        if (r.ok) { rtitle.textContent = "已收到你的登記"; rnote.textContent = "我們會盡快用你留的方式聯絡你。想更快的話，也可以點右下角的聊天視窗。"; }
+        else fail();
+      })
+      .catch(fail);
     result.scrollIntoView({ block: "nearest", behavior: "smooth" });
   });
 
@@ -479,5 +468,6 @@ footer { border-top: 1px solid var(--line); padding-block: 26px 40px; }
 })();
 </script>
 
+<script src="chat.js" data-lift="84" defer></script>
 </body>
 </html>

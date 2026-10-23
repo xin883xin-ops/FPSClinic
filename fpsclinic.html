@@ -15,7 +15,7 @@
 
 <!--
   站長筆記：
-  1. 在最下方 <script> 的 LINE_ID 填入你的 LINE ID，所有預約按鈕會自動接上。
+  1. 聊天視窗由 chat.js 統一載入，帶 data-chat 的按鈕點下去會展開。
   2. 實測案例區（#case）：規格表與前後對照已填入。調校前用文字「卡頓、約 30 FPS」，調校後用示意圖（images/lol-demo.jpg，圖上與圖說都標「示意圖」）。
      還沒有的：1% low 與前後實拍截圖，等第一批客戶的真實資料再補。換成實拍時，把「示意圖」標籤一併拿掉。
   條款與隱私在 terms.html。
@@ -267,22 +267,9 @@ footer p { margin: 6px 0 0; max-width: none; }
       <a href="#tiers">服務內容</a>
       <a href="#faq">常見問題</a>
     </nav>
-    <a class="btn small line-link" href="#contact">預約試營運</a>
+    <a class="btn small" href="#" data-chat>預約試營運</a>
   </div>
 </header>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/6acbe49bf5cc5c34c2fbba6f/1k4m7a0ct';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
 <main id="top">
 
 <!-- 首屏 -->
@@ -293,7 +280,7 @@ s0.parentNode.insertBefore(s1,s0);
       <h1>遊戲卡頓，先查出卡在哪，再動手。</h1>
       <p class="lead">真人遠端診斷你的電腦。不用先換硬體；調整前先備份，全程看得到畫面，每一項都能還原。</p>
       <div class="actions">
-        <a class="btn line-link" href="#contact">預約試營運</a>
+        <a class="btn" href="#" data-chat>預約試營運</a>
         <a class="btn ghost" href="#symptoms">看看是哪一種卡頓</a>
       </div>
       <p class="fine">不承諾固定 FPS。每台電腦先測再說明可改善的幅度，不值得調的也會直接告訴你。</p>
@@ -561,7 +548,7 @@ s0.parentNode.insertBefore(s1,s0);
       <h2>試營運限 10 個名額</h2>
       <p style="margin-top:14px">免費調校一次，換你的前後對比與使用回饋。</p>
       <ol>
-        <li>加 LINE，傳下面準備好的資料。</li>
+        <li>線上傳下面準備好的資料。</li>
         <li>確認你的電腦適合，約好時段。</li>
         <li>簽同意書、先備份，再遠端調校。</li>
       </ol>
@@ -574,9 +561,7 @@ s0.parentNode.insertBefore(s1,s0);
         <li>記憶體容量、Windows 版本</li>
         <li>玩的遊戲，與卡頓的感覺</li>
       </ul>
-      <a class="btn line-link" href="#contact">加 LINE 預約</a>
-      <a class="btn ghost tawk-link" href="#contact" style="margin-left:8px">線上詢問（備用）</a>
-      <p class="lineid">LINE ID：<span class="line-id">xin883xin</span></p>
+      <a class="btn" href="#" data-chat>線上預約</a>
     </div>
   </div>
 </section>
@@ -637,40 +622,7 @@ s0.parentNode.insertBefore(s1,s0);
   </div>
 </footer>
 
-<script>
-  // 站長設定：全站只改這一個地方。
-  // 個人 LINE ID 直接填，例如 "fpsclinic"；官方帳號要連 @ 一起填，例如 "@fpsclinic"。
-  var LINE_ID = "xin883xin";
-
-  (function () {
-    var id = (LINE_ID || "").trim();
-    if (!id) return; // 還沒填：按鈕維持跳到 #contact，文字維持「待補」提示
-
-    var url = id.charAt(0) === "@"
-      ? "https://line.me/R/ti/p/" + encodeURIComponent(id)
-      : "https://line.me/ti/p/~" + encodeURIComponent(id);
-
-    // 所有預約按鈕（class="line-link"）
-    document.querySelectorAll("a.line-link").forEach(function (a) {
-      a.href = url; a.target = "_blank"; a.rel = "noopener";
-    });
-    // 所有顯示 LINE ID 文字的位置（class="line-id"），數量不限
-    document.querySelectorAll(".line-id").forEach(function (el) {
-      el.textContent = id;
-      el.classList.remove("tbd");
-    });
-  })();
-
-  // 備用：tawk.to 線上聊天。所有 class="tawk-link" 的按鈕點下去會展開聊天視窗。
-  document.querySelectorAll("a.tawk-link").forEach(function (a) {
-    a.addEventListener("click", function (e) {
-      if (window.Tawk_API && typeof Tawk_API.maximize === "function") {
-        e.preventDefault();
-        Tawk_API.maximize();
-      }
-    });
-  });
-</script>
+<script src="chat.js" defer></script>
 <script src="waffle.js" defer></script>
 </body>
 </html>

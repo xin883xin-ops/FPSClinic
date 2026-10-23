@@ -23,7 +23,6 @@
 
 <!--
   站長筆記：條款與隱私在 ../terms.html。
-  LINE ID 在 ../main.js 最上面設定。
 -->
 <noscript><style>.rv{opacity:1;transform:none}</style></noscript>
 <style>
@@ -87,7 +86,7 @@
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0B1620"/><rect x="6" y="6" width="9" height="9" rx="2.5" fill="#5FD3BC"/><rect x="17" y="6" width="9" height="9" rx="2.5" fill="#fff"/><rect x="6" y="17" width="9" height="9" rx="2.5" fill="#fff"/><rect x="17" y="17" width="9" height="9" rx="2.5" fill="#fff" fill-opacity=".4"/></svg>
       <b>KitLab 商店</b>
     </a>
-    <a class="btn small line-link" href="#book" style="margin-left:auto">預約</a>
+    <a class="btn small" href="#" data-chat style="margin-left:auto">預約</a>
   </div>
 </header>
 
@@ -99,7 +98,7 @@
     <h1>你的網站，<br><em>30 分鐘</em>上線。</h1>
     <p class="sub">商店、介紹頁都行。簡單描述你要什麼，我們做好，並免費幫你部署上線，網站放一年。</p>
     <div class="price-big"><b>NT$199</b><span>一頁，含部署</span></div>
-    <div class="ctas"><a class="btn light line-link" href="#book">加 LINE 預約</a><a class="btn outline-light" href="#samples">先看做好的樣品</a></div>
+    <div class="ctas"><a class="btn light" href="#" data-chat>線上預約</a><a class="btn outline-light" href="#samples">先看做好的樣品</a></div>
     <p class="by">提供者 KitLab 官方
       <span class="tick" title="已通過審核"><svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5l2.5 2.5L10 3.5"/></svg></span>
       官方技能包
@@ -169,12 +168,12 @@
       <div class="sgrid one">
         <a class="scard wide rv" href="../pos/about.html">
           <div class="shot"><img src="samplesite/thumbs/pos.jpg" width="780" height="1040" loading="lazy" alt="點餐收銀機的開始畫面：三道菜色，下方是內用與外帶兩個大按鈕"></div>
-          <div class="body"><h4>KitLab 點餐收銀機 · 小店專用</h4><div class="tags"><span>餐飲</span><span>離線可用</span><span>買斷</span></div><p>把上面那種滾輪點餐，做成店裡真正在用的系統：客人在平板上自己點，拿到號碼；店員在收銀畫面接單、收款、叫號，一天結束看報表。第一次連網設定，之後沒有網路也能用，資料只存在你自己的裝置，不收月費。</p><p style="color:var(--muted);font-size:.9rem">目前可以試用；價格與需求請加 LINE 聯繫我們，一起看你的店還需要什麼。</p><span class="go">看介紹 <i aria-hidden="true">↗</i></span></div>
+          <div class="body"><h4>KitLab 點餐收銀機 · 小店專用</h4><div class="tags"><span>餐飲</span><span>離線可用</span><span>買斷</span></div><p>把上面那種滾輪點餐，做成店裡真正在用的系統：客人在平板上自己點，拿到號碼；店員在收銀畫面接單、收款、叫號，一天結束看報表。第一次連網設定，之後沒有網路也能用，資料只存在你自己的裝置，不收月費。</p><p style="color:var(--muted);font-size:.9rem">目前可以試用；價格與需求請線上聯繫我們，一起看你的店還需要什麼。</p><span class="go">看介紹 <i aria-hidden="true">↗</i></span></div>
         </a>
       </div>
     </div>
 
-    <p class="snote rv"><b>這些是樣品，不是現成樣板。</b>裡面的店名、菜色和房型都是示範，LINE 按鈕也是示範狀態。想做成這個樣子，或想要更多互動，加 LINE 告訴我們你的店，我們看你的需求再回你。</p>
+    <p class="snote rv"><b>這些是樣品，不是現成樣板。</b>裡面的店名、菜色和房型都是示範，訂位和點餐按鈕也是示範狀態。想做成這個樣子，或想要更多互動，線上告訴我們你的店，我們看你的需求再回你。</p>
   </div>
 </section>
 
@@ -248,10 +247,9 @@
   <div class="wrap">
     <div>
       <h2>準備好了嗎？</h2>
-      <p style="margin:8px 0 0;color:#33545B">加 LINE，簡單說你要什麼，我們開始。</p>
-      <p class="lineid">LINE ID：<span class="line-id">xin883xin</span></p>
+      <p style="margin:8px 0 0;color:#33545B">線上簡單說你要什麼，我們開始。</p>
     </div>
-    <a class="btn line-link" href="#book">加 LINE 預約</a>
+    <a class="btn" href="#" data-chat>線上預約</a>
   </div>
 </section>
 
@@ -267,6 +265,7 @@
 </footer>
 
 <script src="../main.js"></script>
+<script src="../chat.js" defer></script>
 <script src="../waffle.js" defer></script>
 </body>
 </html>
