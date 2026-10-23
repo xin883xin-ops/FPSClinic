@@ -1,5 +1,5 @@
 /* KitLab 商店 service worker：離線可看已載入過的頁面。
-   改了頁面或樣式後，把下面的版本號加 1，使用者下次開啟就會更新。 */
+   所有檔案都是先連網路拿最新，離線才用快取，所以改了內容不需要動版本號。 */
 const VERSION = "v37";
 const CACHE = "skillstore-" + VERSION;
 const CORE = [
@@ -54,15 +54,12 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // 同網站的檔案：先給快取，背景更新
+  // 同網站的檔案：先連網路拿最新，離線才用快取
   if (url.origin === location.origin) {
     e.respondWith(
-      caches.match(req).then((hit) => {
-        const net = fetch(req)
-          .then((res) => { if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); } return res; })
-          .catch(() => hit);
-        return hit || net;
-      })
+      fetch(req)
+        .then((res) => { if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); } return res; })
+        .catch(() => caches.match(req))
     );
   }
   // 其他網站（Google Fonts 等）不攔截，離線時用系統字型
